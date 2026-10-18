@@ -17,3 +17,21 @@
 .medic-contact-actions a:hover,.medic-contact-actions a:focus-visible{box-shadow:0 0 20px #ff28b244;border-color:#ff28b2;color:#ff5bc2}
 .medic-contact p.medic-contact-foot,.medic-contact p.medic-contact-email{font-size:10px;color:#99aab4}
 .medic-contact p.medic-contact-email{overflow-wrap:anywhere;color:#00eaff}
+
+
+/* One-tap Pantry Goblin launcher: an animated, accessible floating mascot. */
+.pantry-goblin{position:fixed;right:max(13px,env(safe-area-inset-right));bottom:max(13px,env(safe-area-inset-bottom));z-index:20;display:flex;flex-direction:column;align-items:center;gap:7px;text-decoration:none;cursor:pointer;filter:drop-shadow(0 0 12px #00eaff55);-webkit-tap-highlight-color:transparent}
+.goblin-body{position:relative;display:flex;align-items:center;justify-content:center;width:82px;height:82px;border:1px solid #00eaff99;border-radius:50%;background:radial-gradient(circle at 35% 30%,#274331,#0b171a 65%,#050711);font-size:43px;box-shadow:0 0 21px #00eaff33,inset 0 0 20px #ff28b21f;animation:goblinDance 1.18s ease-in-out infinite;transform-origin:center 84%}
+.goblin-beans{position:absolute;right:-5px;bottom:-5px;display:grid;place-items:center;width:31px;height:31px;border-radius:50%;border:1px solid #ff28b2;background:#080d18;font-size:19px;animation:beanShake 1.18s ease-in-out infinite}
+.goblin-label{display:block;padding:7px 10px;border:1px solid #00eaff99;border-radius:5px;background:#07111df0;color:#00eaff;font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.6px;text-align:center;white-space:nowrap;box-shadow:0 0 12px #00eaff22}
+.goblin-sparkle{position:absolute;color:#ff5bc2;text-shadow:0 0 9px #ff28b2;pointer-events:none;animation:goblinSparkle 1.18s ease-in-out infinite}
+.goblin-sparkle-one{top:-6px;left:4px;font-size:24px}
+.goblin-sparkle-two{top:7px;right:2px;font-size:18px;animation-delay:.3s}
+.pantry-goblin:hover .goblin-body,.pantry-goblin:focus-visible .goblin-body{border-color:#ff28b2;box-shadow:0 0 28px #ff28b266}
+.pantry-goblin:hover .goblin-label,.pantry-goblin:focus-visible .goblin-label{color:#ff5bc2;border-color:#ff28b2}
+.pantry-goblin:focus-visible{outline:3px solid #00eaff;outline-offset:4px;border-radius:8px}
+@keyframes goblinDance{0%,100%{transform:translateY(0) rotate(-8deg)}22%{transform:translateY(-9px) rotate(10deg) scale(1.04)}47%{transform:translateY(0) rotate(-7deg)}72%{transform:translateY(-6px) rotate(9deg) scale(1.05)}}
+@keyframes beanShake{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(12deg)}}
+@keyframes goblinSparkle{0%,100%{opacity:.3;transform:scale(.75) rotate(0)}50%{opacity:1;transform:scale(1.22) rotate(20deg)}}
+@media(max-width:780px){.goblin-body{width:66px;height:66px;font-size:35px}.goblin-beans{width:26px;height:26px;font-size:16px}.goblin-label{font-size:8px;padding:6px 7px}.pantry-goblin{right:max(9px,env(safe-area-inset-right));bottom:max(9px,env(safe-area-inset-bottom))}}
+@media(prefers-reduced-motion:reduce){.goblin-body,.goblin-beans,.goblin-sparkle{animation:none}}
