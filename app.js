@@ -25,12 +25,12 @@ function emtizzleGreeting() {
     caption.hidden = false;
   }
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-  if (!window.EMTIZZLE_VOICE_DATA_URL) { speakEmtizzleFallback(); return; }
+  
   if (emtizzleAudio) {
     emtizzleAudio.pause();
     emtizzleAudio.currentTime = 0;
   } else {
-    emtizzleAudio = new Audio(window.EMTIZZLE_VOICE_DATA_URL);
+    emtizzleAudio = new Audio('emtizzle-take2-20261018.mp3');
     emtizzleAudio.preload = 'none';
   }
   // When the personal recording is not installed, continue with browser TTS.
