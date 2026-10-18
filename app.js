@@ -11,13 +11,17 @@ function emtizzleGreeting() {
   if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') return;
   try {
     window.speechSynthesis.cancel();
-    const message = new SpeechSynthesisUtterance(EMTIZZLE_GREETING);
+    // Preserve the displayed script; guide TTS rhythm with punctuation only.
+    const spokenGreeting = "What's up, guys? This is EMTizzle. Life can really go off the rails unexpectedly. Don't be embarrassed. You're in the Drop Zone. Let's get you moving!";
+    const message = new SpeechSynthesisUtterance(spokenGreeting);
     message.lang = 'en-US';
-    message.rate = 0.98;
-    message.pitch = 1.05;
+    // Bright, relaxed West Coast delivery. Exact accent depends on device voices.
+    message.rate = 1.08;
+    message.pitch = 1.13;
     const voices = window.speechSynthesis.getVoices();
-    const preferred = voices.find(v => /^en/i.test(v.lang) && /Samantha|Aria|Jenny|Joanna|Google US English/i.test(v.name))
-      || voices.find(v => /^en-US/i.test(v.lang))
+    const usVoices = voices.filter(v => /^en[-_]US$/i.test(v.lang));
+    const preferred = usVoices.find(v => /Samantha|Ava|Allison|Jenny|Aria|Joanna|Zira|Google US English/i.test(v.name))
+      || usVoices[0]
       || voices.find(v => /^en/i.test(v.lang));
     if (preferred) message.voice = preferred;
     window.speechSynthesis.speak(message);
