@@ -4,3 +4,16 @@
 .portrait-tap:hover span,.portrait-tap:focus-visible span{border-color:#ff28b2;color:#ff5bc2}
 .portrait-tap:focus-visible{outline:3px solid #00eaff;outline-offset:-3px}
 .voice-caption{margin:12px 0 0;padding:12px;border:1px solid #00eaff55;color:#d6e5eb;background:#07111d;font-size:11px;line-height:1.6}
+
+/* Contact choices for the two CALL THE MEDIC entry points. */
+.medic-contact{position:fixed;inset:auto;max-width:min(94vw,540px);max-height:90vh;overflow:auto;margin:auto;padding:clamp(24px,5vw,40px);border:1px solid #00eaff;background:#070b16;color:#f5f5f5;box-shadow:0 0 35px #00eaff44;font-family:'IBM Plex Mono',monospace}
+.medic-contact::backdrop{background:#030711dd;backdrop-filter:blur(5px)}
+.medic-contact h2{font-size:clamp(42px,9vw,68px);margin:0 25px 22px 0;color:#ff28b2}
+.medic-contact p:not(.tag){font-size:12px;line-height:1.65;color:#d5e1e9}
+.medic-contact-close{position:absolute;top:10px;right:10px;width:44px;height:44px;border:1px solid #ff28b2;background:#140819;color:#fff;font-size:29px;cursor:pointer}
+.medic-contact-actions{display:grid;gap:12px;margin:25px 0}
+.medic-contact-actions a{display:block;padding:18px 16px;border:1px solid #00eaff;background:#071b26;color:#00eaff;font:800 22px 'Barlow Condensed',sans-serif;letter-spacing:1px;text-decoration:none;text-align:center}
+.medic-contact-actions a.medic-contact-primary{background:#290e24;border-color:#ff28b2;color:#fff}
+.medic-contact-actions a:hover,.medic-contact-actions a:focus-visible{box-shadow:0 0 20px #ff28b244;border-color:#ff28b2;color:#ff5bc2}
+.medic-contact p.medic-contact-foot,.medic-contact p.medic-contact-email{font-size:10px;color:#99aab4}
+.medic-contact p.medic-contact-email{overflow-wrap:anywhere;color:#00eaff}
