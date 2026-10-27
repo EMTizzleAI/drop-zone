@@ -64,3 +64,6 @@
 @media(max-width:520px){
  .dz-coach-launch .dz-coach-icon{flex-basis:43px;width:43px;height:43px;font-size:24px}
 }
+
+/* Human-readable status for the optional live model connection. */
+.dz-coach-diagnostic{margin:0;padding:9px 12px;color:#ffe2a4;background:#1a1321;border-bottom:1px solid #4e3757;font:10px/1.45 'IBM Plex Mono',monospace;overflow-wrap:anywhere}
