@@ -53,3 +53,14 @@
 
 /* Override the site's global sticky-header rules inside the floating coach. */
 .dz-coach-panel .dz-coach-top{position:relative;top:auto;left:auto;right:auto;z-index:auto;height:auto;min-height:63px;backdrop-filter:none}
+
+/* Robot co-pilot identity: visibly separate from the human EMTizzle portrait/recording. */
+.dz-coach-launch .dz-coach-icon{
+ display:grid;place-items:center;flex:0 0 47px;width:47px;height:47px;border-radius:50%;
+ border:1px solid #00eaff;background:#061322;
+ font-size:27px;line-height:1;
+ box-shadow:inset 0 0 12px #00eaff24
+}
+@media(max-width:520px){
+ .dz-coach-launch .dz-coach-icon{flex-basis:43px;width:43px;height:43px;font-size:24px}
+}
