@@ -1,4 +1,4 @@
-/* Drop Zone // EMTizzle encouragement interface
+/* Drop Zone // EMTizzle's onboard co-pilot interface
    This browser-only backup is labeled offline, NEVER pretends to be generative AI.
    User's recorded homepage greeting remains untouched. */
 (() => {
@@ -66,15 +66,15 @@
     const row=document.createElement('div');
     row.className='dz-coach-msg '+(role==='operator'?'dz-coach-operator':'dz-coach-medic');
     const label=document.createElement('strong');
-    label.textContent=role==='operator'?'YOU // OPERATOR':'EMTIZZLE // '+(mode==='live'?'GENERATIVE AI':'FIELD ENCOURAGEMENT');
+    label.textContent=role==='operator'?'YOU // OPERATOR':'CO-PILOT // '+(mode==='live'?'GENERATIVE AI':'OFFLINE SUPPORT');
     const body=document.createElement('p');
     body.textContent=text;
     row.append(label,body);
     if(role==='medic'){
       const play=document.createElement('button');
       play.type='button';play.className='dz-coach-speak';
-      play.textContent='🔊 HEAR THIS (BROWSER VOICE)';
-      play.setAttribute('aria-label','Read EMTizzle encouragement using your device voice');
+      play.textContent='🔊 PLAY ROBOT VOICE';
+      play.setAttribute('aria-label','Read the co-pilot reply using your device voice');
       play.addEventListener('click',()=>speak(text));
       row.append(play);
       if(autoVoice.checked)speak(text);
@@ -135,7 +135,7 @@
   });
   clear.addEventListener('click',()=>{
     history.length=0;log.textContent='';stopSpeaking();
-    addMessage('medic',"Hey. EMTizzle here. Tell me what's heavy, or ask for a pep talk. No judgment.",'offline');
+    addMessage('medic',"Co-pilot online, operator. Tell me what's heavy, or ask for a pep talk. No judgment.",'offline');
     setMode('offline');
   });
   form.addEventListener('submit',e=>{e.preventDefault();ask(input.value.trim())});
@@ -143,6 +143,6 @@
   document.addEventListener('keydown',e=>{
     if(e.key==='Escape'&&!panel.hidden){panel.hidden=true;stopSpeaking();launcher.focus();}
   });
-  addMessage('medic',"Hey. EMTizzle here. Your next step doesn't have to be huge. Ask for a little motivation or tell me what you're proud of.",'offline');
+  addMessage('medic',"Co-pilot online, operator. Your next objective doesn't have to be huge. Ask for a little motivation or tell me what you're proud of.",'offline');
   setMode('offline');syncPage();
 })();
