@@ -9,6 +9,7 @@
   const input=document.getElementById('dzCoachInput');
   const log=document.getElementById('dzCoachLog');
   const status=document.getElementById('dzCoachMode');
+  const diagnostic=document.getElementById('dzCoachDiagnostic');
   const autoVoice=document.getElementById('dzCoachAutoVoice');
   const clear=document.getElementById('dzCoachClear');
   const close=document.getElementById('dzCoachClose');
@@ -86,6 +87,29 @@
     log.scrollTop=log.scrollHeight;
     return row;
   }
+  function setDiagnostic(message){
+    if(diagnostic)diagnostic.textContent=message;
+  }
+  async function checkConnection(){
+    if(!backend){setDiagnostic('⚠ No AI backend linked. Only prewritten offline replies are available.');return}
+    setDiagnostic('🔎 Checking the Co-Pilot server. This does not verify model generation yet…');
+    const ctrl=new AbortController();
+    const timer=setTimeout(()=>ctrl.abort(),8500);
+    try{
+      const res=await fetch(backend,{method:'GET',mode:'cors',signal:ctrl.signal});
+      if(!res.ok)throw new Error('Backend health check HTTP '+res.status);
+      const data=await res.json();
+      if(data.configured===false){
+        setDiagnostic('⚠ Live AI not authenticated on the server. Chat will use offline replies until the AI connection is configured.');
+      }else if(data.configured===true){
+        setDiagnostic('📡 AI credentials detected, but generation is unverified. Send a message to test the model.');
+      }else{
+        setDiagnostic('⚠ Server status unclear. Send a test message; offline replies are available.');
+      }
+    }catch(err){
+      setDiagnostic('⚠ Cannot reach the AI server from this browser ('+(err.name==='AbortError'?'timed out':'network or access error')+'). Offline replies are available.');
+    }finally{clearTimeout(timer)}
+  }
   function setMode(mode){
     status.textContent=mode==='live'?'● GENERATIVE AI ACTIVE':'● OFFLINE ENCOURAGEMENT MODE';
     status.dataset.mode=mode;
@@ -105,21 +129,25 @@
         reply=offlineReply(text);
       }else if(backend){
         const ctrl=new AbortController();
-        const timer=setTimeout(()=>ctrl.abort(),13000);
+        const timer=setTimeout(()=>ctrl.abort(),26000);
         try {
           const res=await fetch(backend,{
             method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},
             body:JSON.stringify({message:text,history:history.slice(-12)}),
             signal:ctrl.signal
           });
-          if(!res.ok)throw Error('Generation not available');
-          const data=await res.json();
+          const data=await res.json().catch(()=>({}));
+          if(!res.ok)throw Error(data.error||('Co-Pilot server returned HTTP '+res.status));
           if(typeof data.reply!=='string'||!data.reply.trim())throw Error('Missing response');
           reply=data.reply.slice(0,900);
           mode=data.mode==='live'?'live':'offline';
+          setDiagnostic(mode==='live'?'✅ LIVE GENERATION CONFIRMED · Co-Pilot is answering through the language model.':'ⓘ A safety response was used instead of model generation.');
         }finally{clearTimeout(timer)}
       }else throw Error('No AI backend configured');
-    }catch(_){reply=offlineReply(text)}
+    }catch(err){
+      setDiagnostic('⚠ Live model unavailable: '+String(err?.message||'connection failed').slice(0,180)+' Offline encouragement shown below.');
+      reply=offlineReply(text)
+    }
     placeholder.remove();
     setMode(mode);
     addMessage('medic',reply,mode);
@@ -131,6 +159,7 @@
   }
   launcher.addEventListener('click',()=>{
     panel.hidden=false;launcher.setAttribute('aria-expanded','true');
+    checkConnection();
     input.focus({preventScroll:true});
   });
   close.addEventListener('click',()=>{
@@ -140,6 +169,7 @@
     history.length=0;log.textContent='';stopSpeaking();
     addMessage('medic',"Co-pilot online, operator. Tell me what's heavy, or ask for a pep talk. No judgment.",'offline');
     setMode('offline');
+    setDiagnostic('Conversation cleared. Live model connection has not been retested.');
   });
   form.addEventListener('submit',e=>{e.preventDefault();ask(input.value.trim())});
   panel.querySelectorAll('[data-pep]').forEach(b=>b.addEventListener('click',()=>ask(b.dataset.pep)));
