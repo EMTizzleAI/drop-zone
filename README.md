@@ -35,9 +35,9 @@ Open `index.html` in a browser, or serve this directory with any static web serv
 
 Repository **Settings → Pages → Deploy from a branch → `main` → `/ (root)`**.
 
-## EMTizzle encouragement coach — new beta
+## EMTizzle's onboard co-pilot — new beta
 
-**The existing personal homepage voice recording is unchanged.** On the other screens, click the floating EMTizzle portrait to open a small chat panel. A visitor can type a request, use prompt chips, receive an uplifting response, and optionally hear it through **their device's built-in text-to-speech voice** (not a synthesized clone of EMTizzle).
+**The existing personal homepage voice recording is unchanged.** The co-pilot deliberately uses a separate, synthetic device voice. On the other screens, click the floating robot co-pilot button to open a small chat panel. The co-pilot is a separate assistant, not EMTizzle herself. A visitor can type a request, use prompt chips, receive an uplifting response, and optionally hear it through **their device's built-in text-to-speech voice** (not a synthesized clone of EMTizzle).
 
 **Two distinct states:**
 - **OFFLINE ENCOURAGEMENT MODE:** prewritten, varied encouragement; runs on GitHub Pages without a server or user account. This is **not** generative AI. If no authenticated live endpoint exists, the interface clearly identifies offline mode.
