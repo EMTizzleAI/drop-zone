@@ -50,3 +50,6 @@
  .dz-coach-top strong{font-size:23px}
 }
 @media(prefers-reduced-motion:reduce){.dz-coach-panel,.dz-coach-launch{transition:none}}
+
+/* Override the site's global sticky-header rules inside the floating coach. */
+.dz-coach-panel .dz-coach-top{position:relative;top:auto;left:auto;right:auto;z-index:auto;height:auto;min-height:63px;backdrop-filter:none}
