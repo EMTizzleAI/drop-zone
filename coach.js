@@ -14,7 +14,8 @@
   const close=document.getElementById('dzCoachClose');
   const backend=panel?.dataset.endpoint||'';
   if(!launcher||!panel||!form||!input||!log)return;
-  // Rolling conversational context stays in memory while the page is open; no account or transcript storage.\n  const history=[];
+  // Rolling conversational context stays in memory while the page is open; no account or transcript storage.
+  const history=[];
   let busy=false;
   let turn=0;
   const helpText="I hear you. This is more than a pep talk deserves to handle. If you're in immediate danger, call local emergency services (911 in the U.S.). In the U.S. you can also call or text 988 for immediate emotional support. Try to reach someone you trust and get to a safer place if you can.";
