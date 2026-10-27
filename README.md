@@ -35,19 +35,16 @@ Open `index.html` in a browser, or serve this directory with any static web serv
 
 Repository **Settings → Pages → Deploy from a branch → `main` → `/ (root)`**.
 
-## EMTizzle's onboard co-pilot — new beta
+## EMTizzle's onboard co-pilot — multi-turn generative beta
 
-**The existing personal homepage voice recording is unchanged.** The co-pilot deliberately uses a separate, synthetic device voice. On the other screens, click the floating robot co-pilot button to open a small chat panel. The co-pilot is a separate assistant, not EMTizzle herself. A visitor can type a request, use prompt chips, receive an uplifting response, and optionally hear it through **their device's built-in text-to-speech voice** (not a synthesized clone of EMTizzle).
+**Home page:** EMTizzle's original human voice recording is unchanged. **Inside Drop Zone:** the floating robot Co-Pilot is a separate AI assistant with a synthetic browser voice. It provides encouragement and can recommend real music and comfortable, optional movement ideas. It does not provide diagnoses, treatment or emergency services.
 
-**Two distinct states:**
-- **OFFLINE ENCOURAGEMENT MODE:** prewritten, varied encouragement; runs on GitHub Pages without a server or user account. This is **not** generative AI. If no authenticated live endpoint exists, the interface clearly identifies offline mode.
-- **GENERATIVE AI ACTIVE:** optional backend `api/pep-talk.js`, deployed separately on Vercel and protected by server-side AI Gateway authentication. Its prompt prohibits medical diagnoses, medication suggestions, pretending to be a therapist, or invented live resources. Critical safety requests receive a fixed response directing the user toward human help.
+**Live architecture:** GitHub Pages hosts the browser UI. Its `index.html` points to `https://pantry-goblin.vercel.app/api/dropzone-copilot`, a new serverless function in the separate `EMTizzleAI/pantry-goblin` repository. The function calls Vercel AI Gateway with the explicitly free **`nvidia/nemotron-3.5-lightning-free`** chat model and no paid fallback. Vercel's OIDC token or a server-side Gateway key is required; no secret is embedded in public frontend files. A Vercel deployment succeeding does not guarantee live inference is authorized; check actual POST responses.
 
-**Enable live generation only when spending and abuse controls are in place.**
-1. Deploy this repo as a separate Vercel project (the main public site can stay on GitHub Pages). Configure Vercel AI Gateway and set an explicit low spending cap in the account dashboard. The endpoint is intentionally **off by default**.
-2. Set `DROPZONE_AI_ENABLED=true` in the Vercel server environment, and configure secure AI Gateway authentication with Vercel OIDC or `AI_GATEWAY_API_KEY`. Never put credentials into client-side JavaScript, Git, or the HTML.
-3. Set `data-endpoint="https://YOUR-VERCEL-DEPLOYMENT.vercel.app/api/pep-talk"` on `#dzCoachPanel` in `index.html` after confirming the deployment's actual URL.
-4. Test from the published GitHub Pages origin. Keep the production endpoint disabled until you implement a durable per-user request quota/rate limiter; the serverless in-memory counter is only a best-effort backup.
-5. Verify the UI labels "GENERATIVE AI ACTIVE" only on a real model response. With missing configuration, it automatically reverts to an honest offline motivational response.
+**User experience:** multi-turn chat with a rolling 12-message context window, unlimited *sequential* conversation turns while the tab stays open, optional text-to-speech, music and gentle movement chips, and an offline prewritten fallback if inference is unavailable. It does not save transcripts or remember people between browser visits. The visible "GENERATIVE AI ACTIVE" indicator appears only after an actual model-generated response. Clicking CLEAR CHAT forgets current context. Never interpret "never-ending" as guaranteed uptime or unlimited paid requests.
 
-**Privacy:** The site does not persist chat transcripts. When live AI is enabled, submitted messages are sent to the provider through the configured server backend. Visitors should avoid sensitive personal data. This is motivational support, not a medical or emergency service.
+**Costs and abuse:** Gateway's free models and promotions can change. The API hardcodes the verified free model ID, has no paid fallback and includes a temporary per-instance 35-requests/hour cap. Before expanding access, add a durable gateway/user budget, a durable rate limiter and monitoring so a publicly accessible endpoint can't create uncontrolled spend or resource exhaustion. The old `drop-zone/api/pep-talk.js` is a disabled prototype and is NOT the connected runtime backend.
+
+**Privacy and safety:** Public visitors should avoid entering sensitive information. Messages and a rolling subset of conversation history are sent to NVIDIA via Vercel AI Gateway, whose provider may retain submitted content. No conversation is stored by Drop Zone. The Co-Pilot must not give medical advice or replace appropriate local emergency services; in U.S. mental health emergencies the safety message mentions 988.
+
+**Manual smoke test:** Check `/api/dropzone-copilot` returns JSON health information, then send a harmless POST with `{ "message": "Suggest an uplifting song and a gentle activity.", "history": [] }` from the GitHub Pages origin, and confirm `mode:"live"` before advertising generative responses. If it returns 503, confirm Vercel OIDC authentication, AI Gateway account eligibility, and model access. Test the original recording, the Co-Pilot on mobile, and the Pantry Goblin link.
