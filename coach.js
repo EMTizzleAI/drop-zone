@@ -143,7 +143,7 @@
           mode=data.mode==='live'?'live':'offline';
           setDiagnostic(mode==='live'?'✅ LIVE GENERATION CONFIRMED · Co-Pilot is answering through the language model.':'ⓘ A safety response was used instead of model generation.');
         }finally{clearTimeout(timer)}
-      }else throw Error('No AI backend configured');
+      }else throw Error('Cloudflare Worker is not deployed or its workers.dev URL is not linked yet.');
     }catch(err){
       setDiagnostic('⚠ Live model unavailable: '+String(err?.message||'connection failed').slice(0,180)+' Offline encouragement shown below.');
       reply=offlineReply(text)
