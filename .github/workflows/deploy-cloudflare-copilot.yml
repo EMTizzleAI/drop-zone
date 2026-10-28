@@ -1,0 +1,48 @@
+name: Deploy Co-Pilot to Cloudflare Workers
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+      - name: Check Cloudflare deployment authorization
+        shell: bash
+        env:
+          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_DEPLOY_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$CF_ACCOUNT_ID" ] || [ -z "$CF_DEPLOY_TOKEN" ]; then
+            echo "::error::Set GitHub repository secrets CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN, or connect the repository in Cloudflare Workers Builds."
+            exit 1
+          fi
+      - name: Deploy with Wrangler
+        id: deploy
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: cloudflare-copilot
+          command: deploy
+      - name: Show deployment URL
+        shell: bash
+        env:
+          WORKER_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          node -e '
+            const url=new URL(process.env.WORKER_URL||"");
+            if(url.protocol!=="https:"||!url.hostname.endsWith(".workers.dev"))throw Error("Expected Cloudflare workers.dev URL");
+            console.log("Deployed Worker: "+url.origin);
+          '
+          {
+            echo "### Cloudflare Co-Pilot deployed"
+            echo "Worker URL: $WORKER_URL"
+            echo ""
+            echo "Ask ChatGPT to connect this exact URL in drop-zone/copilot-config.js."
+            echo "A deployed Worker needs one successful model POST before declaring generative chat live."
+          } >> "$GITHUB_STEP_SUMMARY"
