@@ -13,7 +13,7 @@
   const autoVoice=document.getElementById('dzCoachAutoVoice');
   const clear=document.getElementById('dzCoachClear');
   const close=document.getElementById('dzCoachClose');
-  const backend=panel?.dataset.endpoint||'';
+  const backend=String(window.DROPZONE_COPILOT_ENDPOINT || panel?.dataset.endpoint || '').trim();
   if(!launcher||!panel||!form||!input||!log)return;
   // Rolling conversational context stays in memory while the page is open; no account or transcript storage.
   const history=[];
@@ -91,8 +91,8 @@
     if(diagnostic)diagnostic.textContent=message;
   }
   async function checkConnection(){
-    if(!backend){setDiagnostic('⚠ No AI backend linked. Only prewritten offline replies are available.');return}
-    setDiagnostic('🔎 Checking the Co-Pilot server. This does not verify model generation yet…');
+    if(!backend){setDiagnostic('☁ Cloudflare Worker not connected yet. Co-Pilot is using prewritten offline encouragement until its deployment URL is configured.');return}
+    setDiagnostic('☁ Checking Cloudflare Workers AI. This does not verify model generation yet…');
     const ctrl=new AbortController();
     const timer=setTimeout(()=>ctrl.abort(),8500);
     try{
@@ -100,14 +100,14 @@
       if(!res.ok)throw new Error('Backend health check HTTP '+res.status);
       const data=await res.json();
       if(data.configured===false){
-        setDiagnostic('⚠ Live AI not authenticated on the server. Chat will use offline replies until the AI connection is configured.');
+        setDiagnostic('⚠ Cloudflare Workers AI binding is unavailable. Co-Pilot will use offline encouragement.');
       }else if(data.configured===true){
-        setDiagnostic('📡 AI credentials detected, but generation is unverified. Send a message to test the model.');
+        setDiagnostic('☁ Cloudflare AI binding detected. Send a message to verify actual model generation.');
       }else{
         setDiagnostic('⚠ Server status unclear. Send a test message; offline replies are available.');
       }
     }catch(err){
-      setDiagnostic('⚠ Cannot reach the AI server from this browser ('+(err.name==='AbortError'?'timed out':'network or access error')+'). Offline replies are available.');
+      setDiagnostic('⚠ Cannot reach Cloudflare Worker from this browser ('+(err.name==='AbortError'?'timed out':'network or access error')+'). Offline replies are available.');
     }finally{clearTimeout(timer)}
   }
   function setMode(mode){
