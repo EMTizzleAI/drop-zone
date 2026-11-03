@@ -93,37 +93,32 @@ function startGreetingMusic() {
   } catch(e) {stopGreetingMusic();}
 }
 
+let captionAnimation = 0;
 function emtizzleGreeting() {
-  const caption = document.getElementById('emtizzleGreetingCaption');
-  if (caption) {
-    caption.textContent = EMTIZZLE_GREETING;
-    caption.hidden = false;
+ const caption=document.getElementById('emtizzleGreetingCaption');
+ cancelAnimationFrame(captionAnimation);
+ const words="EMTizzle, operator. I heard you're in a rough spot. That's all right. Sometimes life can take you sideways. We're gonna get you out.";
+ if(caption){caption.hidden=false;caption.textContent='';caption.setAttribute('aria-label',words)}
+ if('speechSynthesis' in window)window.speechSynthesis.cancel();
+ if(emtizzleAudio){emtizzleAudio.pause();emtizzleAudio.currentTime=0}
+ else{emtizzleAudio=new Audio('EMTizzle_Operator_Timelapse_Radio_Drop.mp3');emtizzleAudio.preload='none'}
+ const cues=[[0.5,"EMTizzle, operator."],[2.7," I heard you're in a rough spot."],[5.6," That's all right."],[7.5," Sometimes life can take you sideways."],[11.1," We're gonna get you out."]];
+ function draw(){
+  if(!caption)return;
+  const t=emtizzleAudio.currentTime;let out='';
+  for(let i=0;i<cues.length;i++){
+   const [at,part]=cues[i];if(t<at)break;
+   const until=i+1<cues.length?cues[i+1][0]-.2:14.2;
+   const fraction=Math.max(0,Math.min(1,(t-at)/(until-at)));
+   out+=part.slice(0,Math.floor(part.length*fraction));
+   if(fraction<1)break;
   }
-  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-  
-  if (emtizzleAudio) {
-    emtizzleAudio.pause();
-    emtizzleAudio.currentTime = 0;
-  } else {
-    emtizzleAudio = new Audio('EMTizzle_Operator_Timelapse_Radio_Drop.mp3');
-    emtizzleAudio.preload = 'none';
-  }
-  // When the personal recording is not installed, continue with browser TTS.
-  let fallbackUsed = false;
-  const fallback = () => {
-    if (fallbackUsed) return;
-    fallbackUsed = true;
-    stopGreetingMusic();
-    speakEmtizzleFallback();
-  };
-  emtizzleAudio.onerror = fallback;
-  emtizzleAudio.onended = () => stopGreetingMusic();
-  // Do not stop music on pause: restarting a previous greeting fires pause before play.
-  // The approved MP3 already contains the music, radio effects, and outro.
-  // Never layer the legacy browser-generated techno over the mastered track.
-  stopGreetingMusic();
-  try {
-    const playback = emtizzleAudio.play();
-    if (playback && typeof playback.catch === 'function') playback.catch(fallback);
-  } catch (e) { fallback(); }
+  caption.textContent=out;
+  if(!emtizzleAudio.paused&&!emtizzleAudio.ended)captionAnimation=requestAnimationFrame(draw);
+ }
+ const fallback=()=>{cancelAnimationFrame(captionAnimation);if(caption)caption.textContent=words;speakEmtizzleFallback()};
+ emtizzleAudio.onerror=fallback;
+ emtizzleAudio.onended=()=>{cancelAnimationFrame(captionAnimation);if(caption)caption.textContent=words};
+ stopGreetingMusic();
+ try{const p=emtizzleAudio.play();if(p&&typeof p.then==='function')p.then(()=>captionAnimation=requestAnimationFrame(draw)).catch(fallback);else captionAnimation=requestAnimationFrame(draw)}catch(e){fallback()}
 }
