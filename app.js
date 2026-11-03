@@ -105,7 +105,7 @@ function emtizzleGreeting() {
     emtizzleAudio.pause();
     emtizzleAudio.currentTime = 0;
   } else {
-    emtizzleAudio = new Audio('emtizzle-voice-final-take3-20261018.mp3');
+    emtizzleAudio = new Audio('Drop_Zone_FINAL_Mix_Recovered.mp3');
     emtizzleAudio.preload = 'none';
   }
   // When the personal recording is not installed, continue with browser TTS.
