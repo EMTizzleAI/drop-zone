@@ -57,7 +57,7 @@ function startGreetingMusic() {
     master.gain.value = 0;
     master.connect(compressor); compressor.connect(ctx.destination);
     // Prominent but still behind the spoken recording.
-    master.gain.setTargetAtTime(.8,ctx.currentTime,.4);
+    master.gain.setTargetAtTime(1.6,ctx.currentTime,.4);
     const bassNotes=[55,55,65.41,55,73.42,65.41,49,65.41];
     const leadNotes=[220,261.63,329.63,293.66,220,392,329.63,261.63];
     const synth=(frequency,type,volume,duration,cutoff=2400)=>{
