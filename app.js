@@ -35,7 +35,7 @@ function startGreetingMusic() {
     const ctx=new AC(), master=ctx.createGain(), filter=ctx.createBiquadFilter();
     master.gain.value=0; filter.type='lowpass'; filter.frequency.value=1450;
     filter.connect(master); master.connect(ctx.destination);
-    master.gain.setTargetAtTime(.5,ctx.currentTime,.35);
+    master.gain.setTargetAtTime(1.0,ctx.currentTime,.35);
     const notes=[55,55,65.41,49,55,73.42,65.41,49];
     let step=0;
     const pulse=()=>{
