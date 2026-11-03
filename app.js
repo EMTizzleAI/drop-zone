@@ -33,21 +33,21 @@ function startGreetingMusic() {
     const AC=window.AudioContext||window.webkitAudioContext;
     if(!AC)return;
     const ctx=new AC(), master=ctx.createGain(), filter=ctx.createBiquadFilter();
-    master.gain.value=0; filter.type='lowpass'; filter.frequency.value=850;
+    master.gain.value=0; filter.type='lowpass'; filter.frequency.value=1450;
     filter.connect(master); master.connect(ctx.destination);
-    master.gain.setTargetAtTime(.09,ctx.currentTime,.8);
+    master.gain.setTargetAtTime(.32,ctx.currentTime,.35);
     const notes=[55,55,65.41,49,55,73.42,65.41,49];
     let step=0;
     const pulse=()=>{
       const t=ctx.currentTime, n=notes[step%notes.length];
       const osc=ctx.createOscillator(),gain=ctx.createGain();
       osc.type='triangle';osc.frequency.setValueAtTime(n,t);
-      gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(.16,t+.018);gain.gain.exponentialRampToValueAtTime(.0001,t+.42);
+      gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(.24,t+.018);gain.gain.exponentialRampToValueAtTime(.0001,t+.42);
       osc.connect(gain);gain.connect(filter);osc.start(t);osc.stop(t+.44);
       if(step%2===0){
         const hi=ctx.createOscillator(),hg=ctx.createGain();
         hi.type='sine';hi.frequency.setValueAtTime(880,t);hi.frequency.exponentialRampToValueAtTime(330,t+.09);
-        hg.gain.setValueAtTime(.0001,t);hg.gain.exponentialRampToValueAtTime(.024,t+.008);hg.gain.exponentialRampToValueAtTime(.0001,t+.12);
+        hg.gain.setValueAtTime(.0001,t);hg.gain.exponentialRampToValueAtTime(.055,t+.008);hg.gain.exponentialRampToValueAtTime(.0001,t+.12);
         hi.connect(hg);hg.connect(filter);hi.start(t);hi.stop(t+.13);
       }
       step++;
@@ -82,7 +82,7 @@ function emtizzleGreeting() {
   };
   emtizzleAudio.onerror = fallback;
   emtizzleAudio.onended = stopGreetingMusic;
-  emtizzleAudio.onpause = stopGreetingMusic;
+  // Do not stop music on pause: restarting a previous greeting fires pause before play.
   startGreetingMusic();
   try {
     const playback = emtizzleAudio.play();
