@@ -105,7 +105,7 @@ function emtizzleGreeting() {
     emtizzleAudio.pause();
     emtizzleAudio.currentTime = 0;
   } else {
-    emtizzleAudio = new Audio('Drop_Zone_FINAL_Mix_Recovered.mp3');
+    emtizzleAudio = new Audio('EMTizzle_Operator_Timelapse_Radio_Drop.mp3');
     emtizzleAudio.preload = 'none';
   }
   // When the personal recording is not installed, continue with browser TTS.
