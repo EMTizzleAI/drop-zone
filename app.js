@@ -20,43 +20,79 @@ function speakEmtizzleFallback() {
 }
 // Original low-volume hacker-techno bed, generated locally in the browser.
 // No third-party track, autoplay, external requests, or licensing dependencies.
+// Original upbeat melodic-techno backing for the EMTizzle greeting (128 BPM).
+// Synthesized on-device; no copyrighted recording or external service.
 let dzMusic = null;
-function stopGreetingMusic() {
+function stopGreetingMusic(trailSeconds = 0) {
   if (!dzMusic) return;
   const m = dzMusic; dzMusic = null;
-  clearInterval(m.timer);
-  try { const t=m.ctx.currentTime; m.master.gain.cancelScheduledValues(t); m.master.gain.setTargetAtTime(0,t,.12); setTimeout(()=>m.ctx.close().catch(()=>{}),650); } catch(e) {}
+  if (m.stopTimer) clearTimeout(m.stopTimer);
+  const tail = Math.max(0, trailSeconds);
+  try {
+    const t = m.ctx.currentTime;
+    m.master.gain.cancelScheduledValues(t);
+    m.master.gain.setValueAtTime(m.master.gain.value, t);
+    if (tail) {
+      // Keep the groove audible after the voice, then fade across the last 3 seconds.
+      m.master.gain.setValueAtTime(m.master.gain.value, t + Math.max(0,tail-3));
+      m.master.gain.linearRampToValueAtTime(0, t+tail);
+    } else {
+      m.master.gain.linearRampToValueAtTime(0, t+.12);
+    }
+  } catch(e) {}
+  m.stopTimer = setTimeout(() => {
+    clearInterval(m.timer);
+    m.ctx.close().catch(()=>{});
+  }, (tail+.25)*1000);
 }
 function startGreetingMusic() {
   stopGreetingMusic();
   try {
-    const AC=window.AudioContext||window.webkitAudioContext;
-    if(!AC)return;
-    const ctx=new AC(), master=ctx.createGain(), filter=ctx.createBiquadFilter();
-    master.gain.value=0; filter.type='lowpass'; filter.frequency.value=1450;
-    filter.connect(master); master.connect(ctx.destination);
-    master.gain.setTargetAtTime(1.0,ctx.currentTime,.35);
-    const notes=[55,55,65.41,49,55,73.42,65.41,49];
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    const ctx = new AC(), master = ctx.createGain();
+    const compressor = ctx.createDynamicsCompressor();
+    compressor.threshold.value = -18;
+    compressor.ratio.value = 3;
+    master.gain.value = 0;
+    master.connect(compressor); compressor.connect(ctx.destination);
+    // Prominent but still behind the spoken recording.
+    master.gain.setTargetAtTime(.8,ctx.currentTime,.4);
+    const bassNotes=[55,55,65.41,55,73.42,65.41,49,65.41];
+    const leadNotes=[220,261.63,329.63,293.66,220,392,329.63,261.63];
+    const synth=(frequency,type,volume,duration,cutoff=2400)=>{
+      const t=ctx.currentTime, osc=ctx.createOscillator(),env=ctx.createGain(),lp=ctx.createBiquadFilter();
+      osc.type=type;osc.frequency.setValueAtTime(frequency,t);
+      lp.type='lowpass';lp.frequency.value=cutoff;
+      env.gain.setValueAtTime(.0001,t);
+      env.gain.exponentialRampToValueAtTime(volume,t+.012);
+      env.gain.exponentialRampToValueAtTime(.0001,t+duration);
+      osc.connect(lp);lp.connect(env);env.connect(master);
+      osc.start(t);osc.stop(t+duration+.02);
+    };
     let step=0;
     const pulse=()=>{
-      const t=ctx.currentTime, n=notes[step%notes.length];
-      const osc=ctx.createOscillator(),gain=ctx.createGain();
-      osc.type='triangle';osc.frequency.setValueAtTime(n,t);
-      gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(.24,t+.018);gain.gain.exponentialRampToValueAtTime(.0001,t+.42);
-      osc.connect(gain);gain.connect(filter);osc.start(t);osc.stop(t+.44);
-      if(step%2===0){
-        const hi=ctx.createOscillator(),hg=ctx.createGain();
-        hi.type='sine';hi.frequency.setValueAtTime(880,t);hi.frequency.exponentialRampToValueAtTime(330,t+.09);
-        hg.gain.setValueAtTime(.0001,t);hg.gain.exponentialRampToValueAtTime(.055,t+.008);hg.gain.exponentialRampToValueAtTime(.0001,t+.12);
-        hi.connect(hg);hg.connect(filter);hi.start(t);hi.stop(t+.13);
+      const s=step%16;
+      // Driving four-on-the-floor kick, offbeat hats, syncopated bass.
+      if(s%2===0){
+        const t=ctx.currentTime, o=ctx.createOscillator(),g=ctx.createGain();
+        o.type='sine';o.frequency.setValueAtTime(135,t);o.frequency.exponentialRampToValueAtTime(48,t+.12);
+        g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.32,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+.22);
+        o.connect(g);g.connect(master);o.start(t);o.stop(t+.24);
+      } else {
+        synth(6200,'triangle',.014,.075,6800);
       }
+      if(s%2===1 || s===0) synth(bassNotes[(step>>1)%8],'sawtooth',.075,.19,540);
+      if(s%4===2) synth(leadNotes[(step>>2)%8],'triangle',.055,.29,2100);
       step++;
     };
-    pulse(); const timer=setInterval(pulse,360);
-    dzMusic={ctx,master,timer};
+    pulse();
+    const timer=setInterval(pulse,234.375); // 128 BPM eighth notes
+    dzMusic={ctx,master,timer,stopTimer:null};
     ctx.resume().catch(()=>{});
   } catch(e) {stopGreetingMusic();}
 }
+
 function emtizzleGreeting() {
   const caption = document.getElementById('emtizzleGreetingCaption');
   if (caption) {
@@ -81,7 +117,7 @@ function emtizzleGreeting() {
     speakEmtizzleFallback();
   };
   emtizzleAudio.onerror = fallback;
-  emtizzleAudio.onended = stopGreetingMusic;
+  emtizzleAudio.onended = () => stopGreetingMusic(9);
   // Do not stop music on pause: restarting a previous greeting fires pause before play.
   startGreetingMusic();
   try {
