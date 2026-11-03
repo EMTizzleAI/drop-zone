@@ -117,9 +117,11 @@ function emtizzleGreeting() {
     speakEmtizzleFallback();
   };
   emtizzleAudio.onerror = fallback;
-  emtizzleAudio.onended = () => stopGreetingMusic(9);
+  emtizzleAudio.onended = () => stopGreetingMusic();
   // Do not stop music on pause: restarting a previous greeting fires pause before play.
-  startGreetingMusic();
+  // The approved MP3 already contains the music, radio effects, and outro.
+  // Never layer the legacy browser-generated techno over the mastered track.
+  stopGreetingMusic();
   try {
     const playback = emtizzleAudio.play();
     if (playback && typeof playback.catch === 'function') playback.catch(fallback);
