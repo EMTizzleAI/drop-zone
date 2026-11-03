@@ -28,3 +28,19 @@ Mobile-first `stabilization.html` connects Drop Zone's **I NEED STABILIZATION** 
 
 ## Safety
 Medical content is informational, not diagnosis. For emergencies call 911. Emergency-department screening/stabilization obligations do not guarantee zero bills.
+
+## Expanded navigator (November 3)
+- Three-step health coverage walkthrough: current insurance status, kind of help, and next action. The wizard intentionally avoids collecting names, income, medical history, or SSNs.
+- State-aware official resource cards: BenefitsCal and California DHCS for California, Medicaid.gov and HealthCare.gov for other states; 211 and HRSA health centers for relevant needs.
+- Five-step stabilization mission checklist stored in browser localStorage, with an explicit reset button and copy-to-clipboard plan. Do not use the checklist on a shared device if privacy is a concern.
+- These official resources are starting points, not a substitute for eligibility screening or personalized medical advice.
+
+## Prelaunch manual QA
+1. Open on a small Android screen. Confirm navigation from the existing I NEED STABILIZATION button.
+2. Test California and at least one other state, then test all ten categories.
+3. Complete the insurance wizard with every option; check back and restart.
+4. Confirm checklist persists on refresh and resets, and copy works only when browser permission allows.
+5. Verify public resource cards cannot render injected HTML from resource descriptions.
+6. Test a non-admin account against all write operations. Confirm published-only anonymous reads.
+7. Test when offline and when Supabase is unconfigured; ensure the official resource links remain usable when connectivity returns.
+8. Confirm all externally listed office hours, eligibility, and phone numbers before marking anything field verified.
