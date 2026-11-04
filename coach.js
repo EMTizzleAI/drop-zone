@@ -21,7 +21,7 @@
   let turn=0;
   const helpText="I hear you. This is more than a pep talk deserves to handle. If you're in immediate danger, call local emergency services (911 in the U.S.). In the U.S. you can also call or text 988 for immediate emotional support. Try to reach someone you trust and get to a safer place if you can.";
   const localReplies=[
-    "Hey, operator. You made it this far. That counts. Pick ONE thing you can do in the next ten minutes, not everything at once. I'm rooting for you.",
+    "Okay, soldier. Ease up. You made it this far. That counts. Pick ONE thing you can do in the next ten minutes, not everything at once. I'm rooting for you.",
     "Look at you: still here, still making moves. You don't need a perfect plan; you need one realistic next step. Small victories are actual victories.",
     "Mission accepted: drink some water, unclench your shoulders, and give yourself credit for something you handled today. No heroics required.",
     "You're allowed to be tired and determined at the same time. The next objective can be tiny. Tiny is still forward.",
@@ -35,7 +35,7 @@
     if(/song|music|playlist|beats?|listen|dance/i.test(text))return "Co-pilot DJ mode! Try 'Lovely Day' by Bill Withers for sunshine or 'Dog Days Are Over' by Florence + The Machine for big energy. What kind of music gets you moving, operator?";
     if(/exercise|stretch|movement|workout|walk|move/i.test(text))return "Movement mission: if it feels comfortable, put on one favorite song and sway, stroll, or roll your shoulders for a minute. No pressure or fitness targets. Stop if anything hurts. What movement actually feels fun to you?";
     if(/food|hungry|pantry|beans/i.test(text))return "You're allowed to ask for help with food, full stop. The next mission can be opening Pantry Goblin and checking the nearest listing before traveling. One step, operator.";
-    if(/exhaust|tired|sleep|rest/i.test(text))return "Rest is not a failure to launch. You don't have to earn it. Choose one small, safe comfort step, and let that be enough for now.";
+    if(/exhaust|tired|sleep|rest/i.test(text))return "Ease up, soldier. Rest is not a failure to launch. You don't have to earn it. Choose one small, safe comfort step, and let that be enough for now.";
     if(/job|rejection|work|interview/i.test(text))return "One rejection doesn't erase your skills. You've already put yourself out there. That takes guts. What's one job-related move worth making tomorrow?";
     return localReplies[turn++%localReplies.length];
   }
@@ -176,6 +176,6 @@
   document.addEventListener('keydown',e=>{
     if(e.key==='Escape'&&!panel.hidden){panel.hidden=true;stopSpeaking();launcher.focus();}
   });
-  addMessage('medic',"Co-pilot online, operator. Your next objective doesn't have to be huge. Ask for a little motivation or tell me what you're proud of.",'offline');
+  addMessage('medic',"Okay, soldier. Your next objective doesn't have to be huge. Ask for a little motivation or tell me what you're proud of.",'offline');
   setMode('offline');syncPage();
 })();
