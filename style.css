@@ -47,3 +47,25 @@
 @keyframes jobGoblinCase{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg)}}
 @media(max-width:780px){.job-goblin{right:max(9px,env(safe-area-inset-right));bottom:123px}.job-goblin-body{width:66px;height:66px;font-size:35px}.job-goblin-label{font-size:8px;padding:6px 7px}}
 @media(prefers-reduced-motion:reduce){.job-goblin-body,.job-goblin-briefcase,.job-goblin-spark{animation:none}}
+
+
+/* Goblin extraction bag: both existing launchers peek out, with independent tap targets. */
+.goblin-medbag{position:fixed;right:12px;bottom:15px;width:232px;height:155px;z-index:45;pointer-events:none;filter:drop-shadow(0 9px 13px #000c)}
+.goblin-medbag-handle{position:absolute;left:72px;top:21px;width:86px;height:42px;border:10px solid #e32b89;border-bottom:0;border-radius:22px 22px 0 0;box-shadow:inset 0 2px #ff8fca}
+.goblin-medbag-back{position:absolute;left:5px;right:5px;bottom:8px;height:90px;border:3px solid #fc4ca8;border-radius:20px;background:repeating-linear-gradient(135deg,#13131c 0 8px,#1d1b29 8px 12px);box-shadow:inset 0 0 20px #ff28b233,0 0 18px #ff28b244}
+.goblin-medbag-front{position:absolute;left:9px;right:9px;bottom:5px;height:64px;border:3px solid #f14ca0;border-radius:9px 9px 16px 16px;background:linear-gradient(135deg,#25202c,#090d17 70%);box-shadow:inset 0 0 12px #000,0 -5px 0 #ff64ae;pointer-events:none}
+.goblin-medbag-front:before,.goblin-medbag-front:after{content:"";position:absolute;top:0;bottom:0;width:12px;background:linear-gradient(90deg,#a21b62,#ff63ad,#9b1c60)}
+.goblin-medbag-front:before{left:20px}.goblin-medbag-front:after{right:20px}
+.medbag-patch{position:absolute;left:50%;top:6px;transform:translateX(-50%);font:bold 40px system-ui;color:#ff58a5;text-shadow:0 0 9px #ff48a6}
+.medbag-emt{position:absolute;left:4px;bottom:5px;font:900 11px system-ui;color:white;background:#16304d;padding:2px 4px;border:1px solid #88c5ef;transform:rotate(-7deg)}
+.goblin-medbag .job-goblin,.goblin-medbag .pantry-goblin{position:absolute;z-index:2;bottom:68px;right:auto;gap:0;pointer-events:auto;filter:none}
+.goblin-medbag .job-goblin{left:24px}.goblin-medbag .pantry-goblin{right:18px}
+.goblin-medbag .job-goblin-body,.goblin-medbag .goblin-body{width:60px;height:60px;font-size:35px;border:0;background:none;box-shadow:none;animation:bagPeek 3s ease-in-out infinite}
+.goblin-medbag .goblin-body{animation-delay:1.1s}
+.goblin-medbag .job-goblin-label,.goblin-medbag .goblin-label{position:absolute;bottom:62px;left:50%;transform:translateX(-50%);font-size:9px;padding:5px 7px;box-shadow:0 0 12px #000;opacity:.98}
+.goblin-medbag .job-goblin-label{bottom:70px}
+.goblin-medbag .job-goblin-briefcase{font-size:19px;right:-4px;bottom:2px}
+.goblin-medbag .goblin-beans{width:23px;height:23px;font-size:13px;right:-4px;bottom:1px}
+@keyframes bagPeek{0%,100%{transform:translateY(11px) rotate(-6deg)}45%{transform:translateY(-9px) rotate(6deg)}}
+@media(max-width:780px){.goblin-medbag{width:166px;height:119px;right:5px;bottom:7px}.goblin-medbag-handle{left:49px;top:16px;width:65px;height:30px;border-width:7px}.goblin-medbag-back{height:67px}.goblin-medbag-front{height:46px}.goblin-medbag-front:before,.goblin-medbag-front:after{width:8px}.goblin-medbag-front:before{left:15px}.goblin-medbag-front:after{right:15px}.medbag-patch{font-size:29px;top:1px}.medbag-emt{font-size:8px}.goblin-medbag .job-goblin,.goblin-medbag .pantry-goblin{bottom:49px}.goblin-medbag .job-goblin{left:12px}.goblin-medbag .pantry-goblin{right:10px}.goblin-medbag .job-goblin-body,.goblin-medbag .goblin-body{width:46px;height:46px;font-size:29px}.goblin-medbag .job-goblin-label,.goblin-medbag .goblin-label{font-size:7px;bottom:49px;padding:4px 5px}.goblin-medbag .job-goblin-label{bottom:55px}.goblin-medbag .job-goblin-briefcase{font-size:15px}.goblin-medbag .goblin-beans{width:19px;height:19px;font-size:11px}}
+@media(prefers-reduced-motion:reduce){.goblin-medbag .job-goblin-body,.goblin-medbag .goblin-body{animation:none}}
