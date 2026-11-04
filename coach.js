@@ -75,7 +75,12 @@
     try{
       stopSpeaking();
       const utter=new SpeechSynthesisUtterance(text);
-      utter.lang='en-US';utter.rate=1.03;utter.pitch=1.06;
+      utter.lang='en-US';utter.rate=0.88;utter.pitch=0.82;
+      // Midnight Operator: prefer a lower, smoother English voice when available.
+      const voices=window.speechSynthesis.getVoices();
+      const english=voices.filter(v=>/^en[-_]/i.test(v.lang));
+      const preferred=english.find(v=>/samantha|aria|jenny|zira|serena|moira|female/i.test(v.name))||english.find(v=>v.localService)||english[0];
+      if(preferred)utter.voice=preferred;
       window.speechSynthesis.speak(utter);
     }catch(_){}
   }
