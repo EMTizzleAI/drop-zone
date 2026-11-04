@@ -27,6 +27,19 @@
     "You're allowed to be tired and determined at the same time. The next objective can be tiny. Tiny is still forward.",
     "A bad hour isn't the entire story. Take the win you can reach right now. I'll celebrate the heck out of it with you."
   ];
+  const resourceQuestion=/homeless|unhoused|shelter|shower|laundr|housing|hygiene|safe parking/i;
+  const directorySources=[
+    ['fremont','Fremont city services','https://www.fremont.gov/residents/homeless-response/homeless-services'],
+    ['san jose','San Jose services','https://www.sanjoseca.gov/your-government/departments-offices/housing/resource-library/homeless-services-guide'],
+    ['santa clara','Santa Clara city services','https://www.santaclaraca.gov/our-city/departments-a-f/community-development/housing-community-services-division/homeless-prevention-and-assistance'],
+    ['palo alto','LifeMoves','https://lifemoves.org/get-help/']
+  ];
+  function fieldNotes(message){
+    if(!resourceQuestion.test(message))return '';
+    const matched=directorySources.filter(row=>message.toLowerCase().includes(row[0]));
+    if(!matched.length)return 'Ask for city or ZIP code. Do not guess location. 211 can provide local referrals.';
+    return 'Public directory leads, not live availability: '+matched.map(row=>row[1]+' '+row[2]).join('; ')+'. Tell the operator to confirm hours and eligibility before travel. Never invent details.';
+  }
   const danger=/(?:kill myself|end my life|suicid|hurt myself|self.harm|want to die|about to die|overdose|someone (?:is|will) hurt me|not safe right now)/i;
   const medical=/(?:diagnos|medication dose|symptoms|chest pain|medicine to take|medical advice|prescription)/i;
   function offlineReply(text) {
@@ -133,7 +146,7 @@
         try {
           const res=await fetch(backend,{
             method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({message:text,history:history.slice(-12)}),
+            body:JSON.stringify({message:fieldNotes(text)?text+'\n\nFIELD NOTES: '+fieldNotes(text)+' Use a calm field-medic voice; occasionally say Okay, soldier or Ease up.':text,history:history.slice(-12)}),
             signal:ctrl.signal
           });
           const data=await res.json().catch(()=>({}));
