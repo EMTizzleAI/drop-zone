@@ -35,3 +35,15 @@
 @keyframes goblinSparkle{0%,100%{opacity:.3;transform:scale(.75) rotate(0)}50%{opacity:1;transform:scale(1.22) rotate(20deg)}}
 @media(max-width:780px){.goblin-body{width:66px;height:66px;font-size:35px}.goblin-beans{width:26px;height:26px;font-size:16px}.goblin-label{font-size:8px;padding:6px 7px}.pantry-goblin{right:max(9px,env(safe-area-inset-right));bottom:max(9px,env(safe-area-inset-bottom))}}
 @media(prefers-reduced-motion:reduce){.goblin-body,.goblin-beans,.goblin-sparkle{animation:none}}
+
+/* Job Goblin: floating companion above Pantry Goblin */
+.job-goblin{position:fixed;right:max(15px,env(safe-area-inset-right));bottom:145px;z-index:40;display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;filter:drop-shadow(0 5px 14px #000b);transition:transform .2s ease}
+.job-goblin:hover,.job-goblin:focus-visible{transform:translateY(-5px) scale(1.05)}
+.job-goblin-body{position:relative;display:grid;place-items:center;width:76px;height:76px;border:2px solid #caff82;border-radius:50%;background:radial-gradient(circle at 35% 25%,#6b284f,#1b0e27 75%);font-size:42px;animation:jobGoblinBounce 2.6s ease-in-out infinite;box-shadow:0 0 17px #caff8270}
+.job-goblin-briefcase{position:absolute;right:-7px;bottom:0;font-size:24px;animation:jobGoblinCase 1.7s ease-in-out infinite}
+.job-goblin-label{font-size:10px;font-weight:900;letter-spacing:.5px;white-space:nowrap;color:#160a16;background:#caff82;padding:6px 9px;border-radius:10px;box-shadow:0 3px 8px #0008}
+.job-goblin-spark{position:absolute;left:0;top:4px;color:#caff82;font-size:22px;animation:goblinSparkle 2s ease-in-out infinite}
+@keyframes jobGoblinBounce{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(7deg)}}
+@keyframes jobGoblinCase{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg)}}
+@media(max-width:780px){.job-goblin{right:max(9px,env(safe-area-inset-right));bottom:123px}.job-goblin-body{width:66px;height:66px;font-size:35px}.job-goblin-label{font-size:8px;padding:6px 7px}}
+@media(prefers-reduced-motion:reduce){.job-goblin-body,.job-goblin-briefcase,.job-goblin-spark{animation:none}}
