@@ -86,4 +86,26 @@
 @media(max-width:780px){.goblin-medbag{width:220px}.goblin-medbag-handle{left:50%}.goblin-medbag .job-goblin{left:10px}.goblin-medbag .pantry-goblin{right:10px}.goblin-medbag .housing-goblin{bottom:49px}.goblin-medbag .housing-goblin-body{width:46px;height:46px;font-size:31px}.goblin-medbag .housing-goblin-house{width:19px;height:19px;font-size:12px}.goblin-medbag .housing-goblin-label{bottom:49px;font-size:7px;padding:4px 5px}}
 @media(prefers-reduced-motion:reduce){.goblin-medbag .housing-goblin-body{animation:none}}
 
+
+/* Go-bag tools: only the medical bag is visible until clicked. Three tools pop out above it. */
+.goblin-medbag-toggle{position:absolute;inset:0;z-index:6;display:block;width:100%;height:100%;padding:0;border:0;background:transparent;color:inherit;cursor:pointer;pointer-events:auto;-webkit-tap-highlight-color:transparent}
+.goblin-medbag-toggle:focus-visible{outline:3px solid #00eaff;outline-offset:3px;border-radius:17px}
+.goblin-medbag .medbag-patch{left:22%;font-size:32px;top:9px}
+.medbag-tool-cta{position:absolute;right:18px;bottom:22px;z-index:7;display:block;max-width:62%;padding:8px 10px;border:1px solid #ff7cc4;border-radius:7px;background:#ff4ba9;color:#180b1a;box-shadow:0 0 12px #ff28b288;font:900 12px/1.15 'IBM Plex Mono',monospace;letter-spacing:.1px;text-align:center;white-space:normal;animation:goBagPulse 2.4s ease-in-out infinite}
+.goblin-medbag.is-open .medbag-tool-cta{background:#00eaff;border-color:#00eaff;box-shadow:0 0 14px #00eaff77;animation:none}
+.goblin-medbag .job-goblin,.goblin-medbag .pantry-goblin,.goblin-medbag .housing-goblin{bottom:160px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s ease,transform .38s cubic-bezier(.22,1.5,.45,1),visibility .38s}
+.goblin-medbag .job-goblin,.goblin-medbag .pantry-goblin{transform:translateY(88px) scale(.75)}
+.goblin-medbag .housing-goblin{transform:translate(-50%,88px) scale(.75)}
+.goblin-medbag.is-open .job-goblin,.goblin-medbag.is-open .pantry-goblin,.goblin-medbag.is-open .housing-goblin{opacity:1;visibility:visible;pointer-events:auto}
+.goblin-medbag.is-open .job-goblin,.goblin-medbag.is-open .pantry-goblin{transform:translateY(0) scale(1)}
+.goblin-medbag.is-open .housing-goblin{transform:translate(-50%,0) scale(1)}
+.goblin-medbag.is-open .job-goblin{transition-delay:0s}
+.goblin-medbag.is-open .housing-goblin{transition-delay:.07s}
+.goblin-medbag.is-open .pantry-goblin{transition-delay:.14s}
+.goblin-medbag .job-goblin{left:4px}
+.goblin-medbag .pantry-goblin{right:4px}
+@keyframes goBagPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.2)}}
+@media(max-width:780px){.goblin-medbag .job-goblin,.goblin-medbag .pantry-goblin,.goblin-medbag .housing-goblin{bottom:128px}.goblin-medbag .job-goblin{left:1px}.goblin-medbag .pantry-goblin{right:1px}.goblin-medbag .medbag-patch{left:21%;font-size:25px;top:4px}.medbag-tool-cta{right:12px;bottom:15px;max-width:64%;padding:6px 7px;font-size:10px}}
+@media(prefers-reduced-motion:reduce){.goblin-medbag .job-goblin,.goblin-medbag .pantry-goblin,.goblin-medbag .housing-goblin{transition:none}.medbag-tool-cta{animation:none}}
+
 .housing-entry{margin:18px auto}.housing-entry button{width:100%;padding:18px;border:2px solid #ff4ba9;border-radius:15px;background:#241326;color:white;font:bold 22px system-ui;cursor:pointer}.housing-entry small{display:block;color:#00eaff;font:12px monospace}.housing-dialog{width:min(92vw,650px);max-height:85vh;overflow:auto;box-sizing:border-box;border:2px solid #ff4ba9;border-radius:20px;padding:22px;background:#170e20;color:white}.housing-dialog::backdrop{background:#000c}.housing-dialog h2{color:#ff82c5}.housing-dialog h3{color:#caff82}.housing-close{float:right;background:#30182b;color:white;border:1px solid #ff4ba9;padding:12px}.housing-story{padding:15px;background:#291a30;border-left:4px solid #ff4ba9;line-height:1.6}.housing-actions{display:grid;gap:9px}.housing-actions a,.housing-done{padding:12px;background:#ff4ba9;color:#180d1b;text-align:center;border-radius:10px;font-weight:bold;text-decoration:none}.housing-resource{padding:14px;margin:12px 0;border:1px solid #00eaff;border-radius:10px;background:#0a1a25}.housing-resource p{line-height:1.5}.housing-resource a{color:#00eaff}.housing-small{font-size:12px;color:#b8c6cf}.housing-done{width:100%;border:0;cursor:pointer}
