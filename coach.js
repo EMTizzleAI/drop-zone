@@ -56,13 +56,19 @@
     const found=document.querySelector('main > section:not(.hidden)');
     return found?.id||'home';
   }
+  let previousPage=activePage();
   function syncPage(){
-    const isHome=activePage()==='home';
+    const currentPage=activePage();
+    const isHome=currentPage==='home';
     launcher.hidden=isHome;
-    if(isHome){
+    // Preserve the old close-on-return behavior without closing a chat opened
+    // directly from the homepage's CO-PILOT READY button.
+    if(isHome && previousPage!=='home'){
       panel.hidden=true;
+      launcher.setAttribute('aria-expanded','false');
       stopSpeaking();
     }
+    previousPage=currentPage;
   }
   document.querySelectorAll('main > section').forEach(section=>{
     new MutationObserver(syncPage).observe(section,{attributes:true,attributeFilter:['class']});
@@ -175,14 +181,22 @@
     document.getElementById('dzCoachSend').disabled=false;
     input.focus({preventScroll:true});
   }
-  launcher.addEventListener('click',()=>{
-    panel.hidden=false;launcher.setAttribute('aria-expanded','true');
+  function openChat(){
+    panel.hidden=false;
+    launcher.setAttribute('aria-expanded','true');
     checkConnection();
     input.focus({preventScroll:true});
-  });
-  close.addEventListener('click',()=>{
-    panel.hidden=true;launcher.setAttribute('aria-expanded','false');stopSpeaking();launcher.focus();
-  });
+  }
+  function closeChat(){
+    panel.hidden=true;
+    launcher.setAttribute('aria-expanded','false');
+    stopSpeaking();
+    const returnTarget=launcher.hidden ? document.getElementById('dzCoachReady') : launcher;
+    if(returnTarget) returnTarget.focus({preventScroll:true});
+  }
+  launcher.addEventListener('click',openChat);
+  document.addEventListener('dropzone:open-copilot',openChat);
+  close.addEventListener('click',closeChat);
   clear.addEventListener('click',()=>{
     history.length=0;log.textContent='';stopSpeaking();
     addMessage('medic',"Co-pilot online, operator. Tell me what's heavy, or ask for a pep talk. No judgment.",'offline');
@@ -192,7 +206,7 @@
   form.addEventListener('submit',e=>{e.preventDefault();ask(input.value.trim())});
   panel.querySelectorAll('[data-pep]').forEach(b=>b.addEventListener('click',()=>ask(b.dataset.pep)));
   document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'&&!panel.hidden){panel.hidden=true;stopSpeaking();launcher.focus();}
+    if(e.key==='Escape'&&!panel.hidden)closeChat();
   });
   addMessage('medic',"Okay, soldier. Your next objective doesn't have to be huge. Ask for a little motivation or tell me what you're proud of.",'offline');
   setMode('offline');syncPage();
