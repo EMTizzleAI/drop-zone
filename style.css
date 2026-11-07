@@ -119,5 +119,5 @@
 #dzPatientCount{min-width:32px;margin-left:auto;color:#fff;font:900 21px/1 'Barlow Condensed',sans-serif;letter-spacing:1px;font-variant-numeric:tabular-nums}
 @keyframes dzTickerBlink{0%,100%{opacity:1}50%{opacity:.45}}
 @media(max-width:780px){header .dz-patient-ticker{margin-left:auto;padding:6px 8px;gap:6px;min-width:0}header .dz-patient-ticker-caption{font-size:8px}header .dz-patient-ticker-caption small{font-size:6px}header #dzPatientCount{font-size:20px;min-width:20px}}
-@media(max-width:350px){header .dz-patient-ticker-caption small{display:none}header .dz-patient-ticker-caption{font-size:8px}}
+@media(max-width:350px){header .dz-patient-ticker{gap:4px;padding:5px 6px}header .dz-patient-ticker-caption{font-size:8px}header .dz-patient-ticker-caption small{display:block;font-size:6px;max-width:115px;white-space:normal;line-height:1.1}}
 @media(prefers-reduced-motion:reduce){.dz-patient-ticker-dot{animation:none}}
