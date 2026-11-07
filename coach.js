@@ -81,12 +81,9 @@
     try{
       stopSpeaking();
       const utter=new SpeechSynthesisUtterance(text);
-      utter.lang='en-US';utter.rate=0.88;utter.pitch=0.82;
-      // Midnight Operator: prefer a lower, smoother English voice when available.
-      const voices=window.speechSynthesis.getVoices();
-      const english=voices.filter(v=>/^en[-_]/i.test(v.lang));
-      const preferred=english.find(v=>/samantha|aria|jenny|zira|serena|moira|female/i.test(v.name))||english.find(v=>v.localService)||english[0];
-      if(preferred)utter.voice=preferred;
+      // Original playful robot voice (pre-Midnight Operator preset).
+      // Restore the site's former rate/pitch and use the device's default voice.
+      utter.lang='en-US';utter.rate=1.03;utter.pitch=1.06;
       window.speechSynthesis.speak(utter);
     }catch(_){}
   }
