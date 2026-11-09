@@ -3,6 +3,22 @@ const gigs=[['JobStack','Flexible shifts through PeopleReady','https://www.peopl
 for(const [name,desc,url] of gigs){const d=document.createElement('div');d.className='service';const h=document.createElement('h3');h.textContent=name;const p=document.createElement('p');p.textContent=desc;const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Open '+name+' ↗';d.append(h,p,a);document.getElementById('gigs').append(d)}
 const el=id=>document.getElementById(id);let searchCount=0;
 function jobCard(j){const d=document.createElement('article');d.className='service';const h=document.createElement('h3');h.textContent=j.title||'Job opening';const p=document.createElement('p');p.textContent=[j.company,j.location].filter(Boolean).join(' · ');const a=document.createElement('a');a.href=j.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='VIEW JOB & APPLY ↗';d.append(h,p);if(j.salary){const sal=document.createElement('p');const pay=j.salary;sal.textContent=typeof pay==='string'?'Listed pay: '+pay:'Listed pay: '+[pay.min,pay.max].filter(x=>x!=null).map(x=>Number(x).toLocaleString()).join('–')+' '+(pay.currency||'')+'/'+(pay.interval||'unspecified');d.append(sal)}d.append(a);return d}
+function showBackupJobSearches(results,role,place,type){
+  const heading=document.createElement('h2');
+  heading.textContent='🔗 KEEP HUNTING — SEARCH THESE JOB BOARDS';
+  results.append(heading);
+  const query=[role,type].filter(Boolean).join(' ');
+  const sites=[
+    ['🔎 SEARCH INDEED ↗','https://www.indeed.com/jobs?q='+encodeURIComponent(query)+'&l='+encodeURIComponent(place)],
+    ['🔎 SEARCH LINKEDIN ↗','https://www.linkedin.com/jobs/search/?keywords='+encodeURIComponent(query)+'&location='+encodeURIComponent(place)],
+    ['🔎 SEARCH GOOGLE JOBS ↗','https://www.google.com/search?q='+encodeURIComponent(query+' jobs '+place)]
+  ];
+  for(const [name,url] of sites){
+    const a=document.createElement('a');
+    a.className='btn';a.href=url;a.target='_blank';a.rel='noopener noreferrer';
+    a.textContent=name;results.append(a);
+  }
+}
 async function getJobs(role,place,type,requestId){const results=el('results');const remote=/remote/i.test(place)||type==='remote';const queries=role.toLowerCase().split(/\s+/).filter(w=>w.length>2);const location=place.toLowerCase().split(',')[0].trim();let jobs=[],sources=0,feedErrors=[];
 const params=new URLSearchParams({q:role,limit:'50',location:remote?'':place});if(type==='remote')params.set('remote','remote');else if(type==='part time')params.set('type','part_time');else if(type==='full time')params.set('type','full_time');else if(type==='contract')params.set('type','contract');
 
@@ -20,21 +36,36 @@ const batches=await Promise.race([
 ]);
 if(requestId!==searchCount)return;
 if(batches===timeoutResult){
-  el('status').textContent='📡 LIVE FEEDS TIMED OUT — BACKUP SEARCHES READY.';
   results.replaceChildren();
-  const notice=document.createElement('p');notice.textContent='The connected feeds are taking too long. Try these live job-board searches instead:';results.append(notice);
-  const query=[role,type].filter(Boolean).join(' ');
-  for(const [name,url] of [
-    ['Indeed jobs','https://www.indeed.com/jobs?q='+encodeURIComponent(query)+'&l='+encodeURIComponent(place)],
-    ['LinkedIn jobs','https://www.linkedin.com/jobs/search/?keywords='+encodeURIComponent(query)+'&location='+encodeURIComponent(place)],
-    ['Google jobs','https://www.google.com/search?q='+encodeURIComponent(query+' jobs '+place)]
-  ]){const a=document.createElement('a');a.className='btn';a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='🔎 '+name+' ↗';results.append(a)}
+  el('status').textContent="👹 I couldn't load any job listings right now. Don't give up — use the job-board links below!";
+  const notice=document.createElement('p');
+  notice.textContent="No jobs to show from the Goblin's radar this time. That doesn't mean none are available. Try these direct searches for current openings.";
+  results.append(notice);
+  showBackupJobSearches(results,role,place,type);
   results.scrollIntoView({behavior:'smooth',block:'nearest'});
   return;
 }jobs=batches.flat().filter(j=>j.url&&/^https:\/\//.test(j.url));const unique=new Set();jobs=jobs.filter(j=>{const key=(j.title+'|'+j.company+'|'+j.location).toLowerCase();if(unique.has(key))return false;unique.add(key);return true});
 jobs=jobs.filter(j=>{const title=(j.title+' '+j.company).toLowerCase();const match=j.trustedMatch||queries.some(w=>title.includes(w));const loc=(j.location||'').toLowerCase();const locMatch=j.trustedMatch|| (remote?j.remote||loc.includes('remote'):!location||loc.includes(location)||loc.includes('united states')||loc.includes('usa')||loc.includes('anywhere'));const typeMatch=j.trustedMatch||!type||type==='remote'||!j.employmentType||j.employmentType===type.replaceAll(' ','_');const pay=Number(el('pay').value)||0;const annualFactor=j.salary?.interval==='yearly'?2080:j.salary?.interval==='monthly'?173.33:j.salary?.interval==='weekly'?40:1;const hourlyMin=j.salary?.min?j.salary.min/annualFactor:null;const payMatch=!pay||hourlyMin===null||hourlyMin>=pay;return match&&locMatch&&typeMatch&&payMatch}).slice(0,20);
-results.replaceChildren();results.scrollIntoView({behavior:'smooth',block:'start'});const h=document.createElement('h2');h.textContent='📡 Jobs found on the radar';results.append(h);if(jobs.length){for(const j of jobs)results.append(jobCard(j));const credit=document.createElement('p');credit.className='hint';credit.innerHTML='Listings provided in part by <a href="https://activevacancies.com/" target="_blank" rel="noopener noreferrer">Active Vacancies</a> and public job feeds.';results.append(credit);el('status').textContent='📡 RADAR SWEEP COMPLETE: '+jobs.length+' matching listings displayed. Verify pay and location with employers.'}else{const p=document.createElement('p');p.textContent=sources?'No matching jobs returned by the connected free feeds. This does NOT mean there are no jobs near you. Use the local job searches immediately below.':'The live feeds could not be reached from this browser. Use the local job searches immediately below.';results.append(p);if(feedErrors.length){const info=document.createElement('p');info.className='hint';info.textContent='Diagnostic: '+feedErrors.join('; ')+'. If blocked, we need a server-side proxy.';results.append(info)}const debug=document.createElement('p');debug.className='hint';debug.textContent='Feeds responding: '+sources+' of '+tasks.length+'. Search location: '+(place||'not specified')+'.';results.append(debug);el('status').textContent='📡 RADAR SCAN FINISHED — NO VERIFIED MATCHES IN CONNECTED FEEDS.'}
-if(feedErrors.length&&jobs.length){const diagnostic=document.createElement('p');diagnostic.className='hint';diagnostic.textContent='Some feeds unavailable: '+feedErrors.join('; ');results.append(diagnostic)}const links=document.createElement('h2');links.textContent='🔗 Search local job boards (more coverage)';results.append(links);const query=[role,type].filter(Boolean).join(' ');const sites=[['LinkedIn jobs','https://www.linkedin.com/jobs/search/?keywords='+encodeURIComponent(query)+'&location='+encodeURIComponent(place)],['Indeed jobs','https://www.indeed.com/jobs?q='+encodeURIComponent(query)+'&l='+encodeURIComponent(place)],['Google job search','https://www.google.com/search?q='+encodeURIComponent(query+' jobs '+place)]];for(const [name,url] of sites){const a=document.createElement('a');a.className='btn';a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=name+' ↗';results.append(a)}const pay=el('pay').value;if(pay){const p=document.createElement('p');p.className='hint';p.textContent='Minimum requested: $'+pay+'/hr. Listings with published pay below this minimum are excluded when comparable hourly rates are available. Jobs without published pay may still appear.';results.append(p)}
+results.replaceChildren();results.scrollIntoView({behavior:'smooth',block:'start'});const h=document.createElement('h2');h.textContent='📡 Jobs found on the radar';results.append(h);if(jobs.length){for(const j of jobs)results.append(jobCard(j));const credit=document.createElement('p');credit.className='hint';credit.innerHTML='Listings provided in part by <a href="https://activevacancies.com/" target="_blank" rel="noopener noreferrer">Active Vacancies</a> and public job feeds.';results.append(credit);el('status').textContent='📡 RADAR SWEEP COMPLETE: '+jobs.length+' matching listings displayed. Verify pay and location with employers.'}else{
+  const p=document.createElement('p');
+  p.textContent=sources
+    ? "👹 No matching jobs to show from my radar this time. That doesn't mean no jobs are available! Try the direct job-board links below."
+    : "👹 I couldn't load job listings right now. That doesn't mean no jobs are available! Use the job-board links below to continue your search.";
+  results.append(p);
+  el('status').textContent=sources
+    ? '📡 NO MATCHES FOUND IN MY LIMITED FEEDS — KEEP HUNTING BELOW!'
+    : '📡 NO LISTINGS LOADED — USE THE DIRECT JOB SEARCHES BELOW!';
 }
-el('hunt').addEventListener('submit',e=>{e.preventDefault();const role=el('role').value.trim(),place=el('place').value.trim(),type=el('type').value;if(!role)return;const n=++searchCount;el('results').replaceChildren();el('status').textContent='📡 SCANNING CONNECTED JOB FEEDS… Results and backup local searches will appear below.';getJobs(role,place,type,n).catch(err=>{if(n!==searchCount)return;el('status').textContent='⚠️ Radar encountered a technical error. Try the backup job searches below.';const box=el('results');box.replaceChildren();const p=document.createElement('p');p.textContent='The live job feeds are temporarily unavailable. You can still search current jobs using these links:';box.append(p);for(const [name,url] of [['LinkedIn','https://www.linkedin.com/jobs/search/?keywords='+encodeURIComponent(role)+'&location='+encodeURIComponent(place)],['Indeed','https://www.indeed.com/jobs?q='+encodeURIComponent(role)+'&l='+encodeURIComponent(place)]]){const a=document.createElement('a');a.className='btn';a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='SEARCH '+name.toUpperCase()+' ↗';box.append(a)}console.error('Job Goblin radar:',err)})});
+if(feedErrors.length)console.warn('Job Goblin feed diagnostics (developer only):',feedErrors);showBackupJobSearches(results,role,place,type);const pay=el('pay').value;if(pay){const p=document.createElement('p');p.className='hint';p.textContent='Minimum requested: $'+pay+'/hr. Listings with published pay below this minimum are excluded when comparable hourly rates are available. Jobs without published pay may still appear.';results.append(p)}
+}
+el('hunt').addEventListener('submit',e=>{e.preventDefault();const role=el('role').value.trim(),place=el('place').value.trim(),type=el('type').value;if(!role)return;const n=++searchCount;el('results').replaceChildren();el('status').textContent='📡 SCANNING CONNECTED JOB FEEDS… Results and backup local searches will appear below.';getJobs(role,place,type,n).catch(err=>{
+  if(n!==searchCount)return;
+  const box=el('results');box.replaceChildren();
+  el('status').textContent="👹 I couldn't load job listings right now. Use the links below to keep searching!";
+  const p=document.createElement('p');
+  p.textContent="No jobs to show from the Goblin's radar right now. It doesn't mean none are available — search directly through these job boards:";
+  box.append(p);
+  showBackupJobSearches(box,role,place,type);
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+  console.error('Job Goblin radar:',err)})});
 </script></html>
