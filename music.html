@@ -46,6 +46,17 @@ a:focus-visible{outline:3px solid var(--lime);outline-offset:4px}
 footer{margin-top:24px;border-top:1px solid #263348;padding-top:20px;color:var(--sub);font-size:.79rem}
 @media(max-width:650px){.row{grid-template-columns:1fr}.hero{padding:22px 17px}.btn{width:100%}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.wave span{animation:none;transform:none}}
+
+/* Direct artist-channel card. Links to the official channel without a broken iframe. */
+.channel{display:flex;align-items:center;gap:27px;margin:24px 0;padding:25px;border:1px solid #00e8f880;border-radius:20px;background:linear-gradient(130deg,#091724,#231029);box-shadow:0 0 21px #00e8f811}
+.channel-content{flex:1;min-width:0}
+.channel-content h2{margin:5px 0 11px}
+.channel-content p{margin:8px 0 14px}
+.channel .btn{width:fit-content}
+.channel-disc{position:relative;display:grid;place-items:center;width:157px;height:157px;min-width:157px;border:4px solid #ff38ad;border-radius:50%;background:repeating-radial-gradient(circle at center,#11111c 0 5px,#2c1637 6px 8px,#0f1926 9px 13px);box-shadow:0 0 22px #ff38ad77,7px 8px 0 #03111b}
+.channel-disc:before{content:"";position:absolute;inset:15px;border:2px solid #00e8f844;border-radius:50%}
+.channel-disc-center{display:grid;place-items:center;width:54px;height:54px;border:3px solid #00e8f8;border-radius:50%;background:#1b142a;font-size:1.5rem;z-index:1}
+@media(max-width:650px){.channel{flex-direction:column;align-items:stretch;padding:18px}.channel-disc{margin:auto;width:126px;height:126px;min-width:126px}.channel .btn{width:100%}}
 </style>
 </head>
 <body>
@@ -58,10 +69,20 @@ footer{margin-top:24px;border-top:1px solid #263348;padding-top:20px;color:var(-
 <div class="wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 <p class="slogan">🎚️ YOUR BRAIN. YOUR VOLUME. YOUR EXPERIENCE.</p>
 <div class="buttons">
-<a class="btn" href="https://music.youtube.com/search?q=EM%20Tizzles" target="_blank" rel="noopener noreferrer">🎧 FIND EM TIZZLES ON YOUTUBE MUSIC ↗</a>
+<a class="btn" href="https://music.youtube.com/@emtizzles?si=dWYlwvpp4jwp-aYU" target="_blank" rel="noopener noreferrer" aria-label="Listen to EM Tizzles on the official YouTube Music channel">🎧 LISTEN TO EM TIZZLES · OFFICIAL CHANNEL ↗</a>
 <a class="btn alt" href="https://www.tiktok.com/@emtizzle" target="_blank" rel="noopener noreferrer">📡 FIND EMTIZZLE ON TIKTOK ↗</a>
 </div>
-<p class="note">The music button opens a YouTube Music search for <strong>EM Tizzles</strong> (with the final S). This page does not autoplay music or require an account. Individual platforms may have their own sign-in rules.</p>
+<p class="note">Listen directly on the official <strong>EM Tizzles</strong> YouTube Music channel. Playback starts only when you choose it; YouTube Music may ask you to sign in depending on your device or region.</p>
+</section>
+<section class="channel" aria-labelledby="channel-title">
+  <div class="channel-disc" aria-hidden="true"><div class="channel-disc-center">🎵</div></div>
+  <div class="channel-content">
+    <p class="tag">📡 OFFICIAL SOUNDTRACK FREQUENCY</p>
+    <h2 id="channel-title">EM TIZZLES // ON AIR</h2>
+    <p>Your music is one tap away. Go straight to the actual EM Tizzles artist channel and pick a track at your own pace.</p>
+    <a class="btn alt" href="https://music.youtube.com/@emtizzles?si=dWYlwvpp4jwp-aYU" target="_blank" rel="noopener noreferrer">▶ OPEN THE EM TIZZLES CHANNEL ↗</a>
+    <p class="note">Full YouTube Music channel pages can't be played directly inside a website's embedded player. An individual YouTube video or public playlist can be embedded here later.</p>
+  </div>
 </section>
 <section class="row" aria-label="Pick a listening mode">
 <div class="card"><h3>💗 DECOMPRESS</h3><p>Let the day stop yelling for a minute. Soft sounds, slow beats, or whatever feels steady to you.</p></div>
