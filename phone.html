@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#070811">
+<meta name="description" content="Drop Zone field guide: find free or discounted Lifeline phone service, avoid unwanted upsells, and stay connected.">
+<title>I Need a Phone // Drop Zone</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800;900&family=IBM+Plex+Mono:wght@400;600;700&display=swap');
+:root{color-scheme:dark;--bg:#070811;--panel:#111728;--ink:#fff;--muted:#c6d5e2;--pink:#ff32a9;--cyan:#00e9fc;--lime:#a3ffbf;--gold:#ffe082}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);background:radial-gradient(ellipse at 80% 0%,#ff32a92e,transparent 36%),radial-gradient(ellipse at 0 55%,#00e9fc17,transparent 40%),var(--bg);font:16px/1.65 "IBM Plex Mono",monospace}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.13;background:repeating-linear-gradient(transparent 0 3px,#fff1 3px 4px)}
+.wrap{position:relative;max-width:920px;margin:0 auto;padding:20px 18px 70px}
+a{color:var(--cyan);text-underline-offset:3px}
+a:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 0 22px}
+.back{display:inline-flex;align-items:center;padding:8px 12px;border:1px solid #6d6d89;border-radius:9px;color:white;text-decoration:none;font-size:.82rem}
+.brand{font:900 1.6rem "Barlow Condensed",Impact,sans-serif;letter-spacing:.08em;text-shadow:2px 0 var(--pink),-2px 0 var(--cyan)}
+.tag{font-size:.7rem;font-weight:700;color:var(--pink);letter-spacing:.13em;text-transform:uppercase}
+.hero{position:relative;overflow:hidden;border:1px solid #ff32a987;border-radius:22px;padding:26px 22px 22px;background:linear-gradient(145deg,#161123,#070c1c);box-shadow:0 0 25px #ff32a915}
+.hero:after{content:"";position:absolute;inset:auto -75px -105px auto;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,#00e9fc22,transparent 70%);pointer-events:none}
+.hero-grid{display:flex;align-items:center;gap:20px;justify-content:space-between}
+h1,h2,h3{font-family:"Barlow Condensed",Impact,sans-serif;text-transform:uppercase;line-height:1.05}
+h1{font-size:clamp(3.5rem,11vw,6.3rem);margin:15px 0 12px;letter-spacing:-.02em}
+h1 span{color:var(--pink);text-shadow:3px 2px var(--cyan)}
+h2{font-size:clamp(1.75rem,6vw,2.4rem);margin:0 0 12px;color:var(--pink)}
+h3{font-size:1.35rem;margin:0 0 8px;color:#fff}
+p{margin:8px 0 14px}
+.hero p{max-width:640px;color:#e9edf3}
+.phone-art{flex:0 0 auto;min-width:100px;width:clamp(100px,26vw,176px);filter:drop-shadow(0 0 16px #00e9fc66)}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 10px}
+.btn{display:inline-flex;justify-content:center;align-items:center;min-height:50px;padding:12px 17px;text-align:center;background:var(--pink);color:#160916;border:1px solid var(--pink);border-radius:12px;font-weight:900;text-decoration:none;line-height:1.35}
+.btn.alt{background:#0a1a27;border-color:var(--cyan);color:var(--cyan)}
+.btn:hover{filter:brightness(1.1)}
+.urgent{border-left:5px solid var(--gold);background:#302417;border-radius:9px;margin:19px 0;padding:16px 17px}
+.urgent strong{display:block;color:var(--gold);font-size:1.08rem}
+.section{margin:22px 0;padding:24px;border:1px solid #334d60;border-radius:18px;background:#111728ec}
+.steps{display:grid;gap:12px;counter-reset:step}
+.step{display:flex;gap:14px;padding:12px 0;border-top:1px solid #334052}
+.step:before{counter-increment:step;content:counter(step);display:grid;place-items:center;flex:0 0 33px;width:33px;height:33px;border:1px solid var(--cyan);border-radius:50%;color:var(--cyan);font-weight:900}
+.step p{margin:0}
+.mini{font-size:.82rem;color:var(--muted)}
+.warning{border:1px solid #ff32a9b3;background:#281326}
+.warning h2{color:#ff89ce}
+.important{color:var(--lime);font-weight:800}
+.quote{padding:16px;background:#091d29;border-left:4px solid var(--cyan);border-radius:4px;color:white;font-weight:700}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fact{padding:16px;border:1px solid #36475c;border-radius:11px;background:#0a1020}
+.fact b{display:block;color:var(--cyan);font-size:.85rem}
+.fact p{font-size:.9rem;margin:7px 0 0}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.links a{display:inline-flex;align-items:center;padding:10px 13px;border:1px solid var(--cyan);border-radius:9px;text-decoration:none;font-weight:800}
+footer{padding-top:25px;color:#b3c3cf;font-size:.78rem}
+@media(max-width:520px){.hero-grid{align-items:flex-start}.phone-art{width:88px;min-width:88px}.hero{padding:18px 16px}h1{font-size:3.4rem}.facts{grid-template-columns:1fr}.section{padding:18px}.btns .btn{width:100%}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <nav class="top" aria-label="Page navigation"><a class="back" href="index.html">← BACK TO DROP ZONE</a><div class="brand">DR<span style="color:var(--pink)">O</span>P ZONE // EMTIZZLE</div></nav>
+  <section class="hero" aria-labelledby="main-title">
+    <div class="hero-grid">
+      <div>
+        <p class="tag">📡 FIELD GUIDE // STAY CONNECTED</p>
+        <h1 id="main-title">I NEED<br><span>A PHONE.</span></h1>
+        <p>Need a number for job interviews, housing callbacks, doctor appointments, benefits, or just to stay in touch? You may qualify for a <strong>$0/month phone plan</strong>. Let's get you connected without wasting your money.</p>
+      </div>
+      <svg class="phone-art" viewBox="0 0 170 240" role="img" aria-label="Neon mobile phone receiving a signal" xmlns="http://www.w3.org/2000/svg">
+        <rect x="33" y="8" width="104" height="216" rx="17" fill="#0a1020" stroke="#ff32a9" stroke-width="6"/>
+        <rect x="43" y="30" width="84" height="169" rx="4" fill="#0c2740" stroke="#00e9fc" stroke-width="2"/>
+        <path d="M62 78 Q85 53 108 78 M70 92 Q85 78 100 92 M80 107 Q85 101 90 107" stroke="#00e9fc" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <circle cx="85" cy="127" r="6" fill="#ff32a9"/>
+        <path d="M64 165H106M64 178H93" stroke="#ff32a9" stroke-width="4" stroke-linecap="round"/>
+        <rect x="75" y="211" width="20" height="4" rx="2" fill="#00e9fc"/>
+        <path d="M70 20H100" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+        <path d="M145 35l10 -10M150 48h13" stroke="#00e9fc" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="btns">
+      <a class="btn" href="https://www.lifelinesupport.org/how-to-apply/" target="_blank" rel="noopener noreferrer">📲 APPLY FOR LIFELINE ↗</a>
+      <a class="btn alt" href="https://www.lifelinesupport.org/companies-near-me/" target="_blank" rel="noopener noreferrer">🔎 FIND PHONE PROVIDERS ↗</a>
+    </div>
+    <p class="mini">Official government-program resources. Drop Zone does not enroll you, ask for your ID, or collect your benefit information.</p>
+  </section>
+
+  <div class="urgent" role="note"><strong>⚠️ KEEP YOUR CASH. DO NOT BUY AN UPGRADE JUST BECAUSE SOMEONE PUSHES IT.</strong>
+    Ask for the no-cost plan and basic device option first, if a free device is offered. You can say <em>no</em> to an optional paid phone upgrade. Never hand an enrollment agent cash without checking the official provider's charges and getting a receipt.
+  </div>
+
+  <section class="section" aria-labelledby="what-is-this">
+    <h2 id="what-is-this">WHAT ARE THOSE PHONE TABLES?</h2>
+    <p>You might see people signing up customers for phones outside social-services offices or at community events. They may be representatives of companies participating in <strong>Lifeline</strong>, a government assistance program that helps eligible people afford phone or internet service.</p>
+    <p><strong>Important:</strong> Lifeline itself is a <em>monthly discount</em>—not a federal promise that everyone gets a free smartphone. Some companies and states offer eligible customers <strong>$0 monthly service</strong>, and some companies include a device. Offers depend on your location and provider.</p>
+    <div class="facts">
+      <div class="fact"><b>📞 TALK + TEXT</b><p>Some $0 mobile plans include unlimited calls and texts. Check the actual plan.</p></div>
+      <div class="fact"><b>🌐 MOBILE DATA</b><p>Many plans include data. The amount of high-speed data and hotspot access varies.</p></div>
+      <div class="fact"><b>🧾 WHO QUALIFIES?</b><p>SNAP/CalFresh, Medicaid/Medi-Cal, or qualifying low income may make you eligible.</p></div>
+      <div class="fact"><b>📱 WHAT ABOUT A FREE PHONE?</b><p>Some providers supply a basic device. Others offer bring-your-own-phone service. Ask first.</p></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="missions">
+    <p class="tag">MISSION 01 // GET A LINE</p>
+    <h2 id="missions">HERE'S WHAT TO DO</h2>
+    <div class="steps">
+      <div class="step"><p><strong>Check whether you qualify.</strong> SNAP, Medicaid, other qualifying programs, or income may count. Start at the official Lifeline site. You can ask a participating provider for application help.</p></div>
+      <div class="step"><p><strong>Find a participating provider.</strong> Search by ZIP code or city. In California, compare state LifeLine plans, too.</p></div>
+      <div class="step"><p><strong>Ask for the full $0 option.</strong> Get the monthly price, talk/text allowance, high-speed data amount, device cost, and any activation or optional fees <em>before</em> agreeing.</p></div>
+      <div class="step"><p><strong>Test it before you leave.</strong> Place a call, send a text, and check mobile data. Save the provider name, customer-service number, and any receipt.</p></div>
+    </div>
+    <div class="links">
+      <a href="https://www.californialifeline.com/en/provider_search" target="_blank" rel="noopener noreferrer">🌴 CALIFORNIA $0 PLAN OPTIONS ↗</a>
+      <a href="https://www.lifelinesupport.org/how-to-qualify/" target="_blank" rel="noopener noreferrer">CHECK ELIGIBILITY ↗</a>
+    </div>
+  </section>
+
+  <section class="section warning" aria-labelledby="upsells">
+    <p class="tag">⚠️ MONEY-PROTECTION PROTOCOL</p>
+    <h2 id="upsells">DON'T GET TALKED INTO SPENDING MONEY YOU NEED.</h2>
+    <p>If someone offers an "upgraded" phone for an extra charge, <strong>you do not have to buy it</strong>. An upgrade might be legitimate, but it may not be worth the money—especially when your priority is simply getting a working line.</p>
+    <p class="quote">"I want the free or lowest-cost Lifeline plan. I do not want a paid upgrade. What will I owe today or each month?"</p>
+    <p>Ask the agent which phone company they represent, verify that company through an official provider directory, and read any terms before signing. Do not share your EBT PIN, banking password, or card PIN. Use an official enrollment process for sensitive identity documents.</p>
+    <p class="important">🚩 If you're told you MUST buy a device upgrade to get a supposedly free plan, verify the offer with the provider directly before paying.</p>
+  </section>
+
+  <section class="section" aria-labelledby="little-details">
+    <h2 id="little-details">TINY DETAILS THAT MATTER</h2>
+    <p><strong>No permanent address?</strong> Ask the provider or Lifeline Support Center how to apply while unhoused. Do not invent an address.</p>
+    <p><strong>Already receiving Lifeline?</strong> It is generally limited to one benefit per household. Check transfer rules before switching providers.</p>
+    <p><strong>Keep using your phone.</strong> Free-to-you Lifeline service generally must be used at least once every 30 days. Recertification may also be required.</p>
+    <p><strong>Watch out for old ACP ads.</strong> The Affordable Connectivity Program (ACP) ended in 2024. Lifeline is a different, still-active program.</p>
+    <p><strong>Need a human?</strong> Lifeline Support Center: <a href="tel:18002349473">800-234-9473</a>. If you suspect fraud or improper charges, check the <a href="https://www.lifelinesupport.org/get-help/" target="_blank" rel="noopener noreferrer">official complaint and support options</a>.</p>
+  </section>
+
+  <footer><strong>DROP ZONE // SURVIVE ★ STABILIZE ★ RECOVER</strong><p>Field guide reviewed November 2026. Plans and device offers can change. Always confirm directly with the participating provider. This page is independent of the Lifeline program and is not a government enrollment site.</p><a href="index.html">← RETURN TO THE DROP ZONE</a></footer>
+</main>
+</body></html>
