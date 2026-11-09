@@ -110,6 +110,12 @@
 @media(prefers-reduced-motion:reduce){
   #triage .priority button,#triage .triage-resource{transition:none}
 }
+</style><style>
+/* Quiet, visible crawlable resource links below the main experience. */
+.dz-footer-resources{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 18px;margin:0 auto 16px;max-width:850px;font-size:.72rem;letter-spacing:.025em}
+.dz-footer-resources a{color:#81dce9;text-decoration:none;border-bottom:1px solid #81dce94d;padding:4px 0}
+.dz-footer-resources a:hover{color:#ffc1e7;border-color:#ff5eb5}
+.dz-footer-resources a:focus-visible{outline:2px solid #ff8bcc;outline-offset:3px}
 </style></head><body><header><div class="brand"><b>DR<span>O</span>P ZONE</b><small>SURVIVE ★ STABILIZE ★ RECOVER</small></div><div class="dz-patient-ticker" id="dzPatientTicker" aria-label="Website visitor check-ins, not actual medical patients" title="Approximate unique browsers visiting Drop Zone since November 7, 2026. This is website traffic, not medical patient information."><span class="dz-patient-ticker-dot" aria-hidden="true">●</span><span class="dz-patient-ticker-caption">CHECK-INS <small>WEBSITE VISITORS · NOT PATIENTS</small></span><output id="dzPatientCount" aria-live="polite">—</output></div><div class="signal">● EMTIZZLE // FIELD MEDIC ONLINE</div></header><div id="scenePopup" class="scene-popup hidden" role="dialog" aria-modal="true" aria-label="EMTizzle on scene">
   <div class="scene-static"></div>
   <div class="scene-media">
@@ -214,7 +220,16 @@
   });
   for (const tool of tools) tool.addEventListener('click', () => setOpen(false));
 })();
-</script><footer>DROP ZONE // SURVIVE · STABILIZE · RECOVER // BUILT FOR THE BAD DAY, NOT THE PERFECT ONE.</footer><button id="dzCoachLaunch" class="dz-coach-launch" type="button" hidden aria-controls="dzCoachPanel" aria-expanded="false" aria-label="Talk to EMTizzle’s co-pilot for encouragement"><span class="dz-coach-icon" aria-hidden="true">🤖</span><span>💗 TALK TO CO-PILOT ↗</span></button>
+</script><footer>
+<nav class="dz-footer-resources" aria-label="Drop Zone resource guides">
+<a href="safety.html">Immediate safety</a>
+<a href="stabilization.html">Health &amp; benefits</a>
+<a href="job-goblin.html">Find jobs</a>
+<a href="phone.html">Phone service</a>
+<a href="music.html">Music is Medicine</a>
+</nav>
+<div>DROP ZONE // SURVIVE · STABILIZE · RECOVER // BUILT FOR THE BAD DAY, NOT THE PERFECT ONE.</div>
+</footer><button id="dzCoachLaunch" class="dz-coach-launch" type="button" hidden aria-controls="dzCoachPanel" aria-expanded="false" aria-label="Talk to EMTizzle’s co-pilot for encouragement"><span class="dz-coach-icon" aria-hidden="true">🤖</span><span>💗 TALK TO CO-PILOT ↗</span></button>
 <dialog id="dzLlmWelcome" aria-labelledby="dzLlmWelcomeTitle" style="width:min(92vw,480px);max-height:85vh;overflow:auto;border:2px solid #ff4ba9;border-radius:22px;padding:24px;background:#170e20;color:#fff;box-shadow:0 20px 80px #000b;font:inherit"><h2 id="dzLlmWelcomeTitle" style="color:#ff87c6;margin:0 0 12px">🤖 A NOTE FROM EMTIZZLE AI</h2><p style="line-height:1.65">Welcome to the world of large language models! Meet your co-pilot: think of her like a clever, slightly chaotic, 25-year-old toy robot. She's fun to talk to and can help you think things through—but she's not infallible.</p><p style="line-height:1.65"><strong>HOW TO CHAT:</strong> Tap a suggested prompt or type your own message, then press SEND. Give her context, ask clear questions, and ask follow-up questions. Double-check important answers with reliable sources. If she sounds certain about something she doesn't know, she may be making it up.</p><p style="line-height:1.65"><strong>MODE CHECK:</strong> The chat clearly labels whether live AI is connected or you are receiving prewritten offline encouragement. Offline mode is not a live language model.</p><p style="line-height:1.65">Use her for ideas, encouragement, and next steps—not as your only source for medical, legal, financial, or emergency decisions. And please don't share sensitive personal information.</p><p style="line-height:1.65">Questions about AI? Hit me up through my website or social. 💗<br><strong>— EMTizzle AI</strong></p><div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:18px"><button type="button" id="dzLlmGotIt" style="flex:1;background:#ff4ba9;color:#190a16;border:0;border-radius:12px;padding:14px;font-weight:900;cursor:pointer">OPEN CO-PILOT CHAT →</button><a href="https://www.instagram.com/emtizzle/" target="_blank" rel="noopener noreferrer" style="color:#ffb3db;padding:13px">CONTACT EMTIZZLE ↗</a></div></dialog>
 <section id="dzCoachPanel" class="dz-coach-panel" role="dialog" aria-label="EMTizzle’s onboard co-pilot — encouragement chat" data-endpoint="" hidden>
   <header class="dz-coach-top"><div><strong>🤖 EMTIZZLE’S CO-PILOT</strong><small id="dzCoachMode" role="status">● OFFLINE ENCOURAGEMENT MODE</small></div><button id="dzCoachClose" type="button" aria-label="Close co-pilot chat">×</button></header>
