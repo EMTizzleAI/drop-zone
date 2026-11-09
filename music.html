@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#070811">
+<meta name="description" content="MUSIC IS MEDICINE: an EMTizzle listening room from Drop Zone. Explore EM Tizzles playlists and choose your own volume.">
+<title>MUSIC IS MEDICINE // EMTizzle // Drop Zone</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800;900&family=IBM+Plex+Mono:wght@400;600;700&display=swap');
+:root{color-scheme:dark;--bg:#060812;--pink:#ff38ad;--cyan:#00e8f8;--lime:#d7ff9f;--white:#f5f8ff;--sub:#bec7d8}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;color:var(--white);font:15px/1.7 'IBM Plex Mono',monospace;background:radial-gradient(ellipse at 80% 10%,#ff38ad20,transparent 39%),radial-gradient(ellipse at 7% 63%,#00e8f81c,transparent 40%),var(--bg)}
+body:before{content:"";pointer-events:none;position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent 0 31px,#00e8f809 31px 32px),repeating-linear-gradient(90deg,transparent 0 31px,#00e8f809 31px 32px)}
+.wrap{position:relative;max-width:970px;margin:0 auto;padding:18px 18px 70px}
+nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0 25px}
+.back{display:inline-block;border:1px solid #ff38ad77;border-radius:9px;padding:9px 12px;text-decoration:none;color:white}
+.brand{font:900 1.55rem 'Barlow Condensed',system-ui,sans-serif;letter-spacing:.08em;text-shadow:2px 0 var(--cyan),-2px 0 var(--pink)}
+.hero{overflow:hidden;padding:clamp(20px,5vw,42px);border:1px solid #f546af88;border-radius:22px;background:linear-gradient(135deg,#1e1028,#07121f 63%,#071017);box-shadow:0 0 33px #ff38ad22}
+.tag{color:var(--cyan);font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+h1,h2,h3{font-family:'Barlow Condensed',Impact,sans-serif;text-transform:uppercase;line-height:1.05}
+h1{font-size:clamp(3.8rem,11vw,7.6rem);margin:18px 0;color:var(--white);letter-spacing:-.02em}
+h1 span{display:block;color:var(--pink);text-shadow:3px 3px var(--cyan)}
+h2{color:var(--pink);font-size:clamp(2rem,6vw,3rem);margin:0 0 15px}
+h3{font-size:1.7rem;margin:0 0 8px;color:var(--lime)}
+p{margin:12px 0;color:#e9eaf5}
+.lead{font-size:clamp(.96rem,2.7vw,1.1rem);max-width:690px}
+.wave{display:flex;align-items:center;justify-content:center;gap:5px;height:120px;margin:14px -15px 10px;overflow:hidden}
+.wave span{display:block;width:clamp(5px,1.1vw,10px);height:32px;max-height:95px;background:linear-gradient(180deg,var(--cyan),var(--pink));border-radius:20px;box-shadow:0 0 15px #ff38ad6b;animation:beat 1.3s ease-in-out infinite alternate}
+.wave span:nth-child(2n){animation-delay:-.85s;height:70px}
+.wave span:nth-child(3n){animation-delay:-.42s;height:51px}
+.wave span:nth-child(5n){animation-delay:-.18s;height:94px}
+@keyframes beat{0%{transform:scaleY(.35)}100%{transform:scaleY(1.08)}}
+.buttons{display:flex;flex-wrap:wrap;gap:12px;margin:23px 0 10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:53px;border:1px solid var(--pink);border-radius:12px;padding:12px 20px;text-align:center;background:var(--pink);color:#1a0a1a;font-weight:900;line-height:1.35;text-decoration:none}
+.btn.alt{background:#061b27;border-color:var(--cyan);color:var(--cyan)}
+a:focus-visible{outline:3px solid var(--lime);outline-offset:4px}
+.note{font-size:.79rem;color:var(--sub)}
+.row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:22px 0}
+.card{border:1px solid #3a4158;border-radius:17px;padding:20px;background:#111421ee}
+.card p{font-size:.84rem;color:#dce5ef}
+.panel{border:1px solid #00e8f877;border-radius:17px;padding:23px;margin:20px 0;background:linear-gradient(130deg,#0a1a27,#171122)}
+.panel strong{color:var(--lime)}
+.slogan{border-left:4px solid var(--pink);margin:16px 0;padding:12px 17px;background:#24102b;font-weight:900;font-size:1rem}
+.warning{border-color:#f7c25955}.warning h2{color:#ffd085}
+footer{margin-top:24px;border-top:1px solid #263348;padding-top:20px;color:var(--sub);font-size:.79rem}
+@media(max-width:650px){.row{grid-template-columns:1fr}.hero{padding:22px 17px}.btn{width:100%}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.wave span{animation:none;transform:none}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<nav><a class="back" href="index.html">← BACK TO DROP ZONE</a><div class="brand">DROP ZONE // EMTIZZLE</div></nav>
+<section class="hero" aria-labelledby="hero-title">
+<p class="tag">🎧 EMTIZZLE TRANSMISSION // THE LISTENING ROOM</p>
+<h1 id="hero-title">MUSIC IS <span>MEDICINE.</span></h1>
+<p class="lead">Some days, the next move is a meal. Some days, it's a phone call. And sometimes, before you can do anything else, you need a song that makes you feel human again.</p>
+<div class="wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+<p class="slogan">🎚️ YOUR BRAIN. YOUR VOLUME. YOUR EXPERIENCE.</p>
+<div class="buttons">
+<a class="btn" href="https://music.youtube.com/search?q=EM%20Tizzles" target="_blank" rel="noopener noreferrer">🎧 FIND EM TIZZLES ON YOUTUBE MUSIC ↗</a>
+<a class="btn alt" href="https://www.tiktok.com/@emtizzle" target="_blank" rel="noopener noreferrer">📡 FIND EMTIZZLE ON TIKTOK ↗</a>
+</div>
+<p class="note">The music button opens a YouTube Music search for <strong>EM Tizzles</strong> (with the final S). This page does not autoplay music or require an account. Individual platforms may have their own sign-in rules.</p>
+</section>
+<section class="row" aria-label="Pick a listening mode">
+<div class="card"><h3>💗 DECOMPRESS</h3><p>Let the day stop yelling for a minute. Soft sounds, slow beats, or whatever feels steady to you.</p></div>
+<div class="card"><h3>⚡ REBOOT</h3><p>Need movement? Put on a track that helps you find a rhythm. A dance break counts as a break.</p></div>
+<div class="card"><h3>🛸 SPACE OUT</h3><p>Escape into sound, explore a playlist, or simply enjoy quiet. You get to choose.</p></div>
+</section>
+<section class="panel">
+<h2>🎛️ HEADPHONES OPTIONAL. YOU ARE NOT.</h2>
+<p>Glitchy beats? Great. Bass drops? Absolutely. Headphones? If you love them, put them on. If sound is uncomfortable, turn it off. You can enjoy the words and visuals without audio.</p>
+<p><strong>No autoplay. No pressure. No judgment.</strong> This room is designed for choice—including people who are sensitive to sound or need a lower-stimulation experience.</p>
+</section>
+<section class="panel warning">
+<h2>🩺 THE FINE PRINT FROM THE FIELD MEDIC</h2>
+<p>Music can support mood, comfort, and coping for some people. It's not a substitute for emergency care, mental-health treatment, or medication. If you're in immediate danger or having a medical emergency in the U.S., call <a href="tel:911">911</a>.</p>
+<p>Music doesn't fix the world. But sometimes it makes the next five minutes easier to get through. And five minutes can matter.</p>
+</section>
+<footer><strong>EMTIZZLE AI // SURVIVE ★ STABILIZE ★ RECOVER</strong><p>Music Is Medicine is an artistic invitation, not a medical treatment claim. Built with love and obnoxiously good bass drops. 💗</p><a href="index.html">← RETURN TO DROP ZONE</a></footer>
+</main>
+</body>
+</html>
