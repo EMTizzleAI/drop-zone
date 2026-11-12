@@ -1,0 +1,59 @@
+{
+  "first_name": "YOUR_FIRST_NAME",
+  "last_name": "YOUR_LAST_NAME",
+  "email": "you@example.com",
+  "phone": "",
+  "linkedin": "",
+  "website": "",
+  "targets": [
+    {
+      "role": "EMT",
+      "location": "Fremont, CA",
+      "match_any": [
+        "EMT",
+        "Emergency Medical Technician",
+        "Medical Transport"
+      ],
+      "locations": [
+        "California",
+        "CA",
+        "Fremont",
+        "Hayward",
+        "San Jose"
+      ],
+      "resume": "EMT_Resume.pdf"
+    },
+    {
+      "role": "Data Center Technician",
+      "location": "Santa Clara, CA",
+      "match_any": [
+        "Data Center Technician",
+        "Hardware Technician",
+        "IT Technician"
+      ],
+      "locations": [
+        "California",
+        "CA",
+        "Santa Clara",
+        "San Jose"
+      ],
+      "resume": "Technical_Resume.pdf"
+    },
+    {
+      "role": "AI Evaluator",
+      "location": "Remote",
+      "match_any": [
+        "AI Evaluator",
+        "AI Trainer",
+        "Red Team",
+        "Model Evaluator"
+      ],
+      "locations": [
+        "Remote",
+        "United States",
+        "USA"
+      ],
+      "resume": "AI_Resume.pdf"
+    }
+  ]
+}
