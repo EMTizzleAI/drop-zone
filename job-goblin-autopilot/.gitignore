@@ -1,0 +1,7 @@
+# NEVER publish personal résumé files, private profile, or application history
+profile.json
+resumes/
+applications.jsonl
+__pycache__/
+*.pyc
+.env
