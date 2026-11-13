@@ -231,7 +231,16 @@ def has_challenge(page):
 def has_confirmation(page):
     try:
         body = page.locator("body").inner_text(timeout=8000).lower()
-        return any(s in body for s in SUCCESS_PHRASES)
+        if not any(phrase in body for phrase in SUCCESS_PHRASES):
+            return False
+        # A receipt must replace the editable application. Static text alone
+        # (for example "thank you for applying" on a careers page) is not proof.
+        for selector in ('form input[type="email"]', 'form input[type="file"]'):
+            controls = page.locator(selector)
+            for index in range(min(controls.count(), 5)):
+                if controls.nth(index).is_visible():
+                    return False
+        return True
     except Exception:
         return False
 
