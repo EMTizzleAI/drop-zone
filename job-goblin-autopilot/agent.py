@@ -42,9 +42,9 @@ def text(value):
 
 def host_kind(url):
     host = urlparse(url).hostname or ""
-    if host.endswith("greenhouse.io"):
+    if host == "greenhouse.io" or host.endswith(".greenhouse.io"):
         return "greenhouse"
-    if host.endswith("lever.co"):
+    if host == "lever.co" or host.endswith(".lever.co"):
         return "lever"
     return ""
 
@@ -259,14 +259,19 @@ def try_apply(page, job, profile, resume, submit):
     url = job["url"]
     if host_kind(url) not in ("greenhouse", "lever"):
         return "unsupported", "Autofill only supports direct Greenhouse/Lever posting links"
+    expected_kind = host_kind(url)
     page.goto(url, wait_until="domcontentloaded", timeout=TIMEOUT)
     page.wait_for_timeout(1600)
     maybe_open_apply_form(page)
+    # Never upload a private resume if a posting redirects to a different host.
+    if host_kind(page.url) != expected_kind:
+        return "unsupported", "Application moved outside the verified ATS; resume not uploaded"
     if has_challenge(page):
         return "needs-human", "Human verification present; no CAPTCHA bypass"
     fields = fill_application(page, profile, resume)
-    if not fields.get("email") or not fields.get("resume"):
-        return "needs-human", "Required contact or résumé uploader not recognized: " + str(fields)
+    has_name = fields.get("name") or (fields.get("first") and fields.get("last"))
+    if not has_name or not fields.get("email") or not fields.get("resume"):
+        return "needs-human", "Name, email, or résumé field not recognized: " + str(fields)
     if not submit:
         return "preview", "Fields filled in local browser; no application submitted"
     okay, why = safe_to_submit(page)
@@ -295,16 +300,26 @@ def main():
     cli.add_argument("--queue", type=Path, help="optional exported Job Goblin application JSON")
     cli.add_argument("--discover", action="store_true", help="search public feeds using configured targets")
     cli.add_argument("--submit", action="store_true", help="actually submit eligible ATS forms")
+    cli.add_argument("--unattended", action="store_true", help="no per-run prompt; requires autopilot.enabled=true in private profile")
     cli.add_argument("--max", type=int, default=10, help="max leads processed (default: 10)")
     cli.add_argument("--log", type=Path, default=Path("applications.jsonl"))
     args = cli.parse_args()
     if not args.queue and not args.discover:
         cli.error("Provide --queue export.json or --discover")
-    if args.submit:
-        print("AUTO-SUBMIT ENABLED: eligible simple ATS forms may be sent to employers.")
-        if input("Type APPLY to authorize this run: ").strip() != "APPLY":
-            print("Canceled.");return
     profile = json.loads(args.profile.read_text(encoding="utf-8"))
+    if args.unattended and not args.submit:
+        cli.error("--unattended is only for real submissions; use ordinary preview mode without it")
+    if args.submit:
+        if args.unattended:
+            # Persistent, explicit opt-in replaces a prompt for every application/run.
+            if profile.get("autopilot", {}).get("enabled") is not True:
+                sys.exit("Unattended submission disabled. Set autopilot.enabled=true in your private profile.json.")
+            print("UNATTENDED AUTO-SUBMIT ENABLED: only matching, supported simple ATS forms.")
+        else:
+            print("AUTO-SUBMIT ENABLED: eligible simple ATS forms may be sent to employers.")
+            if input("Type APPLY to authorize this run: ").strip() != "APPLY":
+                print("Canceled.")
+                return
     if not all(text(profile.get(k)) for k in ("first_name","last_name","email")):
         sys.exit("Profile must contain your real first_name, last_name and email.")
     if not args.resumes.is_dir():
@@ -315,24 +330,40 @@ def main():
     if args.discover:
         jobs += discover(profile)
     previously = set()
+    submitted_today = 0
     if args.log.exists():
         for line in args.log.read_text(encoding="utf-8").splitlines():
             try:
                 obj = json.loads(line)
                 if obj.get("status") in ("submitted-confirmed", "uncertain"):
                     previously.add(obj.get("url"))
+                    if str(obj.get("date", "")).startswith(now()[:10]):
+                        submitted_today += 1
             except ValueError:
                 pass
+    today_remaining = max(1, args.max)
+    if args.unattended:
+        try:
+            daily_max = int(profile.get("autopilot", {}).get("daily_max", 10))
+        except (ValueError, TypeError):
+            sys.exit("autopilot.daily_max must be an integer.")
+        if not 1 <= daily_max <= 50:
+            sys.exit("autopilot.daily_max must be between 1 and 50.")
+        today_remaining = min(today_remaining, max(0, daily_max - submitted_today))
+        if today_remaining == 0:
+            print("Daily application cap reached. No submissions will be attempted today.")
+            return
     seen = set()
     jobs = [j for j in jobs if not (j["url"] in seen or seen.add(j["url"]))]
-    print("Candidates:", len(jobs), "| max this run:", args.max, "| submit:", args.submit)
+    print("Candidates:", len(jobs), "| max this run:", today_remaining if args.unattended else args.max,
+          "| submit:", args.submit, "| unattended:", args.unattended)
     processed = 0
     with sync_playwright() as pw, args.log.open("a", encoding="utf-8") as log:
-        browser = pw.chromium.launch(headless=False, slow_mo=100)
+        browser = pw.chromium.launch(headless=args.unattended, slow_mo=0 if args.unattended else 100)
         context = browser.new_context(accept_downloads=False)
         page = context.new_page()
         for job in jobs:
-            if processed >= max(1, args.max):
+            if processed >= (today_remaining if args.unattended else max(1, args.max)):
                 break
             url = job.get("url", "")
             if url in previously:
