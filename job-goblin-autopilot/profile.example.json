@@ -55,5 +55,9 @@
       ],
       "resume": "AI_Resume.pdf"
     }
-  ]
+  ],
+  "autopilot": {
+    "enabled": false,
+    "daily_max": 10
+  }
 }
