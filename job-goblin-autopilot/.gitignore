@@ -5,3 +5,6 @@ applications.jsonl
 __pycache__/
 *.pyc
 .env
+# Browser dependencies and temporary timer lock
+.venv/
+.autopilot.lock
