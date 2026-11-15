@@ -137,3 +137,12 @@
  .loot-bag-btn.loot-bag-burst,#inventoryPanel.loot-target-highlight,.loot-toast{animation:none!important}
  .loot-flying-icon{display:none!important}
 }
+
+/* Previously earned loot can be replayed for demos, never re-awarded. */
+.loot-replay-btn{
+ display:inline-flex;margin:9px 0 0;padding:7px 10px;
+ border:1px solid #ff77c2;border-radius:8px;background:#261025;
+ color:#ffc0e3;font:800 10px/1.4 'IBM Plex Mono',monospace;
+}
+.loot-replay-btn:hover{background:#401a3d;border-color:#00eaff}
+.loot-replay-btn:focus-visible{outline:3px solid #caff82;outline-offset:3px}
