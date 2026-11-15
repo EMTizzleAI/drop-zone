@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#060812">
+<meta name="description" content="Field Intel: learn useful facts about shelter, health care, food, phone service and safety. Earn virtual gear and mission perks in Drop Zone.">
+<link rel="canonical" href="https://emtizzleai.github.io/drop-zone/field-intel.html">
+<title>FIELD INTEL // DROP ZONE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#060812;--pink:#ff39aa;--cyan:#00eaff;--line:#315266;--muted:#bdcbd6;--white:#f6f7fb;--lime:#b1ffb2}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 95% 10%,#ff28b21c,transparent 42%),radial-gradient(ellipse at 5% 90%,#00eaff13,transparent 46%),var(--bg);color:var(--white);font:15px/1.55 'IBM Plex Mono',monospace;min-height:100vh}
+body:before{content:"";position:fixed;z-index:-1;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 39px,#00eaff07 40px),repeating-linear-gradient(90deg,transparent 0 39px,#00eaff07 40px)}
+a{color:#94f4ff}a:focus-visible,button:focus-visible{outline:3px solid #d1ff80;outline-offset:4px}
+button{font:inherit;cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}
+.wrap{width:min(100% - 30px,1100px);margin:auto;padding:0 0 75px}
+.top{display:flex;gap:16px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:22px 0}
+.brand{text-decoration:none;color:#fff;font:900 clamp(1.4rem,5vw,2rem)/1 'Barlow Condensed',Impact,sans-serif;letter-spacing:.045em;text-shadow:-3px 0 var(--pink),3px 0 var(--cyan)}
+.back{font-size:.76rem;text-decoration:none;color:#b9f9ff;border:1px solid #00eaff88;padding:10px 14px;border-radius:9px}
+.hero{border:1px solid #ff39aa85;background:linear-gradient(125deg,#210e25,#0a1525 78%);padding:clamp(20px,5vw,40px);box-shadow:0 0 35px #ff39aa19}
+.eyebrow,.kicker{color:var(--cyan);font-weight:700;font-size:.74rem;letter-spacing:.15em;text-transform:uppercase}
+h1,h2,h3{font-family:'Barlow Condensed',Impact,sans-serif;line-height:1;text-transform:uppercase;margin:0}
+h1{font-size:clamp(3.8rem,11vw,7rem);letter-spacing:-.03em}h1 span{color:var(--pink);text-shadow:3px 3px var(--cyan)}
+h2{font-size:clamp(2rem,5vw,3rem)}h3{font-size:1.6rem}
+.hero p:last-child{max-width:790px;color:var(--muted);margin-bottom:0}
+.panel{border:1px solid #00eaff66;background:linear-gradient(150deg,#091626,#100d19);padding:clamp(18px,4vw,30px);margin-top:18px;min-width:0}
+.hud{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:17px 0}
+.hud article{background:#10192a;border:1px solid #36576c;border-radius:10px;padding:12px 16px;min-width:0}
+.hud small{display:block;color:#b2cbd8;font-size:.66rem;letter-spacing:.1em}
+.hud strong{font:900 clamp(1.3rem,5vw,2.25rem) 'Barlow Condensed',sans-serif;color:#ff86c9}
+.meter{height:9px;border-radius:9px;overflow:hidden;background:#263a49;border:1px solid #30596b}
+.meter span{display:block;background:linear-gradient(90deg,var(--pink),var(--cyan));height:100%;width:0;transition:width .3s ease}
+.mission-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.85fr);gap:18px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+.filters button{border:1px solid #36647a;background:#0b2030;color:#c9eaf3;padding:9px 13px;border-radius:999px;font-size:.72rem}
+.filters button[aria-pressed="true"]{background:#ff39aa;color:#1a0b17;border-color:#ffc0e4;font-weight:700}
+.question{background:#090f20;border:1px solid #ff39aa55;border-radius:12px;padding:22px}
+.question-tag{font-size:.72rem;font-weight:700;color:#ff9ad0;letter-spacing:.13em;text-transform:uppercase}
+.prompt{font:900 clamp(1.6rem,4vw,2.3rem)/1.12 'Barlow Condensed',sans-serif;margin:13px 0 22px;text-transform:none}
+.options{display:grid;gap:10px}
+.options button{width:100%;text-align:left;border:1px solid #3e6380;border-radius:9px;background:#111d31;color:#f9fbff;padding:15px 17px;min-height:54px}
+.options button:not(:disabled):hover{background:#192940;border-color:#ff76c6}
+.options button.good{border-color:#a5f5b4;background:#143324}
+.options button.bad{border-color:#ff92a6;background:#40202d}
+.result{margin:18px 0 0;border:1px solid #6e718e;border-radius:10px;background:#14192a;padding:15px;color:#eef3fa}
+.result.success{border-color:#91ffa4;background:#113323}
+.result.retry{border-color:#ffcf7f;background:#302318}
+.result h3{font-size:1.55rem;margin-bottom:8px}
+.result p{margin:0 0 9px;font-size:.84rem}
+.result .reward{color:#baffc7;font-weight:700}
+.resources{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:47px;padding:10px 15px;border:1px solid #ffbfdf;border-radius:9px;background:#ff39aa;color:#180a15;text-decoration:none;font-weight:900;font-size:.85rem;text-align:center}
+.btn.secondary{background:#0c2333;color:#b3f5ff;border-color:#00eaff93}
+.source{font-size:.7rem;color:#b2c9d3;margin-top:18px}
+.source a{overflow-wrap:anywhere}
+.inventory{display:grid;gap:10px;margin:16px 0}
+.item{display:flex;gap:12px;align-items:start;background:#10192a;border:1px solid #3c566e;border-radius:10px;padding:12px}
+.item .emoji{font-size:2rem;line-height:1.2}
+.item b{display:block;font-size:.82rem;color:#ffb3df}
+.item small{font-size:.72rem;color:#c1d0d9;line-height:1.5;display:block}
+.item a{display:inline-block;margin-top:7px;font-size:.72rem}
+.empty{font-size:.79rem;color:var(--muted)}
+.perk{background:#201326;border-left:4px solid #ff39aa;padding:11px 13px;margin:14px 0;color:#f5ddef;font-size:.77rem}
+.note{font-size:.77rem;color:#bdcbd6;line-height:1.6}
+.pill{display:inline-block;background:#1c3933;color:#c9ffcd;border:1px solid #6aba9b;border-radius:100px;padding:3px 9px;font-size:.69rem;font-weight:700}
+footer{margin:30px auto 0;text-align:center;color:#9db0c0;font-size:.69rem;line-height:1.7}
+@media(max-width:780px){.mission-layout{grid-template-columns:1fr}.hud{gap:7px}.hud article{padding:11px 9px}.hero{padding:25px 20px}.panel{padding:18px}}
+@media(prefers-reduced-motion:reduce){.meter span{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><a class="brand" href="index.html">DROP ZONE</a><a class="back" href="features.html">← FIELD KIT</a></header>
+<main>
+<section class="hero">
+<p class="eyebrow">📡 CHANNEL 05 // SURVIVAL KNOWLEDGE</p>
+<h1>FIELD <span>INTEL.</span></h1>
+<p>Did you know? Learn the shortcuts nobody tells you about. Answer questions, collect <strong>virtual gear</strong>, earn mission perks and find real resources. No account, no shame, no cost. Actual services are always available without winning the game.</p>
+</section>
+<section class="panel" aria-label="Operator progress">
+<div class="kicker">🎮 YOUR OPERATOR STATUS</div>
+<div class="hud">
+<article><small>INTEL POINTS</small><strong id="xp">0 XP</strong></article>
+<article><small>MISSIONS CLEARED</small><strong id="cleared">0 / 12</strong></article>
+<article><small>OPERATOR RANK</small><strong id="rank">SCOUT</strong></article>
+</div>
+<div class="meter" role="progressbar" aria-label="Questions completed" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0" id="progress"><span id="progressFill"></span></div>
+</section>
+<div class="mission-layout">
+<section class="panel" aria-labelledby="quiztitle">
+<p class="kicker">📻 INCOMING TRANSMISSION</p>
+<h2 id="quiztitle">THINGS NOBODY TELLS YOU</h2>
+<div class="filters" role="group" aria-label="Choose an intel topic" id="filters"></div>
+<div class="question" id="questionPanel">
+<p class="question-tag" id="questionTag">FIELD QUIZ</p>
+<div class="prompt" id="questionText">Loading transmission…</div>
+<div class="options" id="answers"></div>
+<div class="result" id="result" role="status" aria-live="polite" hidden></div>
+<div class="resources" id="questionActions"></div>
+<div class="source" id="questionSource"></div>
+</div>
+<p class="note">🩷 Wrong answers are practice, not failure. You can retry to earn your collectible. Need help now? Skip the quiz and use the resource link on every question, or <a href="index.html">return to triage</a>.</p>
+</section>
+<aside class="panel" aria-labelledby="inventorytitle">
+<p class="kicker">🎒 REWARD STORAGE</p>
+<h2 id="inventorytitle">INTEL MANIFEST</h2>
+<p class="note">Virtual collectibles only. Your actual food, supplies, medications and equipment are tracked separately in the <a href="index.html">Gear Manifest</a>.</p>
+<div class="perk" id="streakPerk" aria-live="polite">MISSION PERK // Answer correctly to unlock gear and useful quick-access links.</div>
+<div class="inventory" id="inventory"><p class="empty">NO GEAR YET // THE GOBLIN ARMORY AWAITS.</p></div>
+<h3 style="margin-top:26px">MISSION PERKS</h3>
+<div id="ranks" class="inventory"></div>
+<div class="resources"><a href="index.html" class="btn secondary">← FIELD TRIAGE</a><a href="features.html" class="btn secondary">FIELD KIT →</a></div>
+<p class="note">Progress is saved only in this browser's local storage. Clearing browser data may reset your earned collectibles. Resource links leave Drop Zone and may require internet access.</p>
+</aside>
+</div>
+</main>
+<footer>DROP ZONE // SURVIVE · STABILIZE · RECOVER<br>Knowledge is survival gear. Educational information, not medical or legal advice. Programs and eligibility can change; verify with the linked source. Emergency in the U.S.? Call 911.</footer>
+</div>
+<script>
+(function(){
+'use strict';
+const KEY='dropzoneFieldIntelV1';
+const Q=[
+{id:'emtala',cat:'HEALTH',tag:'MEDICAL MYTHBUSTERS',q:'Can most U.S. hospital emergency departments refuse to screen you for an emergency condition because you cannot pay?',o:['Yes','No','Only if you are uninsured'],a:1,f:'No. Under EMTALA, covered hospital emergency departments must offer an appropriate medical screening exam regardless of ability to pay. If there is an emergency condition, stabilizing care or an appropriate transfer is required. Care may still be billed.',gear:'🛡️',name:'EMERGENCY RIGHTS SHIELD',perk:'Know-your-rights card',url:'https://www.cms.gov/Priorities/your-patient-rights/emergency-room-rights',link:'READ YOUR EMERGENCY RIGHTS',source:'CMS // EMTALA'},
+{id:'clinic',cat:'HEALTH',tag:'CLINIC RECON',q:'Can you visit a federally supported community health center without insurance?',o:['Yes','No','Only in an emergency'],a:0,f:'Yes. Health centers serve insured and uninsured patients. Fees may be adjusted based on ability to pay. Ask the clinic about its sliding-fee program.',gear:'🩺',name:'CLINIC SCOUT SCANNER',perk:'Find nearby affordable care',url:'https://findahealthcenter.hrsa.gov/',link:'FIND A HEALTH CENTER',source:'HRSA // Affordable Health Care'},
+{id:'fees',cat:'HEALTH',tag:'BILLING INTEL',q:'A health center’s sliding-fee discount is mainly based on which factors?',o:['Phone brand','Income and family size','How long you waited'],a:1,f:'Sliding-fee programs use income and family size to determine discounts. Ask the health center directly about fees before your visit.',gear:'🧾',name:'SLIDING-FEE DECODER',perk:'Check clinic eligibility details',url:'https://www.hrsa.gov/get-health-care/affordable/eligibility',link:'EXPLORE LOW-COST CARE',source:'HRSA // Eligibility'},
+{id:'dental',cat:'HEALTH',tag:'WHOLE-PERSON SUPPORT',q:'Which services may be available through community health centers besides basic medical visits?',o:['Dental and behavioral health care','Only emergency surgery','Only laboratory tests'],a:0,f:'Health centers may provide dental, mental health and substance-use services, along with primary care. Check the particular center for its available services.',gear:'🦷',name:'WHOLE-HEALTH TOOLKIT',perk:'Health center service finder',url:'https://www.hrsa.gov/get-health-care',link:'EXPLORE HEALTH CENTERS',source:'HRSA // Get Health Care'},
+{id:'211',cat:'HOUSING',tag:'RESOURCE RADAR',q:'Which three-digit number connects U.S. callers with many local food, housing and other social services?',o:['411','211','611'],a:1,f:'211 connects people to local community assistance where available. If dialing 211 does not work, visit 211.org to find local options.',gear:'📡',name:'211 SIGNAL BEACON',perk:'Shortcut to local support lines',url:'https://www.211.org/',link:'OPEN 211 RESOURCE NETWORK',source:'United Way // 211'},
+{id:'hud',cat:'HOUSING',tag:'SHELTER SCOUT',q:'HUD’s Find Shelter tool can help locate which resources?',o:['Only apartments for sale','Shelters, food pantries and health clinics','Only vehicle registration offices'],a:1,f:'HUD Find Shelter lists emergency shelter, food pantry, health clinic and clothing resources by location. Call providers to confirm availability and requirements.',gear:'🏕️',name:'SHELTER RADAR',perk:'Search local shelter and essentials',url:'https://www.hud.gov/findshelter',link:'SEARCH HUD FIND SHELTER',source:'HUD // Find Shelter'},
+{id:'pit2025',cat:'STATS',tag:'THE BIG PICTURE // 2025',q:'Roughly how many people were counted as experiencing homelessness in the U.S. on one night in January 2025?',o:['About 75,000','About 746,000','About 7.5 million'],a:1,f:'HUD reported 745,652 people on a single night in January 2025. This point-in-time count is a snapshot, not a total of everyone who experienced homelessness during the year.',gear:'📊',name:'REALITY CHECK RADAR',perk:'Open the 2025 HUD report',url:'https://www.hud.gov/news/hud-no-26-037',link:'READ THE HUD COUNT',source:'HUD // 2025 Point-in-Time Report'},
+{id:'pitmeaning',cat:'STATS',tag:'NUMBERS WITH CONTEXT',q:'Does a one-night homelessness count measure everybody who experienced homelessness during the entire year?',o:['Yes, it counts the whole year','No, it is a single-night snapshot','Only people in permanent housing'],a:1,f:'Point-in-time counts estimate sheltered and unsheltered homelessness on one night. They do not measure every person who experiences homelessness throughout a year.',gear:'🔍',name:'DATA LENS',perk:'View HUD methodology and results',url:'https://www.hud.gov/news/hud-no-26-037',link:'EXPLORE THE DATA',source:'HUD // Point-in-Time Count'},
+{id:'snap',cat:'FOOD',tag:'BENEFITS NAVIGATION',q:'Where do you normally apply for SNAP food benefits?',o:['Your state or local SNAP office','Any bank branch','At a hospital emergency desk'],a:0,f:'SNAP is administered through states. Rules and application methods vary by state; use the federal guide to find your state or local office.',gear:'🥫',name:'FOOD SUPPLY COMPASS',perk:'Go to the correct application guide',url:'https://www.usa.gov/food-stamps',link:'FIND SNAP APPLICATION HELP',source:'USAGov // SNAP Applications'},
+{id:'ebt',cat:'FOOD',tag:'SUPPLY TRACKER',q:'Which is a common way to check an EBT/SNAP balance?',o:['Read a store receipt after a purchase','Ask a random online seller','Call an emergency dispatcher'],a:0,f:'Many stores print your remaining EBT balance on a receipt. Some states also have apps, and your state SNAP office can explain other secure ways to check.',gear:'💳',name:'EBT BALANCE TOOL',perk:'Learn secure balance-check methods',url:'https://www.usa.gov/food-stamps',link:'CHECK EBT GUIDANCE',source:'USAGov // SNAP Balance'},
+{id:'lifeline',cat:'PHONE',tag:'SIGNAL RECOVERY',q:'What does the federal Lifeline program help eligible households with?',o:['Discounted phone or internet service','Guaranteed free smartphones for everyone','Unlimited free international travel'],a:0,f:'Lifeline offers eligible households a discount on qualifying phone or internet service. A free device or plan is not guaranteed; check the provider and eligibility rules.',gear:'📱',name:'SIGNAL RESTORER',perk:'Check Lifeline assistance',url:'https://www.usa.gov/help-with-phone-internet-bills',link:'EXPLORE PHONE DISCOUNTS',source:'USAGov // Lifeline'},
+{id:'988',cat:'SAFETY',tag:'HUMAN BACKUP',q:'Which number can you call or text in the U.S. for free, 24/7 mental health and emotional crisis support?',o:['988','811','511'],a:0,f:'The 988 Lifeline offers free call, text and chat support around the clock. For immediate physical danger or a medical emergency, call 911 instead.',gear:'💗',name:'HUMAN BACKUP RADIO',perk:'Connect to 988 support options',url:'https://988lifeline.org/get-help/',link:'SEE 988 SUPPORT OPTIONS',source:'988 Lifeline // Get Help'},
+{id:'hillburton',cat:'HEALTH',tag:'HIDDEN CARE ROUTE',q:'Do some hospitals have programs offering free or reduced-cost care to eligible patients?',o:['No, never','Yes, at certain participating facilities','Every hospital must provide every service for free'],a:1,f:'Some facilities participate in the Hill-Burton program and offer qualifying care at reduced or no cost. It is not available at every hospital, and eligibility and funding limits apply.',gear:'🏥',name:'CARE ACCESS PASS',perk:'Check Hill-Burton options',url:'https://www.hrsa.gov/get-health-care/affordable/eligibility',link:'READ HILL-BURTON INFO',source:'HRSA // Reduced-Cost Care'},
+{id:'food211',cat:'FOOD',tag:'PANTRY RECON',q:'Can 211 help you look for food pantries and food assistance in your community?',o:['Yes','Only if you already receive SNAP','No'],a:0,f:'Local 211 networks help connect callers to food pantries and other available food assistance. Call first to confirm hours, location and requirements.',gear:'🥕',name:'PANTRY GOBLIN COMPASS',perk:'Find community food support',url:'https://211.org/get-help/food-programs-food-benefits',link:'FIND FOOD RESOURCES',source:'United Way // 211 Food Programs'}
+];
+const CATS=['ALL','HEALTH','HOUSING','FOOD','PHONE','SAFETY','STATS'];
+const $=id=>document.getElementById(id);
+function getState(){try{const x=JSON.parse(localStorage.getItem(KEY)||'{}');return {solved:Array.isArray(x.solved)?x.solved.filter(id=>Q.some(q=>q.id===id)):[]};}catch(_){return {solved:[]};}}
+let state=getState(),category='ALL',current=null,done=false,consecutive=0;
+function save(){try{localStorage.setItem(KEY,JSON.stringify({solved:state.solved}));}catch(_){}}
+function rank(n){return n>=12?'INTEL COMMANDER':n>=8?'FIELD OPERATIVE':n>=4?'RESOURCE SCOUT':'ROOKIE SCOUT';}
+function updateHUD(){
+const n=state.solved.length;
+$('xp').textContent=(n*25)+' XP';
+$('cleared').textContent=n+' / '+Q.length;
+$('rank').textContent=rank(n);
+$('progress').setAttribute('aria-valuemax',String(Q.length));
+$('progress').setAttribute('aria-valuenow',String(n));
+$('progressFill').style.width=(n/Q.length*100)+'%';
+$('streakPerk').textContent=n>=8?'🏆 PERK UNLOCKED // FIELD OPERATIVE: 8 useful resource routes collected.':n>=4?'🧭 PERK UNLOCKED // RESOURCE SCOUT: four new survival shortcuts are in your manifest.':n>0?'⚡ MISSION PERK // Knowledge is gear. Collect four intel cards to rank up!':'MISSION PERK // Answer correctly to unlock virtual gear and helpful shortcuts.';
+const box=$('inventory');box.replaceChildren();
+if(!n){const p=document.createElement('p');p.className='empty';p.textContent='NO GEAR YET // THE GOBLIN ARMORY AWAITS.';box.append(p);}
+Q.filter(q=>state.solved.includes(q.id)).forEach(q=>{
+const item=document.createElement('div');item.className='item';
+const em=document.createElement('span');em.className='emoji';em.setAttribute('aria-hidden','true');em.textContent=q.gear;
+const div=document.createElement('div');const b=document.createElement('b');b.textContent=q.name;const small=document.createElement('small');small.textContent='MISSION PERK: '+q.perk;
+const a=document.createElement('a');a.href=q.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='OPEN RESOURCE ↗';
+div.append(b,small,a);item.append(em,div);box.append(item);
+});
+const ranks=$('ranks');ranks.replaceChildren();
+[[4,'🧭 RESOURCE SCOUT'],[8,'⚡ FIELD OPERATIVE'],[Q.length,'👑 INTEL COMMANDER']].forEach(([threshold,label])=>{
+const p=document.createElement('div');p.className='item';
+const strong=document.createElement('strong');strong.textContent=(n>=threshold?'✓ ':'🔒 ')+label;
+const small=document.createElement('small');small.textContent=n>=threshold?'MISSION PERK UNLOCKED':(threshold-n)+' more intel missions to unlock';
+const d=document.createElement('div');d.append(strong,small);p.append(d);ranks.append(p);
+});
+}
+function renderFilters(){const f=$('filters');f.replaceChildren();CATS.forEach(c=>{
+const b=document.createElement('button');b.type='button';b.textContent=c==='ALL'?'ALL INTEL':c;b.setAttribute('aria-pressed',String(c===category));b.addEventListener('click',()=>{category=c;renderFilters();pickQuestion();});f.append(b);
+});}
+function pickQuestion(){
+const pool=Q.filter(q=>category==='ALL'||q.cat===category);
+const unsolved=pool.filter(q=>!state.solved.includes(q.id));
+if(!pool.length)return;
+if(!unsolved.length){consecutive=0;showDone(pool.length);return;}
+current=unsolved[0];done=false;renderQuestion();
+}
+function showDone(count){
+current=null;$('questionTag').textContent='MISSION COMPLETE';$('questionText').textContent='All '+count+' '+(category==='ALL'?'intel':'topic')+' transmissions cleared! ✨';
+$('answers').replaceChildren();$('result').hidden=false;$('result').className='result success';$('result').textContent='Your rewards are in the Intel Manifest. Pick another topic or replay later. Real resources never require a score.';
+const actions=$('questionActions');actions.replaceChildren();const a=document.createElement('a');a.href='index.html';a.className='btn';a.textContent='RETURN TO FIELD TRIAGE →';actions.append(a);$('questionSource').textContent='';
+}
+function renderQuestion(){
+const q=current;$('questionTag').textContent=q.tag+' // '+q.cat;$('questionText').textContent=q.q;
+const answers=$('answers');answers.replaceChildren();$('result').hidden=true;$('result').className='result';
+q.o.forEach((answer,i)=>{
+const b=document.createElement('button');b.type='button';b.textContent=String.fromCharCode(65+i)+'. '+answer;b.addEventListener('click',()=>respond(i));answers.append(b);
+});
+const actions=$('questionActions');actions.replaceChildren();
+const link=document.createElement('a');link.href=q.url;link.target='_blank';link.rel='noopener noreferrer';link.className='btn secondary';link.textContent='🧭 '+q.link+' ↗';actions.append(link);
+const next=document.createElement('button');next.type='button';next.className='btn';next.textContent='SKIP / NEXT TRANSMISSION →';next.addEventListener('click',()=>{
+const other=Q.filter(x=>(category==='ALL'||x.cat===category)&&!state.solved.includes(x.id)&&x.id!==q.id);
+if(other.length){current=other[0];done=false;renderQuestion();}
+else if(category!=='ALL'){category='ALL';renderFilters();pickQuestion();}
+else{current=q;renderQuestion();}
+});actions.append(next);
+const src=$('questionSource');src.replaceChildren();src.append('SOURCE: '+q.source+' · ');
+const a=document.createElement('a');a.href=q.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='VERIFY THIS FACT ↗';src.append(a);
+}
+function respond(index){
+if(!current||done)return;
+const q=current,buttons=Array.from($('answers').children),correct=index===q.a,box=$('result');
+done=true;buttons.forEach((b,i)=>{b.disabled=true;if(i===q.a)b.classList.add('good');if(i===index&&!correct)b.classList.add('bad');});
+box.hidden=false;box.className='result '+(correct?'success':'retry');box.replaceChildren();
+const h=document.createElement('h3'),p=document.createElement('p');h.textContent=correct?'📡 INTEL ACQUIRED!':'📻 SIGNAL ADJUSTMENT';p.textContent=q.f;box.append(h,p);
+if(correct){
+consecutive++;
+const fresh=!state.solved.includes(q.id);
+if(fresh){state.solved.push(q.id);save();updateHUD();}
+const prize=document.createElement('p');prize.className='reward';prize.textContent=fresh?'✨ +25 XP // '+q.gear+' '+q.name+' ADDED TO INTEL MANIFEST!':'✓ ALREADY IN YOUR MANIFEST';
+box.append(prize);
+if(consecutive>=3){const combo=document.createElement('p');combo.className='reward';combo.textContent='🔥 FIELD COMBO // '+consecutive+' CORRECT IN A ROW!';box.append(combo);}
+const next=document.createElement('button');next.type='button';next.className='btn';next.textContent='NEXT INTEL MISSION →';next.addEventListener('click',()=>pickQuestion());box.append(next);
+}else{
+consecutive=0;
+const retry=document.createElement('button');retry.type='button';retry.className='btn secondary';retry.textContent='TRY AGAIN // CLAIM THE GEAR ↺';retry.addEventListener('click',()=>{done=false;renderQuestion();});box.append(retry);
+}
+}
+renderFilters();updateHUD();pickQuestion();
+window.addEventListener('storage',e=>{if(e.key===KEY){state=getState();updateHUD();if(current&&state.solved.includes(current.id))pickQuestion();}});
+})();
+</script>
+<script src="soundtrack.js?v=dropzone-radio-20261114" defer></script>
+</body>
+</html>
