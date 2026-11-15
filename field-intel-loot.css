@@ -1,0 +1,139 @@
+/* FIELD INTEL // arcade loot drop + compact, always-visible inventory bag */
+.top{
+  position:sticky;top:0;z-index:50;
+  margin:0 -10px;padding:12px 10px;
+  background:linear-gradient(110deg,#070a15f5,#150e20f5);
+  border-bottom:1px solid #ff39aa63;
+  backdrop-filter:blur(12px);
+}
+.field-header-actions{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.loot-sound-btn,.loot-bag-btn{
+  min-height:43px;padding:7px 12px;
+  border:1px solid #00eaff8c;border-radius:10px;
+  background:linear-gradient(135deg,#0e2030,#23132d);color:#e2faff;
+  font:900 11px/1.1 'IBM Plex Mono',monospace;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  box-shadow:inset 0 0 10px #ff39aa12;
+}
+.loot-sound-btn[aria-pressed="false"]{border-color:#687585;color:#adbac4}
+.loot-bag-btn{
+  position:relative;border:2px solid #ff57ba;color:#ffbfdf;
+  background:radial-gradient(circle at 40% 20%,#4b1a46,#130b20 80%);
+  box-shadow:0 0 12px #ff39aa42;min-height:50px;
+}
+.loot-bag-btn .loot-bag-emoji{font-size:27px;line-height:1}
+.loot-bag-count{
+  display:grid;place-items:center;min-width:24px;height:24px;
+  padding:0 5px;border:1px solid #caffb9;border-radius:99px;
+  background:#0a332a;color:#caffb9;font:900 13px/1 'IBM Plex Mono',monospace;
+}
+.loot-bag-btn.loot-bag-burst{animation:lootBagBurst .6s ease-out}
+#inventoryPanel{scroll-margin-top:90px}
+#inventoryPanel.loot-target-highlight{animation:lootBagOutline 1.5s ease-out}
+/* The overlay is decorative: answer status already uses an aria-live region. */
+.loot-drop-layer{
+  position:fixed;inset:0;z-index:250;pointer-events:none;
+  display:grid;place-items:center;padding:12px;
+  overflow:hidden;
+}
+.loot-drop-layer:empty{display:none}
+.loot-drop-card{
+  position:relative;isolation:isolate;overflow:hidden;
+  width:min(490px,calc(100vw - 24px));
+  padding:26px 19px 28px;text-align:center;
+  border:2px solid #ff56b8;border-radius:17px;
+  background:
+    radial-gradient(circle at 50% 26%,#ff39aa30,transparent 57%),
+    linear-gradient(150deg,#27142f 0%,#0a1628 58%,#08121d 100%);
+  box-shadow:0 0 0 1px #00eaff77,inset 0 0 40px #ff39aa20,0 16px 75px #000d,0 0 55px #ff39aa7a;
+  animation:lootCardArrival .45s cubic-bezier(.15,1.45,.35,1) both;
+}
+.loot-drop-card:before,.loot-drop-card:after{
+  content:'';position:absolute;inset:9px;border:1px solid #00eaff4a;
+  border-radius:9px;z-index:-1;
+}
+.loot-drop-card:after{inset:15px;border-color:#ff56b847}
+.loot-drop-card.loot-card-exit{animation:lootCardExit .25s ease-in both}
+.loot-drop-kicker{
+  font:900 13px/1.3 'IBM Plex Mono',monospace;
+  letter-spacing:.13em;color:#b9ffb6;text-shadow:0 0 14px #8fff89;
+}
+.loot-drop-icon{
+  position:relative;display:grid;place-items:center;margin:14px auto 11px;
+  width:108px;height:108px;border-radius:22px;
+  border:2px solid #00eaff;background:radial-gradient(circle at 42% 23%,#4c2251,#10172b 78%);
+  box-shadow:0 0 25px #00eaff5a,0 0 45px #ff39aa78;
+  font-size:68px;line-height:1;animation:lootIconPulse .7s ease-out;
+}
+.loot-drop-icon:after{
+  content:'';position:absolute;inset:-13px;border:2px dashed #ff8bd1;border-radius:28px;
+  animation:lootHaloSpin 6s linear infinite;
+}
+.loot-drop-name{
+  color:#fff;font:900 clamp(26px,7vw,41px)/1 'Barlow Condensed',Impact,sans-serif;
+  letter-spacing:.02em;text-transform:uppercase;text-shadow:-2px 0 #ff39aa,2px 0 #00eaff;
+}
+.loot-drop-xp{
+  display:inline-block;margin:15px 0 9px;
+  padding:8px 20px;border:1px solid #caff9b;border-radius:10px;
+  background:#163524;color:#caff9b;
+  font:900 21px/1 'Barlow Condensed',Impact,sans-serif;
+  letter-spacing:.045em;
+}
+.loot-drop-note{color:#e8b8dc;font-size:11px;font-weight:900;letter-spacing:.04em;line-height:1.55}
+.loot-drop-streak{margin-top:9px;font-size:12px;color:#a9f7ff}
+.loot-drop-star{
+  position:absolute;font-size:24px;color:#f4c0ff;text-shadow:0 0 14px #ff39aa;
+  animation:lootStar .8s ease-out both;
+}
+.loot-drop-star:nth-of-type(1){left:7%;top:15%}
+.loot-drop-star:nth-of-type(2){right:9%;top:22%;animation-delay:.08s}
+.loot-drop-star:nth-of-type(3){left:13%;bottom:13%;animation-delay:.13s}
+.loot-drop-star:nth-of-type(4){right:12%;bottom:15%;animation-delay:.2s}
+.loot-flying-icon{
+  position:fixed;z-index:300;display:grid;place-items:center;
+  width:82px;height:82px;border:2px solid #00eaff;border-radius:18px;
+  background:#24102e;box-shadow:0 0 30px #ff39aacc,0 0 17px #00eaffa3;
+  font-size:53px;line-height:1;
+  pointer-events:none;will-change:transform,opacity;
+}
+.loot-toast{
+  position:fixed;z-index:301;top:76px;right:13px;
+  color:#d3ffde;border:1px solid #87ffb7;border-radius:8px;
+  background:#0c3025;padding:8px 13px;
+  font:900 11px/1.4 'IBM Plex Mono',monospace;
+  box-shadow:0 0 20px #50ff815c;
+  animation:lootToast .9s ease both;
+}
+@keyframes lootCardArrival{from{opacity:0;transform:translateY(40px) scale(.65) rotate(-3deg);filter:blur(3px)}65%{opacity:1;filter:blur(0)}to{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
+@keyframes lootCardExit{to{opacity:0;transform:scale(.82)}}
+@keyframes lootIconPulse{0%{transform:scale(.2) rotate(-25deg)}68%{transform:scale(1.15) rotate(7deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes lootHaloSpin{to{transform:rotate(360deg)}}
+@keyframes lootStar{from{opacity:0;transform:scale(.2) rotate(-30deg)}55%{opacity:1}to{opacity:.7;transform:scale(1.1) rotate(25deg)}}
+@keyframes lootBagBurst{0%,100%{transform:scale(1)}35%{transform:scale(1.17) rotate(-9deg)}65%{transform:scale(.94) rotate(6deg)}}
+@keyframes lootBagOutline{0%,100%{box-shadow:initial}30%{box-shadow:0 0 35px #ff39aa99}}
+@keyframes lootToast{0%{opacity:0;transform:translateY(-12px)}20%,80%{opacity:1;transform:translateY(0)}100%{opacity:0}}
+@media(max-width:640px){
+ .top{padding:9px 4px;gap:5px;margin:0 -4px}
+ .field-header-actions{gap:5px;flex-wrap:nowrap}
+ .top .brand{font-size:1.35rem}
+ .top .back{padding:8px;font-size:.62rem}
+ .loot-bag-btn{min-height:44px;padding:6px 8px;gap:4px;font-size:10px}
+ .loot-bag-btn .loot-bag-emoji{font-size:24px}
+ .loot-sound-btn{min-height:43px;padding:7px;font-size:16px}
+ .loot-sound-btn .loot-sound-label{display:none}
+ .loot-drop-card{padding:23px 14px}
+ .loot-drop-icon{width:96px;height:96px;font-size:60px}
+ .loot-toast{top:73px;right:9px}
+}
+@media(max-width:370px){
+ .top .brand{font-size:1.12rem}
+ .loot-bag-btn .loot-bag-text{display:none}
+ .top .back{font-size:.58rem}
+ .loot-bag-count{height:21px;min-width:21px;font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+ .loot-drop-card,.loot-drop-icon,.loot-drop-icon:after,.loot-drop-star,
+ .loot-bag-btn.loot-bag-burst,#inventoryPanel.loot-target-highlight,.loot-toast{animation:none!important}
+ .loot-flying-icon{display:none!important}
+}
