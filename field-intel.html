@@ -143,7 +143,7 @@ const CATS=['ALL','HEALTH','HOUSING','FOOD','PHONE','SAFETY','STATS'];
 const $=id=>document.getElementById(id);
 function getState(){try{const x=JSON.parse(localStorage.getItem(KEY)||'{}');return {solved:Array.isArray(x.solved)?x.solved.filter(id=>Q.some(q=>q.id===id)):[]};}catch(_){return {solved:[]};}}
 let state=getState(),category='ALL',current=null,done=false,consecutive=0;
-function save(){try{localStorage.setItem(KEY,JSON.stringify({solved:state.solved}));}catch(_){}}
+function save(){try{const awards=Q.filter(q=>state.solved.includes(q.id)).map(q=>({id:q.id,gear:q.gear,name:q.name,perk:q.perk,url:q.url}));localStorage.setItem(KEY,JSON.stringify({solved:state.solved,awards:awards}));}catch(_){}}
 function rank(n){return n>=12?'INTEL COMMANDER':n>=8?'FIELD OPERATIVE':n>=4?'RESOURCE SCOUT':'ROOKIE SCOUT';}
 function updateHUD(){
 const n=state.solved.length;
