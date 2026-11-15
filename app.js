@@ -155,6 +155,7 @@ function startGreetingMusic() {
 
 let captionAnimation = 0;
 function emtizzleGreeting() {
+ if (typeof window.dzSoundtrackDuck === 'function') window.dzSoundtrackDuck(26000);
  const caption=document.getElementById('emtizzleGreetingCaption');
  cancelAnimationFrame(captionAnimation);
  const words="EMTizzle, operator. I heard you're in a rough spot. That's all right. Sometimes life can take you sideways. We're gonna get you out.";
