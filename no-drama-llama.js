@@ -52,7 +52,7 @@
      url:'https://www.thehotline.org/resources/safety-planning-with-pets/',link:'SAFETY PLANNING WITH PETS'},
     {id:'care',name:'CARE LANTERN',icon:'🏮',title:'Medical care and emotional support both matter.',
      body:'Medical professionals can assess injuries and document symptoms. Pressure to the neck or strangulation requires urgent medical evaluation even without visible marks. Ask about reporting and privacy rules when safe to do so.',
-     url:'https://medlineplus.gov/intimatepartnerviolence.html',link:'MEDICAL SUPPORT INFORMATION'},
+     url:'https://www.thehotline.org/resources/the-dangers-of-strangulation/',link:'DANGERS OF STRANGULATION & SUPPORT'},
     {id:'hope',name:'HOPE STAR',icon:'⭐',title:'Help is available even if you are not ready to leave.',
      body:'The National Domestic Violence Hotline offers support for exploring options and safety planning. You do not need a police report or a completed quest to reach out. You decide what information to share.',
      url:'https://www.thehotline.org/get-help/',link:'NATIONAL DOMESTIC VIOLENCE HOTLINE'}
@@ -181,6 +181,7 @@
     if(!game.hidden)return;
     game.hidden=false;
     roamer.hidden=true;
+    roamer.setAttribute('aria-expanded','true');
     updateStatus();
     renderCharms();
     game.scrollIntoView({behavior:reduced()?'auto':'smooth',block:'start'});
@@ -191,6 +192,7 @@
     clearLoot();
     game.hidden=true;
     roamer.hidden=false;
+    roamer.setAttribute('aria-expanded','false');
     roamer.focus({preventScroll:true});
   }
   roamer.addEventListener('click',open);
