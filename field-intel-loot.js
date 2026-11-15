@@ -92,20 +92,20 @@
   }
   bag.addEventListener('click',scrollToInventory);
 
-  function landing(){
+  function landing(preview){
     bag.classList.remove('loot-bag-burst');
     void bag.offsetWidth;
     bag.classList.add('loot-bag-burst');
-    const toast=el('div','loot-toast','✓ GEAR SECURED // MANIFEST UPDATED');
+    const toast=el('div','loot-toast',preview?'✓ REPLAY COMPLETE // ALREADY OWNED':'✓ GEAR SECURED // MANIFEST UPDATED');
     toast.setAttribute('aria-hidden','true');
     document.body.append(toast);
     timer(()=>toast.remove(),1000);
     timer(()=>bag.classList.remove('loot-bag-burst'),650);
   }
 
-  function fly(icon,card){
+  function fly(icon,card,preview){
     const sprite=card.querySelector('.loot-drop-icon');
-    if(!sprite){landing();return;}
+    if(!sprite){landing(preview);return;}
     const start=sprite.getBoundingClientRect();
     const end=bag.getBoundingClientRect();
     const size=82;
@@ -126,7 +126,7 @@
       currentFlyer.remove();
       if(flyer===currentFlyer)flyer=null;
       card.remove();
-      landing();
+      landing(preview);
     };
     if(typeof currentFlyer.animate==='function'){
       const motion=currentFlyer.animate([
@@ -144,16 +144,16 @@
 
   function reward(item,options){
     if(!item||typeof item.name!=='string')return;
-    const xp=options?.xp??25,streak=options?.streak??0;
+    const xp=options?.xp??25,streak=options?.streak??0,preview=options?.preview===true;
     clearEffects();
     const icon=String(item.gear||'🎒');
     const card=el('div','loot-drop-card');
-    const kicker=el('div','loot-drop-kicker','✦ ✦  NEW LOOT ACQUIRED  ✦ ✦');
+    const kicker=el('div','loot-drop-kicker',preview?'✦ ✦  REPLAY OWNED LOOT  ✦ ✦':'✦ ✦  NEW LOOT ACQUIRED  ✦ ✦');
     const sigil=el('div','loot-drop-icon',icon);
     sigil.setAttribute('aria-hidden','true');
     const name=el('div','loot-drop-name',item.name);
-    const points=el('div','loot-drop-xp','+'+Math.max(0,Number(xp)||0)+' XP');
-    const note=el('div','loot-drop-note','VIRTUAL COLLECTIBLE → GEAR BAG');
+    const points=el('div','loot-drop-xp',preview?'ALREADY OWNED':'+'+Math.max(0,Number(xp)||0)+' XP');
+    const note=el('div','loot-drop-note',preview?'REPLAY ONLY · NO NEW XP OR ITEMS':'VIRTUAL COLLECTIBLE → GEAR BAG');
     card.append(kicker,sigil,name,points,note);
     if(streak>=3){
       const combo=el('div','loot-drop-streak','🥤 REFRESHMENT BUFF // '+streak+'-ANSWER STREAK');
@@ -167,9 +167,9 @@
     layer.append(card);
     chime();
     if(reduceMotion()){
-      timer(()=>{card.remove();landing();},1050);
+      timer(()=>{card.remove();landing(preview);},1050);
     }else{
-      timer(()=>fly(icon,card),1180);
+      timer(()=>fly(icon,card,preview),1180);
     }
   }
   window.DZIntelLoot={reward,refreshBag};
