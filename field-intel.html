@@ -88,10 +88,17 @@ footer{margin:30px auto 0;text-align:center;color:#9db0c0;font-size:.69rem;line-
 @media(max-width:780px){.mission-layout{grid-template-columns:1fr}.hud{gap:7px}.hud article{padding:11px 9px}.hero{padding:25px 20px}.panel{padding:18px}}
 @media(prefers-reduced-motion:reduce){.meter span{transition:none}.result.success,.result .reward{animation:none}}
 </style>
+<link rel="stylesheet" href="field-intel-loot.css?v=loot-drop-20261115">
 </head>
 <body>
 <div class="wrap">
-<header class="top"><a class="brand" href="index.html">DROP ZONE</a><a class="back" href="features.html">← FIELD KIT</a></header>
+<header class="top"><a class="brand" href="index.html">DROP ZONE</a>
+<div class="field-header-actions">
+  <button id="lootSoundToggle" class="loot-sound-btn" type="button" aria-pressed="true" aria-label="Mute loot sounds" title="Loot chimes on. Tap to mute."><span id="lootSoundIcon" aria-hidden="true">🔊</span><span id="lootSoundLabel" class="loot-sound-label">SOUND ON</span></button>
+  <button id="lootBagButton" class="loot-bag-btn" type="button" aria-label="Open Intel Manifest: 0 virtual gear items collected" aria-controls="inventoryPanel" title="View earned virtual gear"><span class="loot-bag-emoji" aria-hidden="true">🎒</span><span class="loot-bag-text">GEAR BAG</span><span id="lootBagCount" class="loot-bag-count">0</span></button>
+  <a class="back" href="features.html">← FIELD KIT</a>
+</div>
+</header>
 <main>
 <section class="hero">
 <p class="eyebrow">📡 CHANNEL 05 // SURVIVAL KNOWLEDGE</p>
@@ -122,10 +129,10 @@ footer{margin:30px auto 0;text-align:center;color:#9db0c0;font-size:.69rem;line-
 </div>
 <p class="note">🩷 Wrong answers are practice, not failure. You can retry to earn your collectible. Need help now? Skip the quiz and use the resource link on every question, or <a href="index.html">return to triage</a>.</p>
 </section>
-<aside class="panel" aria-labelledby="inventorytitle">
+<aside id="inventoryPanel" class="panel" aria-labelledby="inventorytitle">
 <p class="kicker">🎒 REWARD STORAGE</p>
-<h2 id="inventorytitle">INTEL MANIFEST</h2>
-<p class="note">Virtual collectibles only. Your actual food, supplies, medications and equipment are tracked separately in the <a href="index.html">Gear Manifest</a>.</p>
+<h2 id="inventorytitle" tabindex="-1">INTEL MANIFEST</h2>
+<p class="note">Virtual collectibles only. Your actual food, supplies, medications and equipment are tracked separately in the <a href="index.html">Gear Manifest</a>. Tap <strong>REPLAY LOOT FX</strong> on an owned item to watch its animation again without earning duplicate XP.</p>
 <div class="perk" id="streakPerk" aria-live="polite">MISSION PERK // Answer correctly to unlock gear and useful quick-access links.</div>
 <div class="inventory" id="inventory"><p class="empty">NO GEAR YET // THE GOBLIN ARMORY AWAITS.</p></div>
 <h3 style="margin-top:26px">MISSION PERKS</h3>
@@ -137,6 +144,8 @@ footer{margin:30px auto 0;text-align:center;color:#9db0c0;font-size:.69rem;line-
 </main>
 <footer>DROP ZONE // SURVIVE · STABILIZE · RECOVER<br>Knowledge is survival gear. Educational information, not medical or legal advice. Programs and eligibility can change; verify with the linked source. Emergency in the U.S.? Call 911.</footer>
 </div>
+<div id="lootDropLayer" class="loot-drop-layer" aria-hidden="true"></div>
+<script src="field-intel-loot.js?v=loot-drop-20261115"></script>
 <script>
 (function(){
 'use strict';
@@ -165,6 +174,7 @@ function save(){try{const awards=Q.filter(q=>state.solved.includes(q.id)).map(q=
 function rank(n){return n>=12?'INTEL COMMANDER':n>=8?'FIELD OPERATIVE':n>=4?'RESOURCE SCOUT':'ROOKIE SCOUT';}
 function updateHUD(){
 const n=state.solved.length;
+window.DZIntelLoot?.refreshBag(n);
 $('xp').textContent=(n*25)+' XP';
 $('cleared').textContent=n+' / '+Q.length;
 $('rank').textContent=rank(n);
@@ -179,7 +189,9 @@ const item=document.createElement('div');item.className='item';
 const em=document.createElement('span');em.className='emoji';em.setAttribute('aria-hidden','true');em.textContent=q.gear;
 const div=document.createElement('div');const b=document.createElement('b');b.textContent=q.name;const small=document.createElement('small');small.textContent='MISSION PERK: '+q.perk;
 const a=document.createElement('a');a.href=q.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='OPEN RESOURCE ↗';
-div.append(b,small,a);item.append(em,div);box.append(item);
+const replay=document.createElement('button');replay.type='button';replay.className='loot-replay-btn';replay.textContent='✨ REPLAY LOOT FX';replay.setAttribute('aria-label','Replay '+q.name+' virtual loot animation, no XP awarded');
+replay.addEventListener('click',()=>window.DZIntelLoot?.reward(q,{preview:true}));
+div.append(b,small,a,replay);item.append(em,div);box.append(item);
 });
 const ranks=$('ranks');ranks.replaceChildren();
 [[4,'🧭 RESOURCE SCOUT'],[8,'⚡ FIELD OPERATIVE'],[Q.length,'👑 INTEL COMMANDER']].forEach(([threshold,label])=>{
@@ -234,6 +246,7 @@ if(fresh){state.solved.push(q.id);save();updateHUD();}
 const prize=document.createElement('p');prize.className='reward';prize.textContent=fresh?'✨ +25 XP // '+q.gear+' '+q.name+' ADDED TO INTEL MANIFEST!':'✓ ALREADY IN YOUR MANIFEST';
 box.append(prize);
 if(consecutive>=3){const combo=document.createElement('p');combo.className='reward';combo.textContent='🔥 FIELD COMBO // '+consecutive+' CORRECT IN A ROW!';box.append(combo);}
+if(fresh)window.DZIntelLoot?.reward(q,{xp:25,streak:consecutive});
 const next=document.createElement('button');next.type='button';next.className='btn';next.textContent='NEXT INTEL MISSION →';next.addEventListener('click',()=>pickQuestion());box.append(next);
 }else{
 consecutive=0;
