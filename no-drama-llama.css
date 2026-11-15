@@ -1,69 +1,157 @@
-/* NO DRAMA LLAMA // opt-in learning companion for safety information.
-   Motion reduced for visitors who prefer less animation; never auto-plays sound. */
-.llama-card{position:relative;overflow:hidden;border:2px solid #a5e9e3;
- background:radial-gradient(circle at 93% 15%,#ff4ba929,transparent 45%),
- linear-gradient(145deg,#152a32,#171626 58%,#27172e);
- box-shadow:0 0 25px #6deafa16}
-.llama-kicker{font-size:.75rem;letter-spacing:.14em;color:#b0faf4;font-weight:900}
-.llama-stage{display:grid;grid-template-columns:minmax(120px,170px) minmax(0,1fr);
- gap:20px;align-items:center;margin:13px 0 20px}
-.llama-avatar{position:relative;display:grid;place-items:center;width:150px;height:155px;
- margin-inline:auto;border:2px solid #ffe3c0;border-radius:44% 44% 42% 42%;
- background:radial-gradient(circle at 47% 30%,#fcf4e6,#dcc6bb 90%);
- box-shadow:inset 0 -12px 19px #d88fc264,0 0 24px #fff1df43;
- transform:rotate(-2deg)}
-.llama-face{font-size:87px;line-height:1;filter:drop-shadow(0 4px 2px #603f5d55)}
-.llama-shield{position:absolute;bottom:1px;right:-8px;display:grid;place-items:center;
- width:57px;height:57px;border:2px solid #ff8fcb;border-radius:50%;
- background:#271026;font-size:34px;box-shadow:0 0 16px #ff4ba97a}
-.llama-bubble{position:relative;padding:19px 20px;border:1px solid #e9b9d9;
- border-radius:22px;background:#281e38;color:#fff;box-shadow:0 5px 16px #0005}
-.llama-bubble:before{content:'';position:absolute;left:-9px;top:50%;
- width:16px;height:16px;transform:translateY(-50%) rotate(45deg);
- background:#281e38;border-left:1px solid #e9b9d9;border-bottom:1px solid #e9b9d9}
-.llama-bubble h2{font-size:clamp(1.7rem,5vw,2.3rem);font-weight:950;color:#ffc5e7;margin:0 0 7px;letter-spacing:.02em}
-.llama-bubble p{margin:5px 0 0;font-size:1rem}
-.llama-quiet-note{font-size:.84rem;color:#dfd8e4;margin-top:10px}
-.llama-quiet-note strong{color:#fff}
-.llama-tools{border:1px solid #6da8ae;background:#0e202a;border-radius:14px;padding:16px}
-.llama-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.llama-toolbar .llama-counter{font-weight:900;color:#baffd7;font-size:.81rem}
-.llama-ask,.llama-next{display:inline-flex;align-items:center;justify-content:center;
- gap:9px;padding:12px 16px;min-height:49px;border-radius:12px;
- border:1px solid #ffd7e9;background:#ff84c9;color:#19091a;
- font:900 .92rem/1.3 system-ui,sans-serif;cursor:pointer;text-align:center}
-.llama-ask:hover,.llama-next:hover{filter:brightness(1.08)}
-.llama-ask[disabled]{opacity:.7;cursor:default}
+/* No Drama Llama 2.0 // 14-fact, no-pressure Comfort Quest
+   Visible page: one bounding fluffy white llama icon. The game is opt-in.
+   IMPORTANT: All sounds disabled. No personal disclosures or saved history. */
+.llama-roamer{
+  --llama-span:clamp(68px,33vw,184px);
+  position:fixed;z-index:30;
+  bottom:max(16px,env(safe-area-inset-bottom));
+  right:clamp(6px,2.4vw,26px);
+  display:grid;place-items:center;
+  width:clamp(88px,12vw,124px);
+  height:clamp(88px,12vw,124px);
+  padding:0;border:0;background:transparent;color:inherit;
+  cursor:pointer;touch-action:manipulation;
+  filter:drop-shadow(0 6px 10px #0008) drop-shadow(0 0 5px #ff90d55e);
+  animation:llamaBounding 6.6s ease-in-out infinite;
+  transform-origin:50% 83%;
+}
+.llama-roamer[hidden]{display:none!important}
+.llama-roamer img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.llama-roamer:hover,.llama-roamer:focus-visible{animation-play-state:paused}
+.llama-roamer:focus-visible{outline:3px solid #caffc8;outline-offset:4px;border-radius:25px}
+@keyframes llamaBounding{
+  0%,100%{transform:translate3d(0,0,0) rotate(-2deg) scaleX(1)}
+  9%{transform:translate3d(calc(var(--llama-span)*-.26),-42px,0) rotate(-12deg) scaleX(1)}
+  18%{transform:translate3d(calc(var(--llama-span)*-.58),-78px,0) rotate(-10deg) scaleX(1)}
+  30%{transform:translate3d(calc(var(--llama-span)*-1),0,0) rotate(2deg) scaleX(1)}
+  34%{transform:translate3d(calc(var(--llama-span)*-1),-7px,0) rotate(3deg) scaleX(1)}
+  41%{transform:translate3d(calc(var(--llama-span)*-1),0,0) rotate(0) scaleX(-1)}
+  55%{transform:translate3d(calc(var(--llama-span)*-.72),-55px,0) rotate(9deg) scaleX(-1)}
+  66%{transform:translate3d(calc(var(--llama-span)*-.46),-76px,0) rotate(8deg) scaleX(-1)}
+  82%{transform:translate3d(0,0,0) rotate(1deg) scaleX(-1)}
+  87%{transform:translate3d(0,-8px,0) rotate(-3deg) scaleX(-1)}
+  94%{transform:translate3d(0,0,0) rotate(0) scaleX(1)}
+}
+.llama-game[hidden]{display:none!important}
+.llama-game{
+  position:relative;isolation:isolate;scroll-margin-top:87px;
+  overflow:visible;border:2px solid #acfff3;
+  background:
+   radial-gradient(ellipse at 97% 3%,#ff4ba82c,transparent 49%),
+   radial-gradient(ellipse at 2% 91%,#61eaf528,transparent 52%),
+   linear-gradient(150deg,#152637,#1b1629 68%,#111b2c);
+  box-shadow:0 0 33px #8af6f82f;
+}
+.llama-game-top{display:flex;justify-content:space-between;align-items:start;gap:14px}
+.llama-game-kicker{font-size:.72rem;color:#b9fff4;font-weight:900;letter-spacing:.13em}
+.llama-game-top h2{font:900 clamp(2rem,6.8vw,3.1rem)/1.05 system-ui,sans-serif;color:#ffd5ed;
+  margin:8px 0 5px;text-shadow:-1px 0 #00eaff,1px 0 #ff4ba9}
+.llama-close{
+  flex-shrink:0;display:grid;place-items:center;width:44px;height:44px;
+  border:1px solid #ffe4f2;background:#402038;color:#fff;border-radius:12px;
+  font-size:1.5rem;cursor:pointer;touch-action:manipulation;
+}
+.llama-subtitle{font-size:.87rem;color:#e4dce9;margin:7px 0 16px}
+.llama-dashboard{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:16px 0 12px}
+.llama-stat{border:1px solid #735e8f;background:#161626;border-radius:12px;padding:10px;min-width:0}
+.llama-stat span{display:block;font-size:.65rem;letter-spacing:.05em;color:#cae8eb;font-weight:800}
+.llama-stat strong{display:block;color:#ffd4ed;font-size:clamp(1.05rem,4vw,1.5rem);line-height:1.28}
+.llama-progress{height:10px;border:1px solid #618c93;border-radius:999px;
+  background:#102332;overflow:hidden;margin:0 0 20px}
+.llama-progress-bar{width:0;height:100%;background:linear-gradient(90deg,#ff73bf,#93fff1);
+  transition:width .32s ease}
+.llama-speech{display:grid;grid-template-columns:80px minmax(0,1fr);
+ align-items:center;gap:13px;margin:12px 0 17px}
+.llama-speech img{width:80px;max-width:100%;filter:drop-shadow(0 4px 6px #0009)}
+.llama-say{margin:0!important;padding:14px;border:1px solid #e9b9d9;
+  border-radius:18px;background:#281b39;color:#fff}
+.llama-game-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.llama-ask{border:1px solid #ffd7e9;background:#ff86c9;color:#210a19;
+ padding:13px 17px;border-radius:13px;min-height:52px;
+ font:900 1rem/1.3 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+.llama-ask:hover{background:#ffa5da}
+.llama-bag{
+  display:flex;align-items:center;gap:7px;justify-content:center;
+  border:1px solid #a6ffee;border-radius:13px;padding:9px 14px;
+  background:#112d33;color:#c5fff0;min-height:52px;font-weight:900;cursor:pointer;
+  box-shadow:inset 0 0 9px #80fff51c;
+}
+.llama-bag span:first-child{font-size:1.4rem}
+.llama-bag strong{display:grid;place-items:center;min-width:24px;height:24px;border-radius:99px;
+ background:#3a1743;border:1px solid #ff87cd;color:#ffcbeb;font-size:.8rem}
+.llama-bag.llama-bag-bounce{animation:llamaBagBounce .6s ease-out}
 .llama-fact[hidden]{display:none!important}
-.llama-fact{margin-top:17px;padding:18px;border:1px solid #b5e8c6;border-radius:13px;
- background:linear-gradient(140deg,#14382c,#192334);animation:llamaReveal .38s ease-out}
-.llama-fact-head{font-size:.76rem;letter-spacing:.12em;font-weight:900;color:#aaffbb}
-.llama-fact h3{font-size:1.35rem;color:#fff;margin:11px 0 6px}
-.llama-fact p{margin:9px 0 13px}
-.llama-fact .llama-resource{display:inline-block;font-size:.83rem;line-height:1.4;
- border:1px solid #79d9e1;border-radius:9px;padding:10px 12px;
- text-decoration:none;background:#12313d;color:#b9fbff;font-weight:850}
-.llama-gear-bar{margin-top:14px}
-.llama-gear-bar strong{display:block;color:#ddf7ff;font-size:.8rem;letter-spacing:.04em}
-.llama-gear-items{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
-.llama-charm{display:inline-flex;gap:6px;align-items:center;border:1px solid #ff86c8;
- border-radius:9px;background:#28172c;padding:7px 9px;font-size:.73rem;
- color:#f3dfed;font-weight:700}
-.llama-empty{color:#b8c7cb;font-size:.79rem}
-.llama-fineprint{margin-top:15px;font-size:.78rem;color:#cdd9dc}
-.llama-fineprint a{color:#adf4ff}
-@keyframes llamaReveal{0%{opacity:.1;transform:translateY(13px) scale(.98)}100%{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes llamaWiggle{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
-.llama-card.llama-learning .llama-avatar{animation:llamaWiggle .55s ease-in-out}
+.llama-fact{position:relative;margin:18px 0 13px;padding:19px;border:1px solid #b5e8c6;
+ background:linear-gradient(140deg,#11382c,#1c2740);
+ border-radius:15px;animation:llamaReveal .32s ease-out}
+.llama-fact-tag{color:#caffbc;letter-spacing:.10em;font-size:.75rem;font-weight:900}
+.llama-fact h3{font-size:1.4rem;margin:10px 0 8px;color:#fff}
+.llama-fact p{color:#eff5f7;line-height:1.6}
+.llama-fact a{display:inline-flex;margin-top:9px;padding:10px 13px;
+ border-radius:10px;border:1px solid #98f2ff;color:#d3ffff;background:#102f3a;
+ text-decoration:none;font-size:.83rem;font-weight:850}
+.llama-fact .llama-fact-reward{display:block;font-size:.83rem;color:#ffe1ef;
+ border-top:1px solid #659f9e;margin-top:15px;padding-top:12px}
+.llama-kit{margin-top:25px;border:1px solid #78638c;background:#171527;
+ border-radius:15px;padding:17px;scroll-margin-top:92px}
+.llama-kit h3{margin:0;color:#ffc6e6;font-size:1.2rem}
+.llama-kit-note{font-size:.78rem;color:#d9cfe2;margin:7px 0 11px!important}
+.llama-charms{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px}
+.llama-charm{display:flex;flex-direction:column;align-items:center;gap:5px;justify-content:center;
+ padding:13px 9px;min-height:105px;text-align:center;
+ border-radius:12px;border:1px solid #b676a6;background:linear-gradient(140deg,#35213f,#1b2635);
+ color:#ffe0f1;font:800 .75rem/1.3 system-ui,sans-serif;cursor:pointer}
+.llama-charm .llama-charm-icon{font-size:2rem;line-height:1.2}
+.llama-charm:hover{border-color:#a3faff;background:#302548}
+.llama-charm:focus-visible{outline:3px solid #bdffed;outline-offset:2px}
+.llama-empty{font-size:.87rem;color:#b8d8d7}
+.llama-privacy{font-size:.79rem;color:#cdd9dc;line-height:1.6;margin:18px 0 2px!important}
+.llama-privacy strong{color:#ffdbec}
+.llama-loot-layer{position:fixed;inset:0;z-index:100;display:grid;place-items:center;
+ pointer-events:none;padding:18px}
+.llama-loot-layer:empty{display:none}
+.llama-loot-card{width:min(385px,calc(100vw - 36px));text-align:center;
+ padding:23px 18px 25px;border:2px solid #ff99d6;border-radius:19px;
+ background:radial-gradient(circle at 40% 22%,#ff61c954,transparent 55%),
+ linear-gradient(140deg,#352045,#122c39);
+ box-shadow:0 0 44px #ff81df71,0 16px 80px #000c,inset 0 0 26px #fff1;
+ animation:llamaLootEntry .42s cubic-bezier(.15,1.45,.28,1) both}
+.llama-loot-card h3{font-size:1.5rem;margin:9px 0 10px;color:#fff}
+.llama-loot-card .llama-loot-icon{display:block;font-size:5rem;line-height:1.1;
+ filter:drop-shadow(0 0 15px #ff85d6)}
+.llama-loot-kicker{font-size:.78rem;color:#caffd4;font-weight:900;letter-spacing:.1em}
+.llama-loot-card p{margin:9px 0;color:#fff1fb;font-size:.89rem}
+.llama-loot-card.llama-loot-leaving{animation:llamaLootExit .25s ease-out forwards}
+.llama-fly-charm{position:fixed;z-index:102;pointer-events:none;
+ display:grid;place-items:center;width:62px;height:62px;border:2px solid #f9b3e1;
+ border-radius:14px;background:#2f1d37;font-size:2.4rem;
+ box-shadow:0 0 22px #ff7cc5}
+.llama-game strong{font-weight:900}
+@keyframes llamaLootEntry{from{opacity:0;transform:translateY(30px) scale(.55)}70%{opacity:1}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes llamaLootExit{to{opacity:0;transform:scale(.84)}}
+@keyframes llamaReveal{from{opacity:.2;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes llamaBagBounce{0%,100%{transform:scale(1)}40%{transform:scale(1.17) rotate(-5deg)}70%{transform:scale(.95) rotate(3deg)}}
 @media(max-width:560px){
- .llama-stage{grid-template-columns:1fr;gap:10px}
- .llama-avatar{width:116px;height:119px}
- .llama-face{font-size:73px}
- .llama-shield{width:45px;height:45px;font-size:26px;right:-6px}
- .llama-bubble:before{left:50%;top:-9px;transform:translateX(-50%) rotate(135deg)}
- .llama-tools{padding:13px}
- .llama-toolbar .llama-ask{width:100%}
+ .llama-game-top h2{font-size:2rem}
+ .llama-speech{grid-template-columns:62px minmax(0,1fr);gap:8px}
+ .llama-speech img{width:62px}
+ .llama-say{font-size:.82rem;padding:12px}
+ .llama-game-actions{display:grid;grid-template-columns:1fr}
+ .llama-ask,.llama-bag{width:100%}
+ .llama-roamer{width:100px;height:100px}
+ .llama-charms{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(prefers-reduced-motion:reduce){
- .llama-fact,.llama-card.llama-learning .llama-avatar{animation:none}
+ .llama-roamer,.llama-game.llama-learning,.llama-fact,.llama-loot-card,
+ .llama-bag.llama-bag-bounce{animation:none!important}
+ .llama-progress-bar{transition:none}
+ .llama-fly-charm{display:none!important}
 }
+
+/* Locked charm slots are deliberately dim; earned charms are tappable. */
+.llama-charm.llama-locked{
+ background:#151821;border-color:#526171;color:#8293a3;
+ cursor:default;opacity:.74;
+}
+.llama-charm.llama-locked .llama-charm-icon{filter:grayscale(1);font-size:1.6rem}
+.llama-charm.llama-locked:hover{background:#151821;border-color:#526171}
