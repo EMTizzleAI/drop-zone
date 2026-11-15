@@ -46,9 +46,10 @@ footer{font-size:.85rem;color:var(--muted);padding:18px 2px}
 @media(max-width:560px){header{padding:12px}.brand{font-size:.9rem}.stat-grid{grid-template-columns:1fr}.exit{font-size:.8rem}.actions{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
-<link rel="stylesheet" href="no-drama-llama.css?v=20261115">
+<link rel="stylesheet" href="no-drama-llama.css?v=20261115-v2">
 </head>
 <body>
+<button id="llamaRoamer" class="llama-roamer" type="button" aria-controls="noDramaLlama" aria-expanded="false" aria-label="Meet the bouncing No Drama Llama and open a 14-fact optional comfort quest" title="Tap the fluffy llama to open Comfort Quest"><img src="no-drama-llama.svg" width="124" height="124" alt="" aria-hidden="true"></button>
 <header>
 <a class="brand" href="safety.html">✚ DROP <span>ZONE</span> / SAFETY</a>
 <a class="exit" href="https://www.weather.gov/" rel="noreferrer" id="quickExit" aria-label="Quick exit this page to the National Weather Service website">↗ QUICK EXIT</a>
@@ -79,31 +80,36 @@ footer{font-size:.85rem;color:var(--muted);padding:18px 2px}
 <p class="note">Hotline and text services are available around the clock. A monitored phone or browser may expose call, text, or browsing activity.</p>
 </section>
 
-<section class="card llama-card" id="noDramaLlama" aria-labelledby="llamaTitle">
-<p class="llama-kicker">🦙 OPTIONAL SAFETY SCOUT // NO PRESSURE, NO JUDGMENT</p>
-<div class="llama-stage">
-  <div class="llama-avatar" role="img" aria-label="Friendly cream-colored llama with a protective shield">
-    <span class="llama-face" aria-hidden="true">🦙</span>
-    <span class="llama-shield" aria-hidden="true">🛡️</span>
+<section class="card llama-game" id="noDramaLlama" aria-labelledby="llamaTitle" hidden>
+  <div class="llama-game-top">
+    <div>
+      <p class="llama-game-kicker">🦙 OPTIONAL COMPANION // GENTLE SAFETY INTEL</p>
+      <h2 id="llamaTitle" tabindex="-1">NO DRAMA LLAMA<br>COMFORT QUEST.</h2>
+    </div>
+    <button type="button" id="llamaClose" class="llama-close" aria-label="Close Comfort Quest and return to the safety page" title="Close comfort quest">×</button>
   </div>
-  <div class="llama-bubble">
-    <h2 id="llamaTitle">THE NO DRAMA LLAMA.</h2>
-    <p id="llamaSay">I'm a llama llama, here with calm, facts, and a little protective magic. Want a safety tip? No pressure, operator. 🩷</p>
+  <p class="llama-subtitle"><strong>14 safety facts · 14 protective charms · 0 judgment.</strong> No quizzes, no wrong answers, and no real help locked behind rewards.</p>
+  <div class="llama-speech">
+    <img src="no-drama-llama.svg" width="80" height="80" alt="" aria-hidden="true">
+    <p class="llama-say" id="llamaSay">I'm a llama llama, here to share gentle facts and tiny protective charms. Want one? Your safety and choices come first. 🩷</p>
   </div>
-</div>
-<p class="llama-quiet-note"><strong>Real safety. Zero judgment.</strong> Abuse is serious—it is never “just drama.” This gentle, optional guide shares sourced facts about recognizing abuse and getting support. Emergency help and advocates are available above without playing anything.</p>
-<div class="llama-tools">
-  <div class="llama-toolbar">
-    <button id="llamaAsk" class="llama-ask" type="button" aria-controls="llamaFact">🛡️ SHOW ME A SAFETY FACT →</button>
-    <span class="llama-counter" id="llamaCounter">0 / 5 safety facts learned</span>
+  <div class="llama-dashboard" aria-label="Comfort Quest progress">
+    <div class="llama-stat"><span>COMFORT XP</span><strong id="llamaXP">0 XP</strong></div>
+    <div class="llama-stat"><span>FACTS LEARNED</span><strong id="llamaCounter">0 / 14</strong></div>
+    <div class="llama-stat"><span>COMFORT RANK</span><strong id="llamaRank">FLUFF SCOUT</strong></div>
+  </div>
+  <div class="llama-progress" id="llamaProgress" role="progressbar" aria-label="Comfort Quest facts learned" aria-valuemin="0" aria-valuemax="14" aria-valuenow="0"><div id="llamaProgressBar" class="llama-progress-bar"></div></div>
+  <div class="llama-game-actions">
+    <button id="llamaAsk" type="button" class="llama-ask" aria-controls="llamaFact">🛡️ LEARN A FACT + COLLECT CHARM →</button>
+    <button id="llamaBag" type="button" class="llama-bag" aria-controls="llamaKit" aria-label="Open Comfort Kit, 0 of 14 virtual charms unlocked"><span aria-hidden="true">🎒</span> COMFORT KIT <strong id="llamaBagCount">0</strong></button>
   </div>
   <div id="llamaFact" class="llama-fact" role="status" aria-live="polite" aria-atomic="true" hidden></div>
-  <div class="llama-gear-bar">
-    <strong>🧸 YOUR PROTECTIVE CHARMS // VIRTUAL LEARNING TOKENS</strong>
-    <div id="llamaCharms" class="llama-gear-items"><span class="llama-empty">Nothing to earn to get help. Tap a fact to collect a tiny shield.</span></div>
+  <div id="llamaKit" class="llama-kit" tabindex="-1">
+    <h3>🧸 YOUR PROTECTIVE CHARMS // VIRTUAL COMFORT KIT</h3>
+    <p class="llama-kit-note">Collect shields, amulets, tiny teddy bears, blankets, keys, and more. Tap any unlocked charm to review the fact and replay its animation.</p>
+    <div id="llamaCharms" class="llama-charms" aria-label="Fourteen virtual protective charms"></div>
   </div>
-</div>
-<p class="llama-fineprint">🩷 No quiz, wrong answers, or rewards for personal experiences. This feature does not record answers, store progress, track your location, or play audio. It does not replace an individualized safety plan. If your device may be monitored, consider using a safer device; the <strong>QUICK EXIT</strong> button does not remove browsing history. <a href="https://www.thehotline.org/plan-for-safety/" target="_blank" rel="noopener noreferrer">Safety planning guidance ↗</a></p>
+  <p class="llama-privacy"><strong>Nothing to earn to deserve help.</strong> This game does not ask about your experiences, collect or save which topics you open, request your location, or play audio. Your learning progress resets when this page reloads. This is education, not personalized safety planning or legal/medical advice. The hotline and emergency options above remain available regardless of the game. If your device might be monitored, use a safer device when possible. <strong>Quick Exit does not erase history.</strong></p>
 </section>
 
 <section class="card" id="medical">
@@ -160,9 +166,10 @@ Safety and resource information, not emergency dispatch, individualized medical 
 Sources: <a href="https://www.cdc.gov/intimate-partner-violence/about/" target="_blank" rel="noopener noreferrer">CDC</a> · <a href="https://www.thehotline.org/resources/documenting-abuse/" target="_blank" rel="noopener noreferrer">Documenting abuse</a> · <a href="https://www.thehotline.org/resources/reporting-to-police-options-tips-for-being-prepared/" target="_blank" rel="noopener noreferrer">Reporting options</a> · <a href="https://medlineplus.gov/intimatepartnerviolence.html" target="_blank" rel="noopener noreferrer">MedlinePlus</a>
 </footer>
 </main>
+<div id="llamaLootLayer" class="llama-loot-layer" aria-hidden="true"></div>
 <script>
 // Fast navigation, not a guarantee of privacy: visited-page history and monitoring may remain.
 document.getElementById('quickExit').addEventListener('click',function(e){e.preventDefault();location.replace(this.href)});
 </script>
-<script src="no-drama-llama.js?v=20261115" defer></script>
-<script src="soundtrack.js?v=dropzone-radio-20261114" defer></script></body></html>
+<script src="no-drama-llama.js?v=20261115-v2" defer></script>
+</body></html>
