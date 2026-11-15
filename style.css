@@ -119,3 +119,36 @@
 @media(max-width:780px){header .dz-patient-ticker{margin-left:auto;padding:6px 8px;gap:6px;min-width:0}header .dz-patient-ticker-caption{font-size:8px}header .dz-patient-ticker-caption small{font-size:6px}header #dzPatientCount{font-size:20px;min-width:20px}}
 @media(max-width:350px){header .dz-patient-ticker{gap:4px;padding:5px 6px}header .dz-patient-ticker-caption{font-size:8px}header .dz-patient-ticker-caption small{display:block;font-size:6px;max-width:115px;white-space:normal;line-height:1.1}}
 @media(prefers-reduced-motion:reduce){.dz-patient-ticker-dot{animation:none}}
+
+
+/* Drop Zone mobile hero: mission headline, EMTizzle portrait, then triage action. */
+@media (max-width:780px) {
+  /* Unwrap the copy panel so its pieces can be arranged around the portrait.
+     The existing controls, audio button, and show('triage') behavior remain intact. */
+  #home .hero {
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    gap:0;
+    padding:clamp(16px,4.5vw,28px);
+    border:1px solid #00eaff66;
+    background:#070b16dd;
+    box-shadow:0 0 30px #00d9ff10;
+  }
+  #home .console {display:contents;}
+  #home .console > .tag {order:1;margin:0 0 15px;}
+  #home .console > .drop-trigger {
+    order:2;
+    margin:0 0 20px;
+    font-size:clamp(50px,13vw,68px);
+    letter-spacing:-2px;
+  }
+  #home .mediccard {order:3;margin:0 0 20px;padding:10px;}
+  #home .mediccard .portrait {
+    height:clamp(220px,65vw,310px);
+    min-height:0;
+  }
+  #home .console > .triage-launch {order:4;margin:0;}
+  #home .console > .micro {order:5;text-align:center;margin:11px 0 16px;}
+  #home .console > .lead {order:6;margin:14px 0 20px;}
+  #home .console > aside {order:7;margin:0;}
+}
