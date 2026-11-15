@@ -132,7 +132,7 @@ footer{margin:30px auto 0;text-align:center;color:#9db0c0;font-size:.69rem;line-
 <aside id="inventoryPanel" class="panel" aria-labelledby="inventorytitle">
 <p class="kicker">🎒 REWARD STORAGE</p>
 <h2 id="inventorytitle" tabindex="-1">INTEL MANIFEST</h2>
-<p class="note">Virtual collectibles only. Your actual food, supplies, medications and equipment are tracked separately in the <a href="index.html">Gear Manifest</a>.</p>
+<p class="note">Virtual collectibles only. Your actual food, supplies, medications and equipment are tracked separately in the <a href="index.html">Gear Manifest</a>. Tap <strong>REPLAY LOOT FX</strong> on an owned item to watch its animation again without earning duplicate XP.</p>
 <div class="perk" id="streakPerk" aria-live="polite">MISSION PERK // Answer correctly to unlock gear and useful quick-access links.</div>
 <div class="inventory" id="inventory"><p class="empty">NO GEAR YET // THE GOBLIN ARMORY AWAITS.</p></div>
 <h3 style="margin-top:26px">MISSION PERKS</h3>
@@ -189,7 +189,9 @@ const item=document.createElement('div');item.className='item';
 const em=document.createElement('span');em.className='emoji';em.setAttribute('aria-hidden','true');em.textContent=q.gear;
 const div=document.createElement('div');const b=document.createElement('b');b.textContent=q.name;const small=document.createElement('small');small.textContent='MISSION PERK: '+q.perk;
 const a=document.createElement('a');a.href=q.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='OPEN RESOURCE ↗';
-div.append(b,small,a);item.append(em,div);box.append(item);
+const replay=document.createElement('button');replay.type='button';replay.className='loot-replay-btn';replay.textContent='✨ REPLAY LOOT FX';replay.setAttribute('aria-label','Replay '+q.name+' virtual loot animation, no XP awarded');
+replay.addEventListener('click',()=>window.DZIntelLoot?.reward(q,{preview:true}));
+div.append(b,small,a,replay);item.append(em,div);box.append(item);
 });
 const ranks=$('ranks');ranks.replaceChildren();
 [[4,'🧭 RESOURCE SCOUT'],[8,'⚡ FIELD OPERATIVE'],[Q.length,'👑 INTEL COMMANDER']].forEach(([threshold,label])=>{
