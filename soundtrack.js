@@ -19,7 +19,7 @@
   } catch (_) {}
   let ctx = null, master = null, timer = null, noise = null;
   let nextStep = setting.tick, nextAt = 0, playing = false, startedAt = 0;
-  let duckTimer = 0, duckFactor = 1;
+  let duckTimer = 0, duckFactor = 1, startAttempt = 0;
 
   const css = document.createElement('style');
   css.textContent = [
@@ -149,7 +149,14 @@
         master.connect(limiter); limiter.connect(ctx.destination);
         makeNoise();
       }
-      await ctx.resume();
+      // On mobile an autoplay-blocked resume() can remain pending until a tap.
+      // Expire that attempt, but let a new user gesture retry without racing it.
+      const attempt = ++startAttempt;
+      await Promise.race([
+        ctx.resume().catch(() => {}),
+        new Promise(resolve => setTimeout(resolve, 450))
+      ]);
+      if (attempt !== startAttempt || playing) return;
       if (ctx.state !== 'running') {
         label('Tap to resume the soundtrack after navigation.');
         return;
@@ -193,6 +200,16 @@
       try { sessionStorage.setItem(KEY, JSON.stringify(setting)); } catch (_) {}
     }
     if (timer) clearInterval(timer);
+    timer = null;
+  });
+  window.addEventListener('pageshow', event => {
+    if (!event.persisted) return;
+    if (playing && ctx && ctx.state === 'running' && !timer) {
+      nextAt = ctx.currentTime + .06;
+      timer = setInterval(pump, 90);
+    } else if (setting.enabled && !playing) {
+      start();
+    }
   });
   // Lower the music while a recorded greeting or other spoken instruction plays.
   window.dzSoundtrackDuck = (duration = 20000) => {
