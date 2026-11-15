@@ -147,3 +147,11 @@
  .llama-progress-bar{transition:none}
  .llama-fly-charm{display:none!important}
 }
+
+/* Locked charm slots are deliberately dim; earned charms are tappable. */
+.llama-charm.llama-locked{
+ background:#151821;border-color:#526171;color:#8293a3;
+ cursor:default;opacity:.74;
+}
+.llama-charm.llama-locked .llama-charm-icon{filter:grayscale(1);font-size:1.6rem}
+.llama-charm.llama-locked:hover{background:#151821;border-color:#526171}
