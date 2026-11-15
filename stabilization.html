@@ -75,4 +75,4 @@ document.getElementById('journeyBack').onclick=()=>{coverageJourney.step=Math.ma
 document.getElementById('journeyNext').onclick=()=>{if(coverageJourney.step===0&&!coverageJourney.coverage){document.getElementById('journeyProgress').textContent='Choose an option to continue.';return}if(coverageJourney.step===1&&!coverageJourney.help){document.getElementById('journeyProgress').textContent='Choose an option to continue.';return}coverageJourney.step=coverageJourney.step===2?0:coverageJourney.step+1;renderJourney()};
 const previousShowGuide=showGuide;showGuide=function(){previousShowGuide();renderJourney();renderOfficial()};
 renderJourney();renderOfficial();renderChecklist();
-</script></body></html>
+</script><script src="soundtrack.js?v=dropzone-radio-20261114" defer></script></body></html>
