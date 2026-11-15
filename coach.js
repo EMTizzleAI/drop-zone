@@ -3,7 +3,7 @@
    User's recorded homepage greeting remains untouched. */
 (() => {
   'use strict';
-  const launcher=document.getElementById('dzCoachLaunch');
+  const launcher=document.getElementById('dzCopilotGearButton');
   const panel=document.getElementById('dzCoachPanel');
   const form=document.getElementById('dzCoachForm');
   const input=document.getElementById('dzCoachInput');
@@ -52,27 +52,6 @@
     if(/job|rejection|work|interview/i.test(text))return "One rejection doesn't erase your skills. You've already put yourself out there. That takes guts. What's one job-related move worth making tomorrow?";
     return localReplies[turn++%localReplies.length];
   }
-  function activePage(){
-    const found=document.querySelector('main > section:not(.hidden)');
-    return found?.id||'home';
-  }
-  let previousPage=activePage();
-  function syncPage(){
-    const currentPage=activePage();
-    const isHome=currentPage==='home';
-    launcher.hidden=isHome;
-    // Preserve the old close-on-return behavior without closing a chat opened
-    // directly from the homepage's CO-PILOT READY button.
-    if(isHome && previousPage!=='home'){
-      panel.hidden=true;
-      launcher.setAttribute('aria-expanded','false');
-      stopSpeaking();
-    }
-    previousPage=currentPage;
-  }
-  document.querySelectorAll('main > section').forEach(section=>{
-    new MutationObserver(syncPage).observe(section,{attributes:true,attributeFilter:['class']});
-  });
   function stopSpeaking(){
     if('speechSynthesis' in window)try{window.speechSynthesis.cancel()}catch(_){}
   }
@@ -189,10 +168,10 @@
     panel.hidden=true;
     launcher.setAttribute('aria-expanded','false');
     stopSpeaking();
-    const returnTarget=launcher.hidden ? document.querySelector('#home .features-home-link') : launcher;
+    const returnTarget=document.getElementById('goBagToggle') || document.querySelector('#home .features-home-link');
     if(returnTarget) returnTarget.focus({preventScroll:true});
   }
-  launcher.addEventListener('click',openChat);
+  // Goblin Gear handles the welcome guide; open chat only after that step.
   document.addEventListener('dropzone:open-copilot',openChat);
   close.addEventListener('click',closeChat);
   clear.addEventListener('click',()=>{
@@ -207,5 +186,5 @@
     if(e.key==='Escape'&&!panel.hidden)closeChat();
   });
   addMessage('medic',"Okay, soldier. Your next objective doesn't have to be huge. Ask for a little motivation or tell me what you're proud of.",'offline');
-  setMode('offline');syncPage();
+  setMode('offline');
 })();
