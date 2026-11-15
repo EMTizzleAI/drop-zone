@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" role="img" aria-labelledby="llamaTitle llamaDesc">
+<title id="llamaTitle">No Drama Llama</title><desc id="llamaDesc">A very fluffy snowy-white cartoon llama with pink cheeks, lavender hooves and a tiny protective heart amulet, bounding playfully.</desc>
+<defs>
+ <radialGradient id="fleece" cx="35%" cy="26%" r="80%"><stop stop-color="#fffefa"/><stop offset=".66" stop-color="#fff7ff"/><stop offset="1" stop-color="#ddd3f6"/></radialGradient>
+ <linearGradient id="fur"><stop stop-color="#fff"/><stop offset="1" stop-color="#e6ddf7"/></linearGradient>
+ <linearGradient id="charm" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#93fff4"/><stop offset="1" stop-color="#fd8ddd"/></linearGradient>
+ <filter id="glow" x="-35%" y="-35%" width="170%" height="170%"><feGaussianBlur stdDeviation="3.4"/></filter>
+</defs>
+<!-- floating magical trail -->
+<g fill="#ffbadf"><path d="m33 96 3 9 9 3-9 4-3 9-3-9-9-4 9-3z"/><circle cx="26" cy="151" r="3"/><circle cx="53" cy="65" r="3"/></g>
+<path d="m235 45 3 8 8 3-8 3-3 9-4-9-8-3 8-3z" fill="#a6ffef"/>
+<ellipse cx="143" cy="239" rx="99" ry="15" fill="#000" opacity=".18" filter="url(#glow)"/>
+<!-- fluffy tail -->
+<g stroke="#d0c4e7" stroke-width="2" fill="url(#fleece)"><circle cx="52" cy="151" r="23"/><circle cx="40" cy="137" r="14"/><circle cx="45" cy="165" r="14"/></g>
+<!-- back legs, bounding -->
+<path d="M88 190 Q77 210 66 216 Q53 220 45 215 L38 223 Q52 240 72 230 Q88 226 109 205Z" fill="#f7f0ff" stroke="#c9bcdc" stroke-width="4" stroke-linejoin="round"/>
+<path d="M45 213 Q35 209 30 220 Q27 233 43 239 Q56 238 60 228Z" fill="#bca5ce" stroke="#9c86b8" stroke-width="3"/>
+<path d="M119 191 Q114 216 134 231 L151 229 Q142 215 142 191Z" fill="#f7f0ff" stroke="#c9bcdc" stroke-width="4"/>
+<path d="M137 222 Q142 216 152 223 L157 234 Q145 244 131 232Z" fill="#bca5ce" stroke="#9c86b8" stroke-width="3"/>
+<!-- fluffy torso -->
+<path d="M64 130 Q64 113 79 110 Q81 92 98 94 Q109 77 128 87 Q145 79 156 96 Q180 96 184 118 Q195 133 188 157 Q191 183 173 198 Q156 217 119 210 Q90 210 74 190 Q58 176 64 154Z" fill="url(#fleece)" stroke="#c8c1e8" stroke-width="4"/>
+<g fill="none" stroke="#e4d8f0" stroke-linecap="round" stroke-width="4" opacity=".95">
+<path d="M82 132 Q92 143 103 132 M112 116 Q125 126 136 114 M154 134 Q165 145 178 136"/>
+<path d="M75 167 Q85 178 99 168 M114 183 Q126 195 140 181 M150 168 Q164 177 176 165"/>
+</g>
+<!-- neck with wool bumps -->
+<path d="M163 120 Q169 105 173 84 L173 56 Q179 38 199 42 Q216 45 218 63 L216 124 Q225 143 214 163 Q203 178 184 167 Q171 156 163 120Z" fill="url(#fleece)" stroke="#c8c1e8" stroke-width="4"/>
+<g fill="none" stroke="#e2d4ef" stroke-width="4" stroke-linecap="round"><path d="M180 107q10 10 18 2M177 131q11 11 23 2"/></g>
+<!-- ears -->
+<path d="M181 55 Q168 35 167 16 Q166 7 177 11 Q195 23 198 43Z" fill="url(#fur)" stroke="#c4b5dc" stroke-width="4"/>
+<path d="M198 44 Q206 14 219 9 Q231 5 227 22 Q223 46 214 56Z" fill="url(#fur)" stroke="#c4b5dc" stroke-width="4"/>
+<path d="M179 43 Q173 29 172 19 Q183 27 188 45Z" fill="#f9b9d8"/>
+<path d="M207 45 Q217 21 221 20 Q217 40 212 48Z" fill="#f9b9d8"/>
+<!-- head and muzzle -->
+<path d="M166 46 Q168 34 181 29 Q199 22 217 34 Q228 42 230 61 Q233 85 219 96 Q206 105 186 97 Q166 93 163 76Z" fill="url(#fleece)" stroke="#c8c1e8" stroke-width="4"/>
+<ellipse cx="214" cy="79" rx="24" ry="18" fill="#fff8ff" stroke="#d0bfd9" stroke-width="3"/>
+<path d="M208 74 Q215 69 222 75 Q216 81 210 78Z" fill="#b982a8"/>
+<path d="M216 78v4m0 0q-6 5-10 0m10 0q7 6 11 0" fill="none" stroke="#9a7b94" stroke-width="2.3" stroke-linecap="round"/>
+<!-- sweet closed eye -->
+<path d="M180 66 Q187 72 194 65" fill="none" stroke="#735c88" stroke-width="3.7" stroke-linecap="round"/>
+<ellipse cx="181" cy="79" rx="9" ry="6" fill="#ffbddb" opacity=".9"/>
+<!-- a tiny head bow -->
+<path d="M174 33q-13-17-17-2 0 11 17 12m1-10q15-15 19-2 0 10-18 12" fill="#ff80bb" stroke="#d94d9a" stroke-width="2.5"/>
+<circle cx="174" cy="38" r="5" fill="#ffdaee"/>
+<!-- legs ahead as if leaping like a deer -->
+<path d="M161 182 Q180 193 201 190 Q216 183 224 172 Q229 165 236 172 Q240 176 232 185 Q211 214 174 216 L157 205Z" fill="#f9f4ff" stroke="#c9bcdc" stroke-width="4" stroke-linejoin="round"/>
+<path d="M226 168 Q237 163 244 173 Q251 186 237 192 L226 184Z" fill="#baa3cf" stroke="#9984b6" stroke-width="3"/>
+<path d="M138 195 Q155 208 175 226 Q185 237 196 228 Q201 223 193 216 Q174 189 155 180Z" fill="#fff9ff" stroke="#c9bcdc" stroke-width="4" stroke-linejoin="round"/>
+<path d="M193 218 Q209 221 210 233 Q205 242 189 238 L185 229Z" fill="#bca6d0" stroke="#9984b6" stroke-width="3"/>
+<!-- protective velvet ribbon and amulet -->
+<path d="M167 119 Q193 135 213 118" fill="none" stroke="#ff74ba" stroke-width="7" stroke-linecap="round"/>
+<path d="M191 133v10" stroke="#f8abd8" stroke-width="3"/>
+<path d="M192 145q-6-11-13-3-6 9 13 24 21-16 14-24-8-7-14 3Z" fill="url(#charm)" stroke="#ffefab" stroke-width="3"/>
+<path d="m192 147 3 6-3 6-3-6z" fill="#fff" opacity=".95"/>
+<!-- sparkles -->
+<path d="m231 109 3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#ffc2e4"/>
+<circle cx="242" cy="140" r="3" fill="#c5fff9"/>
+</svg>
