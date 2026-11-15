@@ -152,3 +152,46 @@
   #home .console > .lead {order:6;margin:14px 0 20px;}
   #home .console > aside {order:7;margin:0;}
 }
+
+/* Goblin Gear v3: the co-pilot sits above Job Goblin and Pantry Goblin.
+   It is only interactive when the bag is expanded. */
+.goblin-medbag .goblin-copilot{
+ position:absolute;z-index:9;bottom:calc(100% + 102px);left:50%;
+ display:flex;flex-direction:column;align-items:center;gap:4px;
+ width:max-content;max-width:140px;padding:0;border:0;background:transparent;
+ color:#fff;opacity:0;visibility:hidden;pointer-events:none;
+ filter:drop-shadow(0 5px 12px #000b);
+ transform:translate(-50%,70px) scale(.72);
+ transition:opacity .24s ease,transform .3s cubic-bezier(.22,1.25,.45,1),visibility .3s;
+}
+.goblin-medbag.is-open .goblin-copilot{
+ opacity:1;visibility:visible;pointer-events:auto;
+ transform:translate(-50%,0) scale(1);transition-delay:.10s;
+}
+.goblin-medbag .goblin-copilot-body{
+ display:grid;place-items:center;width:62px;height:62px;
+ border:2px solid #00eaff;border-radius:50%;
+ background:radial-gradient(circle at 35% 22%,#4f1742,#101b2d 80%);
+ font-size:37px;line-height:1;box-shadow:0 0 19px #ff39aa77,0 0 12px #00eaff44;
+}
+.goblin-medbag .goblin-copilot-label{
+ display:block;min-width:96px;padding:7px 9px;border:1px solid #ff9bda;
+ border-radius:9px;background:linear-gradient(110deg,#ff39aa,#ff8bd6);
+ color:#150916;text-align:center;white-space:nowrap;
+ font:900 11px/1 'Barlow Condensed',Impact,sans-serif;letter-spacing:.035em;
+ box-shadow:0 4px 12px #000a;
+}
+.goblin-medbag .goblin-copilot:hover .goblin-copilot-body{
+ box-shadow:0 0 23px #ff39aacc,0 0 18px #00eaff99;
+}
+.goblin-medbag .goblin-copilot:focus-visible{
+ outline:3px solid #caff82;outline-offset:5px;border-radius:9px;
+}
+@media(max-width:780px){
+ .goblin-medbag .goblin-copilot{bottom:calc(100% + 87px)}
+ .goblin-medbag .goblin-copilot-body{width:54px;height:54px;font-size:32px}
+ .goblin-medbag .goblin-copilot-label{font-size:10px;padding:6px 8px;min-width:88px}
+}
+@media(prefers-reduced-motion:reduce){
+ .goblin-medbag .goblin-copilot{transition:none}
+}
