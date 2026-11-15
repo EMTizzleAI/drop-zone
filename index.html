@@ -116,6 +116,15 @@
 .dz-footer-resources a{color:#81dce9;text-decoration:none;border-bottom:1px solid #81dce94d;padding:4px 0}
 .dz-footer-resources a:hover{color:#ffc1e7;border-color:#ff5eb5}
 .dz-footer-resources a:focus-visible{outline:2px solid #ff8bcc;outline-offset:3px}
+</style><style>
+/* Keep the home screen focused on urgent triage; secondary content lives in features.html. */
+#home .features-home-entry{margin:20px auto 4px;max-width:790px}
+#home .features-home-link{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:19px 15px;border:1px solid #00eaff88;border-radius:14px;background:linear-gradient(120deg,#0c1529,#221027);text-align:center;text-decoration:none;color:#fff;box-shadow:0 0 12px #00eaff17}
+#home .features-home-link small{font:700 .64rem 'IBM Plex Mono',monospace;letter-spacing:.09em;color:#00eaff}
+#home .features-home-link strong{font:900 clamp(1.45rem,4vw,1.9rem)/1.1 'Barlow Condensed',system-ui,sans-serif;letter-spacing:.055em}
+#home .features-home-link span{font:600 .65rem 'IBM Plex Mono',monospace;letter-spacing:.025em;color:#b7bfd0}
+#home .features-home-link:hover{border-color:#ff39aa;background:#21112d}
+#home .features-home-link:focus-visible{outline:3px solid #d6ff9b;outline-offset:4px}
 </style></head><body><header><div class="brand"><b>DR<span>O</span>P ZONE</b><small>SURVIVE ★ STABILIZE ★ RECOVER</small></div><div class="dz-patient-ticker" id="dzPatientTicker" aria-label="Website visitor check-ins, not actual medical patients" title="Approximate unique browsers visiting Drop Zone since November 7, 2026. This is website traffic, not medical patient information."><span class="dz-patient-ticker-dot" aria-hidden="true">●</span><span class="dz-patient-ticker-caption">CHECK-INS <small>WEBSITE VISITORS · NOT PATIENTS</small></span><output id="dzPatientCount" aria-live="polite">—</output></div><div class="signal">● EMTIZZLE // FIELD MEDIC ONLINE</div></header><div id="scenePopup" class="scene-popup hidden" role="dialog" aria-modal="true" aria-label="EMTizzle on scene">
   <div class="scene-static"></div>
   <div class="scene-media">
@@ -140,7 +149,7 @@
     <button type="button" onclick="startSceneTriage()">🚑 BUILD MY FIELD PLAN →</button>
   </div>
   <p class="scene-mission-note">These are optional little resets, not medical advice. For urgent help, start Field Triage.</p>
-</dialog><main><section id="home"><div class="hero"><div class="console"><p class="tag">FIELD TRANSMISSION // EMTIZZLE</p><h1 class="drop-trigger" onclick="openScene()" title="EMTizzle on scene">YOU'RE IN<br><i>THE DROP ZONE.</i></h1><p class="lead">Something went sideways. You're still operational. We don't fix your whole life today—we secure the next objective.</p><aside><b>📡 EMTIZZLE → OPERATOR</b><p>“Give me sixty seconds. Tell me what's on fire first. We'll build the extraction plan from there.”</p></aside><button class="go triage-launch" onclick="show('triage')">START FIELD TRIAGE →</button><p class="micro">NO ACCOUNT · NO JUDGMENT · PLAN STORED ON THIS DEVICE</p></div><div class="mediccard"><div class="portrait"><img src="emtizzle-home.jpg" alt="EMTizzle field medic" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;border-radius:inherit"><button type="button" class="portrait-tap" onclick="emtizzleGreeting()" aria-label="Hear EMTizzle welcome you"><span>▶ TAP TO HEAR EMTIZZLE · NEW VOICE</span></button></div><p id="emtizzleGreetingCaption" class="voice-caption" role="status" aria-live="polite" hidden></p></div></div><div class="music-entry"><a href="music.html" aria-label="Music is Medicine, EMTizzle listening room"><span aria-hidden="true">🎧</span> <strong>MUSIC IS MEDICINE</strong> <small>EMTIZZLE · THE LISTENING ROOM ↗</small></a></div><div class="home-contact"><h2>📻 RADIO IN</h2><p>Connect with EMTizzle for questions and feedback. Not an emergency service.</p><button type="button" onclick="medic()">📡 RADIO IN →</button><div class="home-social"><a href="mailto:emtizzle@proton.me">✉ EMAIL</a><a href="https://www.tiktok.com/@emtizzle" target="_blank" rel="noopener noreferrer">▶ TIKTOK</a><a href="https://www.facebook.com/share/1cUGsjaLsc/" target="_blank" rel="noopener noreferrer" aria-label="Glitchbot Magazine HQ on Facebook">f FACEBOOK</a></div></div><div class="build-banner" role="note" aria-label="Drop Zone live build notice"><div class="build-banner-warning">⚠️ WE BUILD IN PUBLIC ♡</div><strong>THIS IS A FIELD HOSPITAL.</strong><p>👾 Things may change as we go.</p><button id="dzCoachReady" class="build-banner-ready" type="button" aria-haspopup="dialog" aria-controls="dzLlmWelcome" aria-label="Meet the co-pilot and learn how to chat"><span aria-hidden="true">💗</span><b>CO-PILOT READY TO GO!</b><span>Tap to meet the chatbot, read the guide, and start chatting. 🤖 →</span></button></div></section><section id="triage" class="hidden">
+</dialog><main><section id="home"><div class="hero"><div class="console"><p class="tag">FIELD TRANSMISSION // EMTIZZLE</p><h1 class="drop-trigger" onclick="openScene()" title="EMTizzle on scene">YOU'RE IN<br><i>THE DROP ZONE.</i></h1><p class="lead">Something went sideways. You're still operational. We don't fix your whole life today—we secure the next objective.</p><aside><b>📡 EMTIZZLE → OPERATOR</b><p>“Give me sixty seconds. Tell me what's on fire first. We'll build the extraction plan from there.”</p></aside><button class="go triage-launch" onclick="show('triage')">START FIELD TRIAGE →</button><p class="micro">NO ACCOUNT · NO JUDGMENT · PLAN STORED ON THIS DEVICE</p></div><div class="mediccard"><div class="portrait"><img src="emtizzle-home.jpg" alt="EMTizzle field medic" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;border-radius:inherit"><button type="button" class="portrait-tap" onclick="emtizzleGreeting()" aria-label="Hear EMTizzle welcome you"><span>▶ TAP TO HEAR EMTIZZLE · NEW VOICE</span></button></div><p id="emtizzleGreetingCaption" class="voice-caption" role="status" aria-live="polite" hidden></p></div></div><div class="features-home-entry"><a class="features-home-link" href="features.html" aria-label="Explore Drop Zone features, contact, music, co-pilot and build updates"><small>✦ FIELD KIT // MORE FROM EMTIZZLE</small><strong>EXPLORE FEATURES →</strong><span>MUSIC · RADIO IN · CO-PILOT · BUILD NOTES</span></a></div></section><section id="triage" class="hidden">
   <button class="back" onclick="show('home')">← HOME</button>
   <p class="tag">TRIAGE // WHAT DO YOU NEED RIGHT NOW?</p>
   <h2>PICK THE FIRST FIRE.</h2>
@@ -230,6 +239,7 @@
 <a href="job-goblin.html">Find jobs</a>
 <a href="phone.html">Phone service</a>
 <a href="music.html">Music is Medicine</a>
+<a href="features.html">Features &amp; contact</a>
 </nav>
 <div>DROP ZONE // SURVIVE · STABILIZE · RECOVER // BUILT FOR THE BAD DAY, NOT THE PERFECT ONE.</div>
 </footer><button id="dzCoachLaunch" class="dz-coach-launch" type="button" hidden aria-controls="dzCoachPanel" aria-expanded="false" aria-label="Talk to EMTizzle’s co-pilot for encouragement"><span class="dz-coach-icon" aria-hidden="true">🤖</span><span>💗 TALK TO CO-PILOT ↗</span></button>
@@ -252,6 +262,15 @@
   function openGuide(){if(!modal.open)modal.showModal();}
   // Homepage entry point: always offer the existing quick guide before opening chat.
   if(banner) banner.addEventListener('click',openGuide);
+  // Feature page deep link: open the real co-pilot guide, then let the visitor launch chat.
+  try {
+    if (new URLSearchParams(window.location.search).get('feature') === 'copilot') {
+      window.addEventListener('load', () => {
+        openGuide();
+        try { window.history.replaceState(null, '', window.location.pathname + window.location.hash); } catch (_) {}
+      }, {once:true});
+    }
+  } catch (_) {}
   // The floating launcher still shows the guide on a visitor's first use.
   if(launch) launch.addEventListener('click',()=>{
     try{if(sessionStorage.getItem('dz-llm-welcome-seen')==='yes')return;}catch(_){}
