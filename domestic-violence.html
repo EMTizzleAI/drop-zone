@@ -46,10 +46,11 @@ footer{font-size:.85rem;color:var(--muted);padding:18px 2px}
 @media(max-width:560px){header{padding:12px}.brand{font-size:.9rem}.stat-grid{grid-template-columns:1fr}.exit{font-size:.8rem}.actions{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
-<link rel="stylesheet" href="no-drama-llama.css?v=20261115-v2">
+<link rel="stylesheet" href="no-drama-llama.css?v=chime-20261115">
 </head>
 <body>
-<button id="llamaRoamer" class="llama-roamer" type="button" aria-controls="noDramaLlama" aria-expanded="false" aria-label="Meet the bouncing No Drama Llama and open a 14-fact optional comfort quest" title="Tap the fluffy llama to open Comfort Quest"><img src="no-drama-llama.svg?v=three-d-20261115" width="124" height="124" alt="" aria-hidden="true"></button>
+<button id="llamaChimeToggle" class="llama-chime-toggle" type="button" aria-pressed="false" aria-label="Turn on the optional magical llama chime. Plays a short preview." title="Safety first: silent by default. Tap to enable a magical chime when opening the llama."><span class="llama-sound-icon" aria-hidden="true">🔇</span><span class="llama-sound-caption">SOUND OFF</span></button>
+<button id="llamaRoamer" class="llama-roamer" type="button" aria-controls="noDramaLlama" aria-expanded="false" aria-label="Meet the bouncing No Drama Llama and open a 14-fact optional comfort quest" title="Tap the fluffy llama to open Comfort Quest. Sound muted by default; optional chime switch is next to her."><img src="no-drama-llama.svg?v=three-d-20261115" width="124" height="124" alt="" aria-hidden="true"></button>
 <header>
 <a class="brand" href="safety.html">✚ DROP <span>ZONE</span> / SAFETY</a>
 <a class="exit" href="https://www.weather.gov/" rel="noreferrer" id="quickExit" aria-label="Quick exit this page to the National Weather Service website">↗ QUICK EXIT</a>
@@ -88,6 +89,11 @@ footer{font-size:.85rem;color:var(--muted);padding:18px 2px}
     </div>
     <button type="button" id="llamaClose" class="llama-close" aria-label="Close Comfort Quest and return to the safety page" title="Close comfort quest">×</button>
   </div>
+  <div class="llama-sound-row">
+    <button id="llamaChimeInside" type="button" class="llama-chime-inside" aria-pressed="false" aria-label="Turn on magical chime sound">🔇 MAGIC CHIME OFF</button>
+    <button id="llamaReplayChime" type="button" class="llama-replay-chime" aria-label="Play the magical llama chime again" hidden>✨ REPLAY CHIME</button>
+    <small id="llamaSoundHint">For safety, the page is quiet until you choose sound. No music plays automatically.</small>
+  </div>
   <p class="llama-subtitle"><strong>14 safety facts · 14 protective charms · 0 judgment.</strong> Abuse is serious; this little llama is here to make learning gentler, not to minimize what anyone is facing. No quizzes, no wrong answers, and no help locked behind rewards.</p>
   <div class="llama-speech">
     <img src="no-drama-llama.svg?v=three-d-20261115" width="80" height="80" alt="" aria-hidden="true">
@@ -109,7 +115,7 @@ footer{font-size:.85rem;color:var(--muted);padding:18px 2px}
     <p class="llama-kit-note">Collect shields, amulets, tiny teddy bears, blankets, keys, and more. Tap any unlocked charm to review the fact and replay its animation.</p>
     <div id="llamaCharms" class="llama-charms" aria-label="Fourteen virtual protective charms"></div>
   </div>
-  <p class="llama-privacy"><strong>Nothing to earn to deserve help.</strong> This game does not ask about your experiences, collect or save which topics you open, request your location, or play audio. Your learning progress resets when this page reloads. This is education, not personalized safety planning or legal/medical advice. The hotline and emergency options above remain available regardless of the game. If your device might be monitored, use a safer device when possible. <strong>Quick Exit does not erase history.</strong></p>
+  <p class="llama-privacy"><strong>Nothing to earn to deserve help.</strong> This game does not ask about your experiences, collect or save which topics you open, request your location, or play audio unless you explicitly enable the optional magical entrance chime. Your learning progress resets when this page reloads. This is education, not personalized safety planning or legal/medical advice. The hotline and emergency options above remain available regardless of the game. If your device might be monitored, use a safer device when possible. <strong>Quick Exit does not erase history.</strong></p>
 </section>
 
 <section class="card" id="medical">
@@ -171,5 +177,5 @@ Sources: <a href="https://www.cdc.gov/intimate-partner-violence/about/" target="
 // Fast navigation, not a guarantee of privacy: visited-page history and monitoring may remain.
 document.getElementById('quickExit').addEventListener('click',function(e){e.preventDefault();location.replace(this.href)});
 </script>
-<script src="no-drama-llama.js?v=20261115-v2" defer></script>
+<script src="no-drama-llama.js?v=chime-20261115" defer></script>
 </body></html>
