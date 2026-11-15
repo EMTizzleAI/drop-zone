@@ -46,7 +46,10 @@ h2{font-size:clamp(2rem,5vw,3rem)}h3{font-size:1.6rem}
 .options button.good{border-color:#a5f5b4;background:#143324}
 .options button.bad{border-color:#ff92a6;background:#40202d}
 .result{margin:18px 0 0;border:1px solid #6e718e;border-radius:10px;background:#14192a;padding:15px;color:#eef3fa}
-.result.success{border-color:#91ffa4;background:#113323}
+.result.success{border-color:#91ffa4;background:#113323;animation:intelWin .42s ease-out}
+.result .reward{animation:intelReward .9s ease-out}
+@keyframes intelWin{0%{transform:scale(.985);box-shadow:0 0 0 #84ffae00}60%{transform:scale(1.015);box-shadow:0 0 24px #84ffae55}100%{transform:scale(1);box-shadow:0 0 0 #84ffae00}}
+@keyframes intelReward{0%{opacity:0;letter-spacing:.05em}100%{opacity:1;letter-spacing:normal}}
 .result.retry{border-color:#ffcf7f;background:#302318}
 .result h3{font-size:1.55rem;margin-bottom:8px}
 .result p{margin:0 0 9px;font-size:.84rem}
@@ -68,7 +71,7 @@ h2{font-size:clamp(2rem,5vw,3rem)}h3{font-size:1.6rem}
 .pill{display:inline-block;background:#1c3933;color:#c9ffcd;border:1px solid #6aba9b;border-radius:100px;padding:3px 9px;font-size:.69rem;font-weight:700}
 footer{margin:30px auto 0;text-align:center;color:#9db0c0;font-size:.69rem;line-height:1.7}
 @media(max-width:780px){.mission-layout{grid-template-columns:1fr}.hud{gap:7px}.hud article{padding:11px 9px}.hero{padding:25px 20px}.panel{padding:18px}}
-@media(prefers-reduced-motion:reduce){.meter span{transition:none}}
+@media(prefers-reduced-motion:reduce){.meter span{transition:none}.result.success,.result .reward{animation:none}}
 </style>
 </head>
 <body>
@@ -84,10 +87,10 @@ footer{margin:30px auto 0;text-align:center;color:#9db0c0;font-size:.69rem;line-
 <div class="kicker">🎮 YOUR OPERATOR STATUS</div>
 <div class="hud">
 <article><small>INTEL POINTS</small><strong id="xp">0 XP</strong></article>
-<article><small>MISSIONS CLEARED</small><strong id="cleared">0 / 12</strong></article>
+<article><small>MISSIONS CLEARED</small><strong id="cleared">0 / 14</strong></article>
 <article><small>OPERATOR RANK</small><strong id="rank">SCOUT</strong></article>
 </div>
-<div class="meter" role="progressbar" aria-label="Questions completed" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0" id="progress"><span id="progressFill"></span></div>
+<div class="meter" role="progressbar" aria-label="Questions completed" aria-valuemin="0" aria-valuemax="14" aria-valuenow="0" id="progress"><span id="progressFill"></span></div>
 </section>
 <div class="mission-layout">
 <section class="panel" aria-labelledby="quiztitle">
