@@ -188,7 +188,7 @@
     panel.hidden=true;
     launcher.setAttribute('aria-expanded','false');
     stopSpeaking();
-    const returnTarget=launcher.hidden ? document.getElementById('dzCoachReady') : launcher;
+    const returnTarget=launcher.hidden ? document.querySelector('#home .features-home-link') : launcher;
     if(returnTarget) returnTarget.focus({preventScroll:true});
   }
   launcher.addEventListener('click',openChat);
