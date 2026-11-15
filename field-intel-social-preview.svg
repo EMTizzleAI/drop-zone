@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+<title id="title">FIELD INTEL // DROP ZONE</title><desc id="desc">Glitchcore field intel survival trivia. Pink and cyan neon on black. Earn XP and virtual gear; unlock real resource links.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#050811"/><stop offset=".52" stop-color="#141020"/><stop offset="1" stop-color="#080e1d"/></linearGradient>
+  <radialGradient id="pinkGlow"><stop stop-color="#ff25a5" stop-opacity=".27"/><stop offset="1" stop-color="#ff25a5" stop-opacity="0"/></radialGradient>
+  <radialGradient id="cyanGlow"><stop stop-color="#00efff" stop-opacity=".15"/><stop offset="1" stop-color="#00efff" stop-opacity="0"/></radialGradient>
+  <linearGradient id="card" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#1d1431"/><stop offset="1" stop-color="#071824"/></linearGradient>
+  <linearGradient id="neon" x1="0" x2="1"><stop stop-color="#ff39aa"/><stop offset="1" stop-color="#ff9ed5"/></linearGradient>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#00eaff" stroke-opacity=".12" stroke-width="1"/></pattern>
+  <pattern id="scan" width="5" height="5" patternUnits="userSpaceOnUse"><rect y="4" width="5" height="1" fill="#000" opacity=".22"/></pattern>
+  <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="10"/></filter>
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="8" stdDeviation="13" flood-color="#000" flood-opacity=".65"/></filter>
+</defs>
+<rect width="1200" height="630" fill="url(#bg)"/>
+<rect x="0" y="0" width="850" height="630" fill="url(#pinkGlow)"/>
+<rect x="450" y="65" width="750" height="565" fill="url(#cyanGlow)"/>
+<rect width="1200" height="630" fill="url(#grid)"/>
+<g fill="none" stroke="#00eaff" stroke-opacity=".33" stroke-width="2">
+<path d="M0 96H210L236 123H305"/><circle cx="305" cy="123" r="5" fill="#00eaff"/>
+<path d="M780 603h150l26-26h244"/><circle cx="782" cy="603" r="4" fill="#00eaff"/>
+<path d="M1190 40h-180l-20 20h-54"/><circle cx="936" cy="60" r="4" fill="#00eaff"/>
+</g>
+<rect x="27" y="25" width="1146" height="580" rx="20" fill="none" stroke="#ff39aa" stroke-width="3" stroke-opacity=".75"/>
+<rect x="38" y="36" width="1124" height="558" rx="13" fill="none" stroke="#00eaff" stroke-width="1" stroke-opacity=".32"/>
+<rect x="56" y="60" width="328" height="37" rx="7" fill="#ff39aa"/>
+<text x="75" y="85" font-family="DejaVu Sans, sans-serif" font-weight="900" font-size="20" fill="#150815" letter-spacing="1">EMTIZZLE AI  //  DROP ZONE</text>
+<text x="62" y="155" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="700" fill="#00edff" letter-spacing="4">📡  CHANNEL 05 / SURVIVAL KNOWLEDGE</text>
+<text x="62" y="281" font-family="DejaVu Sans, sans-serif" font-size="115" font-weight="900" letter-spacing="-6" fill="#05dcef" opacity=".5">FIELD</text>
+<text x="57" y="278" font-family="DejaVu Sans, sans-serif" font-size="115" font-weight="900" letter-spacing="-6" fill="#faf9ff">FIELD</text>
+<text x="62" y="404" font-family="DejaVu Sans, sans-serif" font-size="123" font-weight="900" letter-spacing="-7" fill="#00eaff" opacity=".45">INTEL.</text>
+<text x="58" y="400" font-family="DejaVu Sans, sans-serif" font-size="123" font-weight="900" letter-spacing="-7" fill="url(#neon)">INTEL.</text>
+<rect x="62" y="431" width="563" height="3" rx="2" fill="#00eaff"/>
+<text x="62" y="474" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="800" fill="#f4f5fc">KNOWLEDGE IS SURVIVAL GEAR.</text>
+<text x="62" y="511" font-family="DejaVu Sans, sans-serif" font-size="20" fill="#c8d8e7">PLAY TRIVIA  •  EARN LOOT  •  FIND REAL HELP</text>
+<rect x="61" y="539" width="240" height="41" rx="7" fill="#0b2430" stroke="#00eaff" stroke-width="2"/>
+<text x="79" y="567" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="900" fill="#a7faff">FREE • NO ACCOUNT</text>
+<g transform="translate(728,130)" filter="url(#shadow)">
+<rect x="0" y="0" width="399" height="412" rx="22" fill="url(#card)" stroke="#00eaff" stroke-width="3"/>
+<rect x="12" y="12" width="375" height="388" rx="15" fill="none" stroke="#ff39aa" stroke-opacity=".7" stroke-width="2"/>
+<path d="M25 75H370" stroke="#315d70" stroke-width="2"/>
+<circle cx="35" cy="36" r="7" fill="#ff39aa"/><circle cx="58" cy="36" r="7" fill="#00eaff"/><circle cx="81" cy="36" r="7" fill="#a6ff8e"/>
+<text x="105" y="45" fill="#fff" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="900">RESOURCE CONSOLE</text>
+<g transform="translate(51,92)">
+<path d="M56 60v-12c0-35 24-57 59-57s59 22 59 57v12" fill="none" stroke="#ff6fbc" stroke-width="11" stroke-linecap="round"/>
+<rect x="35" y="50" width="160" height="174" rx="31" fill="#19283b" stroke="#ff60b7" stroke-width="9"/>
+<path d="M57 61h116l10 40v34H48v-34z" fill="#2e2042" stroke="#00eaff" stroke-width="4"/>
+<rect x="74" y="111" width="82" height="76" rx="15" fill="#0b121f" stroke="#ff60b7" stroke-width="4"/>
+<path d="M95 149h40m-20-20v40" fill="none" stroke="#00eaff" stroke-width="12" stroke-linecap="round"/>
+<rect x="43" y="159" width="27" height="49" rx="10" fill="#ff39aa"/>
+<rect x="161" y="159" width="27" height="49" rx="10" fill="#ff39aa"/>
+</g>
+<rect x="234" y="105" width="131" height="51" rx="10" fill="#ff39aa"/>
+<text x="251" y="138" font-family="DejaVu Sans, sans-serif" font-weight="900" font-size="23" fill="#170917">+25 XP!</text>
+<rect x="227" y="183" width="151" height="57" rx="9" fill="#0c2431" stroke="#00eaff" stroke-width="2"/>
+<text x="244" y="205" font-family="DejaVu Sans, sans-serif" font-weight="900" font-size="15" fill="#a8f7ff">GEAR</text>
+<text x="244" y="226" font-family="DejaVu Sans, sans-serif" font-weight="900" font-size="15" fill="#a8f7ff">UNLOCKED ✓</text>
+<rect x="31" y="320" width="339" height="64" rx="9" fill="#2b112b" stroke="#ff67bc" stroke-width="2"/>
+<text x="54" y="348" font-family="DejaVu Sans, sans-serif" font-weight="900" font-size="17" fill="#ff8ed2">NEW MISSION PERK</text>
+<text x="54" y="373" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#f9f7fc">REAL RESOURCE LINK READY →</text>
+</g>
+<rect width="1200" height="630" fill="url(#scan)" pointer-events="none"/>
+</svg>
