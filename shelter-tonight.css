@@ -1,0 +1,81 @@
+/* Shelter Tonight: lightweight choice-first search for free help, safe parking, and lodging. */
+.dz-shelter-dialog{
+ width:min(95vw,750px);max-height:min(90dvh,900px);
+ overflow-y:auto;box-sizing:border-box;
+ padding:clamp(18px,4vw,29px);
+ border:2px solid #ff57ba;border-radius:19px;
+ background:radial-gradient(circle at 95% 0%,#ff39aa25,transparent 37%),linear-gradient(140deg,#131027,#061522);
+ color:#f7f8fd;font:14px/1.55 'IBM Plex Mono',monospace;
+ box-shadow:0 22px 80px #000b,0 0 35px #ff39aa35;
+}
+.dz-shelter-dialog::backdrop{background:#000d;backdrop-filter:blur(3px)}
+.dz-shelter-dialog *{box-sizing:border-box}
+.dz-shelter-dialog .dz-shelter-head{display:flex;justify-content:space-between;gap:9px;align-items:flex-start}
+.dz-shelter-dialog .dz-shelter-kicker{color:#00eaff;font-weight:800;font-size:.69rem;letter-spacing:.12em;margin:0 0 18px}
+.dz-shelter-dialog .dz-shelter-close{
+ display:grid;place-items:center;flex:0 0 auto;min-width:43px;min-height:43px;
+ border:1px solid #ff78c2;border-radius:10px;background:#200e22;
+ color:#fff;font-size:1.15rem;cursor:pointer;
+}
+.dz-shelter-dialog h2{
+ margin:0;font:900 clamp(2.5rem,8vw,4rem)/.96 'Barlow Condensed',Impact,sans-serif;
+ color:#fff;letter-spacing:-.015em;
+}
+.dz-shelter-dialog .dz-shelter-lead{font-size:.91rem;line-height:1.55;color:#dce7ef;margin:16px 0 20px}
+.dz-shelter-dialog .dz-shelter-search{
+ border:1px solid #00eaff7a;border-radius:13px;background:#0a1828;padding:15px 15px 12px;margin-bottom:16px;
+}
+.dz-shelter-dialog .dz-shelter-search label{display:block;margin:0 0 9px;font-size:.76rem;font-weight:900;letter-spacing:.07em;color:#9df6ff}
+.dz-shelter-dialog .dz-shelter-search-row{display:flex;gap:8px;flex-wrap:wrap}
+.dz-shelter-dialog .dz-shelter-search input{
+ flex:1 1 185px;min-width:0;min-height:48px;padding:12px 14px;
+ border:1px solid #6b9ab2;border-radius:9px;color:#fff;
+ background:#05101b;font:14px 'IBM Plex Mono',monospace;
+}
+.dz-shelter-dialog .dz-shelter-search-row button{
+ flex:0 0 auto;min-height:48px;padding:11px 14px;
+ border:1px solid #ff86ce;border-radius:9px;background:#ff48b2;
+ color:#1d071a;font-weight:900;font-size:.78rem;cursor:pointer;
+}
+.dz-shelter-dialog #dzShelterSearchHelp{margin:10px 0 0;color:#aec3d0;font-size:.73rem}
+.dz-shelter-dialog .dz-shelter-options{display:grid;gap:13px}
+.dz-shelter-dialog .dz-shelter-option{
+ padding:18px;border:1px solid #356276;border-radius:12px;
+ background:linear-gradient(135deg,#0b1c2c,#151221);
+}
+.dz-shelter-dialog .dz-shelter-free{border-color:#64dca8;background:linear-gradient(125deg,#0d2928,#101424)}
+.dz-shelter-dialog .dz-shelter-paid{border-color:#ff77c7;background:linear-gradient(125deg,#251022,#121326)}
+.dz-shelter-dialog .dz-shelter-category{color:#00eaff;font-size:.69rem;font-weight:900;letter-spacing:.1em;margin-bottom:7px}
+.dz-shelter-dialog .dz-shelter-free .dz-shelter-category{color:#9cf8c8}
+.dz-shelter-dialog .dz-shelter-paid .dz-shelter-category{color:#ffb6db}
+.dz-shelter-dialog h3{font:900 clamp(1.65rem,5vw,2rem)/1.05 'Barlow Condensed',Impact,sans-serif;margin:0}
+.dz-shelter-dialog .dz-shelter-option p{color:#dee4ec;margin:10px 0 13px;font-size:.86rem}
+.dz-shelter-dialog .dz-shelter-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.dz-shelter-dialog .dz-shelter-links a{
+ display:flex;align-items:center;justify-content:center;
+ min-height:49px;padding:10px 12px;
+ border:1px solid #00eaff96;border-radius:10px;
+ background:#0b2430;color:#b8faff;text-decoration:none;
+ font-size:.73rem;font-weight:900;line-height:1.25;text-align:center;
+}
+.dz-shelter-dialog .dz-shelter-links a.dz-shelter-primary{
+ border-color:#ffb7db;background:#ff46b2;color:#190a18;
+}
+.dz-shelter-dialog .dz-shelter-links a:hover{filter:brightness(1.18)}
+.dz-shelter-dialog small{display:block;color:#aebfce;font-size:.72rem;line-height:1.6}
+.dz-shelter-dialog .dz-shelter-warning{
+ border-left:3px solid #ffbe74;margin:18px 0;
+ background:#2b2021;padding:12px;font-size:.76rem;color:#f7e2d4;
+}
+.dz-shelter-dialog .dz-shelter-done{
+ display:block;width:100%;min-height:51px;padding:12px 17px;
+ border:1px solid #ff8dcf;border-radius:10px;background:#251126;
+ color:#fff;font-weight:900;cursor:pointer;
+}
+.dz-shelter-dialog :is(button,a,input):focus-visible{outline:3px solid #cbff81;outline-offset:3px}
+@media(max-width:590px){
+ .dz-shelter-dialog{width:calc(100vw - 18px);max-height:calc(100dvh - 24px);padding:19px 15px}
+ .dz-shelter-dialog .dz-shelter-links{grid-template-columns:1fr}
+ .dz-shelter-dialog .dz-shelter-search-row button{flex:1 1 100%}
+}
+@media(prefers-reduced-motion:reduce){.dz-shelter-dialog::backdrop{backdrop-filter:none}}
