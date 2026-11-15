@@ -46,6 +46,7 @@ footer{font-size:.85rem;color:var(--muted);padding:18px 2px}
 @media(max-width:560px){header{padding:12px}.brand{font-size:.9rem}.stat-grid{grid-template-columns:1fr}.exit{font-size:.8rem}.actions{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
+<link rel="stylesheet" href="no-drama-llama.css?v=20261115">
 </head>
 <body>
 <header>
@@ -76,6 +77,33 @@ footer{font-size:.85rem;color:var(--muted);padding:18px 2px}
 <a class="action" href="https://www.thehotline.org/get-help/" target="_blank" rel="noopener noreferrer">PRIVATE CHAT / RESOURCES ↗</a>
 </div>
 <p class="note">Hotline and text services are available around the clock. A monitored phone or browser may expose call, text, or browsing activity.</p>
+</section>
+
+<section class="card llama-card" id="noDramaLlama" aria-labelledby="llamaTitle">
+<p class="llama-kicker">🦙 OPTIONAL SAFETY SCOUT // NO PRESSURE, NO JUDGMENT</p>
+<div class="llama-stage">
+  <div class="llama-avatar" role="img" aria-label="Friendly cream-colored llama with a protective shield">
+    <span class="llama-face" aria-hidden="true">🦙</span>
+    <span class="llama-shield" aria-hidden="true">🛡️</span>
+  </div>
+  <div class="llama-bubble">
+    <h2 id="llamaTitle">THE NO DRAMA LLAMA.</h2>
+    <p id="llamaSay">I'm a llama llama, here with calm, facts, and a little protective magic. Want a safety tip? No pressure, operator. 🩷</p>
+  </div>
+</div>
+<p class="llama-quiet-note"><strong>Real safety. Zero judgment.</strong> Abuse is serious—it is never “just drama.” This gentle, optional guide shares sourced facts about recognizing abuse and getting support. Emergency help and advocates are available above without playing anything.</p>
+<div class="llama-tools">
+  <div class="llama-toolbar">
+    <button id="llamaAsk" class="llama-ask" type="button" aria-controls="llamaFact">🛡️ SHOW ME A SAFETY FACT →</button>
+    <span class="llama-counter" id="llamaCounter">0 / 5 safety facts learned</span>
+  </div>
+  <div id="llamaFact" class="llama-fact" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+  <div class="llama-gear-bar">
+    <strong>🧸 YOUR PROTECTIVE CHARMS // VIRTUAL LEARNING TOKENS</strong>
+    <div id="llamaCharms" class="llama-gear-items"><span class="llama-empty">Nothing to earn to get help. Tap a fact to collect a tiny shield.</span></div>
+  </div>
+</div>
+<p class="llama-fineprint">🩷 No quiz, wrong answers, or rewards for personal experiences. This feature does not record answers, store progress, track your location, or play audio. It does not replace an individualized safety plan. If your device may be monitored, consider using a safer device; the <strong>QUICK EXIT</strong> button does not remove browsing history. <a href="https://www.thehotline.org/plan-for-safety/" target="_blank" rel="noopener noreferrer">Safety planning guidance ↗</a></p>
 </section>
 
 <section class="card" id="medical">
@@ -136,4 +164,5 @@ Sources: <a href="https://www.cdc.gov/intimate-partner-violence/about/" target="
 // Fast navigation, not a guarantee of privacy: visited-page history and monitoring may remain.
 document.getElementById('quickExit').addEventListener('click',function(e){e.preventDefault();location.replace(this.href)});
 </script>
+<script src="no-drama-llama.js?v=20261115" defer></script>
 <script src="soundtrack.js?v=dropzone-radio-20261114" defer></script></body></html>

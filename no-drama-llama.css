@@ -1,0 +1,69 @@
+/* NO DRAMA LLAMA // opt-in learning companion for safety information.
+   Motion reduced for visitors who prefer less animation; never auto-plays sound. */
+.llama-card{position:relative;overflow:hidden;border:2px solid #a5e9e3;
+ background:radial-gradient(circle at 93% 15%,#ff4ba929,transparent 45%),
+ linear-gradient(145deg,#152a32,#171626 58%,#27172e);
+ box-shadow:0 0 25px #6deafa16}
+.llama-kicker{font-size:.75rem;letter-spacing:.14em;color:#b0faf4;font-weight:900}
+.llama-stage{display:grid;grid-template-columns:minmax(120px,170px) minmax(0,1fr);
+ gap:20px;align-items:center;margin:13px 0 20px}
+.llama-avatar{position:relative;display:grid;place-items:center;width:150px;height:155px;
+ margin-inline:auto;border:2px solid #ffe3c0;border-radius:44% 44% 42% 42%;
+ background:radial-gradient(circle at 47% 30%,#fcf4e6,#dcc6bb 90%);
+ box-shadow:inset 0 -12px 19px #d88fc264,0 0 24px #fff1df43;
+ transform:rotate(-2deg)}
+.llama-face{font-size:87px;line-height:1;filter:drop-shadow(0 4px 2px #603f5d55)}
+.llama-shield{position:absolute;bottom:1px;right:-8px;display:grid;place-items:center;
+ width:57px;height:57px;border:2px solid #ff8fcb;border-radius:50%;
+ background:#271026;font-size:34px;box-shadow:0 0 16px #ff4ba97a}
+.llama-bubble{position:relative;padding:19px 20px;border:1px solid #e9b9d9;
+ border-radius:22px;background:#281e38;color:#fff;box-shadow:0 5px 16px #0005}
+.llama-bubble:before{content:'';position:absolute;left:-9px;top:50%;
+ width:16px;height:16px;transform:translateY(-50%) rotate(45deg);
+ background:#281e38;border-left:1px solid #e9b9d9;border-bottom:1px solid #e9b9d9}
+.llama-bubble h2{font-size:clamp(1.7rem,5vw,2.3rem);font-weight:950;color:#ffc5e7;margin:0 0 7px;letter-spacing:.02em}
+.llama-bubble p{margin:5px 0 0;font-size:1rem}
+.llama-quiet-note{font-size:.84rem;color:#dfd8e4;margin-top:10px}
+.llama-quiet-note strong{color:#fff}
+.llama-tools{border:1px solid #6da8ae;background:#0e202a;border-radius:14px;padding:16px}
+.llama-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.llama-toolbar .llama-counter{font-weight:900;color:#baffd7;font-size:.81rem}
+.llama-ask,.llama-next{display:inline-flex;align-items:center;justify-content:center;
+ gap:9px;padding:12px 16px;min-height:49px;border-radius:12px;
+ border:1px solid #ffd7e9;background:#ff84c9;color:#19091a;
+ font:900 .92rem/1.3 system-ui,sans-serif;cursor:pointer;text-align:center}
+.llama-ask:hover,.llama-next:hover{filter:brightness(1.08)}
+.llama-ask[disabled]{opacity:.7;cursor:default}
+.llama-fact[hidden]{display:none!important}
+.llama-fact{margin-top:17px;padding:18px;border:1px solid #b5e8c6;border-radius:13px;
+ background:linear-gradient(140deg,#14382c,#192334);animation:llamaReveal .38s ease-out}
+.llama-fact-head{font-size:.76rem;letter-spacing:.12em;font-weight:900;color:#aaffbb}
+.llama-fact h3{font-size:1.35rem;color:#fff;margin:11px 0 6px}
+.llama-fact p{margin:9px 0 13px}
+.llama-fact .llama-resource{display:inline-block;font-size:.83rem;line-height:1.4;
+ border:1px solid #79d9e1;border-radius:9px;padding:10px 12px;
+ text-decoration:none;background:#12313d;color:#b9fbff;font-weight:850}
+.llama-gear-bar{margin-top:14px}
+.llama-gear-bar strong{display:block;color:#ddf7ff;font-size:.8rem;letter-spacing:.04em}
+.llama-gear-items{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.llama-charm{display:inline-flex;gap:6px;align-items:center;border:1px solid #ff86c8;
+ border-radius:9px;background:#28172c;padding:7px 9px;font-size:.73rem;
+ color:#f3dfed;font-weight:700}
+.llama-empty{color:#b8c7cb;font-size:.79rem}
+.llama-fineprint{margin-top:15px;font-size:.78rem;color:#cdd9dc}
+.llama-fineprint a{color:#adf4ff}
+@keyframes llamaReveal{0%{opacity:.1;transform:translateY(13px) scale(.98)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes llamaWiggle{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
+.llama-card.llama-learning .llama-avatar{animation:llamaWiggle .55s ease-in-out}
+@media(max-width:560px){
+ .llama-stage{grid-template-columns:1fr;gap:10px}
+ .llama-avatar{width:116px;height:119px}
+ .llama-face{font-size:73px}
+ .llama-shield{width:45px;height:45px;font-size:26px;right:-6px}
+ .llama-bubble:before{left:50%;top:-9px;transform:translateX(-50%) rotate(135deg)}
+ .llama-tools{padding:13px}
+ .llama-toolbar .llama-ask{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+ .llama-fact,.llama-card.llama-learning .llama-avatar{animation:none}
+}
