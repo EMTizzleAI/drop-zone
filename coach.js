@@ -84,6 +84,7 @@
       // Original playful robot voice (pre-Midnight Operator preset).
       // Restore the site's former rate/pitch and use the device's default voice.
       utter.lang='en-US';utter.rate=1.03;utter.pitch=1.06;
+      if (typeof window.dzSoundtrackDuck === 'function') window.dzSoundtrackDuck(Math.max(5000, Math.min(30000, text.length * 80)));
       window.speechSynthesis.speak(utter);
     }catch(_){}
   }
