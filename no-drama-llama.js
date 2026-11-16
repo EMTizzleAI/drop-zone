@@ -75,7 +75,7 @@
   function updateSoundUI(){
     if(soundOutside){
       soundOutside.setAttribute('aria-pressed',String(soundOn));
-      soundOutside.setAttribute('aria-label',soundOn?'Mute the optional magical llama chime':'Turn on the optional magical llama chime. Plays a preview.');
+      soundOutside.setAttribute('aria-label',soundOn?'Mute both magical llama chimes':'Enable optional entrance and knowledge chimes. Plays a preview.');
       soundOutside.title=soundOn?'Tap here to mute the magical entrance sound.':'Silent by default. Tap to enable a magical chime.';
       const icon=soundOutside.querySelector('.llama-sound-icon');
       const caption=soundOutside.querySelector('.llama-sound-caption');
@@ -84,18 +84,18 @@
     }
     if(soundInside){
       soundInside.setAttribute('aria-pressed',String(soundOn));
-      soundInside.setAttribute('aria-label',soundOn?'Mute the magical chime':'Enable the optional magical chime. Plays a preview.');
+      soundInside.setAttribute('aria-label',soundOn?'Mute entrance and knowledge chimes':'Enable optional magical chimes. Plays a preview.');
       soundInside.textContent=soundOn?'🔊 MAGIC CHIME ON':'🔇 MAGIC CHIME OFF';
     }
     if(replay)replay.hidden=!soundOn;
     if(soundHint)soundHint.textContent=soundOn?
-      'Only deliberate taps play the chime. Mute it anytime.':
-      'Quiet by default for privacy. Tap the switch to enable the magical chime.';
+      'Magical entrance and earned-charm chimes ON. Mute anytime.':
+      'Quiet by default for privacy. Turn on entrance and knowledge-card chimes here.';
     roamer.setAttribute('aria-label',
       soundOn?'Open No Drama Llama Comfort Quest with a magical chime':
       'Open No Drama Llama Comfort Quest silently. Magical chime is optional.');
   }
-  function renderMagicChime(){
+  function renderMagicChime(kind='entrance'){
     if(!audioCtx||!soundOn||document.hidden)return;
     stopChime();
     try{
@@ -118,26 +118,39 @@
         osc.start(start);osc.stop(end+.025);
         osc.onended=()=>{try{osc.disconnect();gain.disconnect();}catch(_){}};
       }
-      // A quiet 4-second cascade of glass bells, twinkles, and a final warm chord.
-      const sequence=[
+      // Two musical signatures: a dreamy entrance and an excited, warm
+      // knowledge-acquired flourish. Both stay intentionally gentle.
+      const acquired=kind==='reward';
+      const sequence=acquired?[
+        [659.25,0,.68],[783.99,.15,.72],[987.77,.33,.79],
+        [1174.66,.51,.87],[1318.51,.70,.92],[1567.98,.90,.96],
+        [1760.0,1.12,1.04],[2093.0,1.36,1.12]
+      ]:[
         [523.25,0,.90],[659.25,.23,1.02],[783.99,.48,1.18],
         [987.77,.77,1.30],[1174.66,1.08,1.38],[1318.51,1.39,1.42],
         [1567.98,1.73,1.50],[2093.0,2.08,1.68]
       ];
       for(const [pitch,delay,duration] of sequence){
-        bell(pitch,delay,duration,.05,'sine');
-        bell(pitch*2.01,delay+.012,Math.max(.33,duration*.63),.01,'triangle');
+        bell(pitch,delay,duration,acquired?.063:.05,'sine');
+        bell(pitch*2.01,delay+.012,Math.max(.33,duration*.63),acquired?.014:.01,'triangle');
       }
-      [523.25,783.99,1046.5,1567.98].forEach(pitch=>bell(pitch,2.51,1.55,.021,'sine'));
-      [[2637,2.15],[3136,2.65],[3520,3.1]].forEach(([pitch,start])=>bell(pitch,start,.46,.008,'sine'));
+      if(acquired){
+        // Major-sixth sparkle and a soft resolving chord: +25 XP!
+        [523.25,659.25,783.99,1046.5].forEach(pitch=>bell(pitch,1.68,1.32,.033,'sine'));
+        [[2637,1.02],[3136,1.30],[3520,1.65],[4186.0,2.06]].forEach(([pitch,start])=>
+          bell(pitch,start,.54,.012,'sine'));
+      }else{
+        [523.25,783.99,1046.5,1567.98].forEach(pitch=>bell(pitch,2.51,1.55,.021,'sine'));
+        [[2637,2.15],[3136,2.65],[3520,3.1]].forEach(([pitch,start])=>bell(pitch,start,.46,.008,'sine'));
+      }
       const finalOutput=output;
       setTimeout(()=>{
         try{finalOutput.disconnect();}catch(_){}
         if(activeOutput===finalOutput)activeOutput=null;
-      },4700);
+      },acquired?3400:4700);
     }catch(_){/* Optional audio must never interrupt safety information. */}
   }
-  function playMagicChime(){
+  function playMagicChime(kind='entrance'){
     if(!soundOn||document.hidden)return;
     try{
       const Audio=window.AudioContext||window.webkitAudioContext;
@@ -145,8 +158,8 @@
       if(!audioCtx)audioCtx=new Audio();
       if(audioCtx.state==='suspended'){
         const promise=audioCtx.resume();
-        if(promise?.then)promise.then(()=>{if(soundOn&&!document.hidden)renderMagicChime();}).catch(()=>{});
-      }else renderMagicChime();
+        if(promise?.then)promise.then(()=>{if(soundOn&&!document.hidden)renderMagicChime(kind);}).catch(()=>{});
+      }else renderMagicChime(kind);
     }catch(_){/* Audio unsupported: game still works. */}
   }
   function toggleSound(){
@@ -231,6 +244,7 @@
     const title=el('h3','',entry.name);
     const note=el('p','',fresh?'+25 LEARNING XP · VIRTUAL PROTECTION':'ALREADY IN YOUR KIT · NO NEW XP');
     card.append(kicker,icon,title,note);layer.append(card);
+    if(fresh)playMagicChime('reward'); // Only newly earned knowledge triggers the victory fanfare.
     if(reduced()){
       later(()=>{card.remove();pulseBag();},1050);
       return;
