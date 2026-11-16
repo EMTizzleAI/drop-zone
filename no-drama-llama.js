@@ -1,4 +1,4 @@
-/* No Drama Llama // Comfort Quest 2.1.
+/* Comfort Bunny // Comfort Quest 2.2 (legacy llama-* DOM ids for compatibility).
    Learning only: no sensitive prompts, persistence, analytics, requests; optional user-enabled chime.
    Rewards are cosmetic and never gate emergency/hotline services. */
 (()=>{
@@ -75,7 +75,7 @@
   function updateSoundUI(){
     if(soundOutside){
       soundOutside.setAttribute('aria-pressed',String(soundOn));
-      soundOutside.setAttribute('aria-label',soundOn?'Mute both magical llama chimes':'Enable optional entrance and knowledge chimes. Plays a preview.');
+      soundOutside.setAttribute('aria-label',soundOn?'Mute the optional Comfort Bunny chimes':'Enable optional entrance and knowledge chimes. Plays a preview.');
       soundOutside.title=soundOn?'Tap here to mute the happy wind-chime entrance sound.':'Silent by default. Tap to enable a happy wind chime.';
       const icon=soundOutside.querySelector('.llama-sound-icon');
       const caption=soundOutside.querySelector('.llama-sound-caption');
@@ -92,8 +92,8 @@
       'Magical entrance and earned-charm chimes ON. Mute anytime.':
       'Quiet by default for privacy. Turn on entrance and knowledge-card chimes here.';
     roamer.setAttribute('aria-label',
-      soundOn?'Open No Drama Llama Comfort Quest with a happy wind chime':
-      'Open No Drama Llama Comfort Quest silently. Magical chime is optional.');
+      soundOn?'Open Comfort Bunny Quest with an optional gentle wind chime':
+      'Open Comfort Bunny Quest silently. Wind chime is optional.');
   }
   function renderMagicChime(kind='entrance'){
     if(!audioCtx||!soundOn||document.hidden)return;
@@ -195,7 +195,7 @@
     bag.setAttribute('aria-label','Open Comfort Kit, '+n+' of 14 virtual charms unlocked');
     progress.setAttribute('aria-valuenow',String(n));
     bar.style.width=n/facts.length*100+'%';
-    ask.textContent=n===14?'🦙 REVIEW A SAFETY FACT ↺':'🛡️ LEARN A FACT + COLLECT CHARM →';
+    ask.textContent=n===14?'🐰 REVIEW A SAFETY FACT ↺':'🛡️ LEARN A FACT + COLLECT CHARM →';
   }
   function renderCharms(){
     charms.replaceChildren();
@@ -212,7 +212,7 @@
   }
   function renderFact(entry,fresh){
     fact.replaceChildren();
-    const label=el('div','llama-fact-tag',fresh?'✦ ✦ PROTECTIVE INTEL ACQUIRED ✦ ✦':'🦙 COMFORT KIT // FACT REPLAY');
+    const label=el('div','llama-fact-tag',fresh?'✦ ✦ PROTECTIVE INTEL ACQUIRED ✦ ✦':'🐰 COMFORT KIT // FACT REPLAY');
     const title=el('h3','',entry.icon+' '+entry.title);
     const desc=el('p','',entry.body);
     const source=el('a','','VERIFY WITH THE HOTLINE ↗ '+entry.link);
@@ -221,8 +221,8 @@
     fact.append(label,title,desc,source,reward);
     fact.hidden=false;
     say.textContent=fresh?
-      'Llama llama! '+entry.name.toLowerCase()+' unlocked. Gentle knowledge, cozy charms, and choices that stay yours.':
-      'Llama llama! Every fact is worth revisiting. Take only what helps you.';
+      'A little comfort: '+entry.name.toLowerCase()+' unlocked. Your safety and choices stay yours.':
+      'Every fact is worth revisiting. Take only what helps you.';
     updateStatus();
     renderCharms();
   }
@@ -318,8 +318,8 @@
   });
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!game.hidden){e.preventDefault();close();}});
   document.addEventListener('visibilitychange',()=>{
-    if(document.hidden){clearLoot();stopChime();roamer.style.animationPlayState='paused';}
-    else roamer.style.animationPlayState='';
+    if(document.hidden){clearLoot();stopChime();roamer.querySelector('img').style.animationPlayState='paused';}
+    else roamer.querySelector('img').style.animationPlayState='';
   });
   $('quickExit')?.addEventListener('click',stopChime);
   window.addEventListener('pagehide',stopChime);
