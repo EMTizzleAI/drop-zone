@@ -53,7 +53,7 @@ card.innerHTML='<style>#jg-desk{border:2px solid #ff46aa;background:#21162d}#jg-
 '<label><input type="checkbox" id="jg-auto"> 👹 AUTO-PREP matching leads into my queue when I search (no applications submitted)</label>'+
 '<details><summary>🚀 AUTOPILOT // WHAT IS READY?</summary><p class="j-quiet"><strong>Available now:</strong> Turn on AUTO-PREP above, run a search, and Job Goblin will save matching leads into your application queue, choose a suggested résumé, and prepare a note. <strong>He does not submit applications from this website.</strong></p><p class="j-quiet"><strong>Automatic submissions:</strong> An experimental separate Linux runner exists for supported Greenhouse/Lever applications, but it needs private setup, your own computer running, and explicit opt-in. It cannot operate from this public webpage or use résumés saved in this browser automatically.</p><p class="j-quiet"><strong>Cloud autopilot:</strong> Not available yet. A future version would need secure user accounts, protected résumé storage, user-controlled permissions, and a hosted worker. Never put passwords or sensitive identity documents into this public site.</p></details>'+
 '<details open><summary>📂 MY RÉSUMÉ VAULT (private on this device)</summary><p class="j-quiet">Select multiple PDF, DOCX, or TXT résumés. Saved in this browser, never sent to Job Goblin or GitHub. Do not use on a shared device.</p><input type="file" id="jg-files" multiple accept=".pdf,.doc,.docx,.txt"><div id="jg-resumes"></div><p class="j-quiet">Add keywords under each résumé so the Goblin knows when to choose it. Example: EMT healthcare, Linux technician, or AI red team.</p></details>'+
-'<details><summary>🪪 MY APPLICANT DETAILS</summary><p class="j-quiet">Optional. Stored locally. Never enter SSN, date of birth, or passwords.</p><div class="j-grid"><label>Full name<input id="jg-name" autocomplete="name"></label><label>Email<input id="jg-email" type="email" autocomplete="email"></label><label>Phone<input id="jg-phone" autocomplete="tel"></label><label>City / region<input id="jg-city"></label></div><label>Professional experience<textarea id="jg-exp" maxlength="2200"></textarea></label><label>Skills<textarea id="jg-skills" maxlength="1000"></textarea></label><button type="button" id="jg-save-profile">SAVE DETAILS</button><button type="button" id="jg-clear-profile" class="j-danger">CLEAR DETAILS</button></details>'+
+'<details><summary>🪪 MY APPLICANT DETAILS</summary><p class="j-quiet">Optional. Stored locally. Never enter SSN, date of birth, or passwords. These details help prepare application notes, but do not automatically search. Use FIND REMOTE JOBS below to search by general job category without sending your private profile.</p><div class="j-grid"><label>Full name<input id="jg-name" autocomplete="name"></label><label>Email<input id="jg-email" type="email" autocomplete="email"></label><label>Phone<input id="jg-phone" autocomplete="tel"></label><label>City / region<input id="jg-city"></label></div><label>Professional experience<textarea id="jg-exp" maxlength="2200"></textarea></label><label>Skills<textarea id="jg-skills" maxlength="1000"></textarea></label><button type="button" id="jg-save-profile">SAVE DETAILS</button><button type="button" id="jg-find-for-me">👹 FIND REMOTE JOBS FOR ME</button><button type="button" id="jg-clear-profile" class="j-danger">CLEAR DETAILS</button></details>'+
 '<details><summary>🔗 ADD A JOB FROM ANYWHERE</summary><div class="j-grid"><label>Title<input id="jg-title" placeholder="Data Center Technician"></label><label>Employer<input id="jg-company"></label><label>Job URL<input id="jg-url" type="url" placeholder="https://…"></label><label>Location<input id="jg-place"></label></div><button type="button" id="jg-add">📎 PREPARE APPLICATION</button></details>'+
 '<p id="jg-message" aria-live="polite"></p><h3>🗂️ APPLICATION QUEUE <span id="jg-total"></span></h3><div id="jg-queue"></div>'+
 '<button id="jg-export" type="button" class="j-muted">EXPORT TRACKER</button><button id="jg-clear" type="button" class="j-danger">CLEAR QUEUE</button>'+
@@ -63,6 +63,25 @@ const fields=['name','email','phone','city','exp','skills'];
 fields.forEach(f=>{el('jg-'+f).value=state.profile[f]||''});
 el('jg-save-profile').onclick=()=>{const profile={};fields.forEach(f=>profile[f]=trim(el('jg-'+f).value,f==='exp'?2200:1000));state.profile=profile;save();notice('Private applicant details saved in this browser.')};
 el('jg-clear-profile').onclick=()=>{if(!confirm('Erase profile details from this browser?'))return;state.profile={};fields.forEach(f=>el('jg-'+f).value='');save();notice('Profile cleared.')};
+el('jg-find-for-me').onclick=()=>{
+ // Choose a general job category locally; never transmit résumé or profile text in a search.
+ const experience=(el('jg-exp').value+' '+el('jg-skills').value).toLowerCase();
+ let role='AI evaluator';
+ if(/\bai\b|llm|red.team|annotat|model evaluat|prompt|data label/.test(experience))role='AI evaluator';
+ else if(/\bqa\b|quality assurance|test case|software test|bug report/.test(experience))role='QA tester';
+ else if(/linux|technical support|helpdesk|troubleshoot|hardware|computer/.test(experience))role='technical support';
+ const searchForm=el('hunt'),roleField=el('role');
+ if(!searchForm||!roleField){notice('Search form not ready. Use Scan The Job Market above.');return}
+ roleField.value=role;
+ el('place').value='';
+ el('type').value='';
+ el('remote-only').checked=true;
+ el('pay').value='';
+ notice('👹 Hunting remote '+role+' positions. Only general job keywords are sent to public job feeds, not your private profile.');
+ if(typeof searchForm.requestSubmit==='function')searchForm.requestSubmit();
+ else searchForm.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+ searchForm.scrollIntoView({behavior:'smooth',block:'start'});
+};
 el('jg-auto').checked=!!state.auto;el('jg-auto').onchange=()=>{state.auto=el('jg-auto').checked;save();notice(state.auto?'Auto-prep enabled for subsequent job searches.':'Auto-prep disabled.')};
 el('jg-files').onchange=async e=>{
  let count=0;
