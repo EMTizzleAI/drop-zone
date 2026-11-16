@@ -1,45 +1,45 @@
-/* No Drama Llama // happy hop-and-dance loop; no obstruction of header.
-   Keeps optional companion reachable and respects reduced motion. */
+/* No Drama Llama // forward-facing dance across the lower screen.
+   The actual llama artwork faces RIGHT. Start at LEFT and travel RIGHT
+   without mirroring; then turn and travel LEFT using scaleX(-1). */
 .llama-roamer{
+  --llama-gutter:clamp(8px,2.4vw,26px);
+  --llama-size:clamp(100px,13vw,130px);
+  --llama-travel:max(0px,calc(100vw - var(--llama-size) - var(--llama-gutter) - var(--llama-gutter)));
   position:fixed;z-index:30;
   bottom:max(12px,env(safe-area-inset-bottom));
-  right:clamp(8px,2.4vw,26px);
+  left:var(--llama-gutter);right:auto;
   display:grid;place-items:center;
-  width:clamp(100px,13vw,130px);
+  width:var(--llama-size);
   height:clamp(108px,14vw,145px);
   padding:0;border:0;background:transparent;color:inherit;
   cursor:pointer;touch-action:manipulation;
   filter:drop-shadow(0 6px 10px #0008) drop-shadow(0 0 5px #ff90d55e);
-  animation:llamaDanceAcross 14s ease-in-out infinite;
+  animation:llamaTravelForward 13s linear infinite;
   transform-origin:50% 84%;
   will-change:transform;
 }
 .llama-roamer[hidden]{display:none!important}
-.llama-roamer img{display:block;width:100%;height:100%;object-fit:contain;
-  pointer-events:none;animation:llamaHappyBop .7s ease-in-out infinite alternate}
+.llama-roamer img{
+  display:block;width:100%;height:100%;object-fit:contain;
+  pointer-events:none;animation:llamaHappyBop .7s ease-in-out infinite alternate;
+}
 .llama-roamer:hover,.llama-roamer:focus-visible{animation-play-state:paused}
 .llama-roamer:hover img,.llama-roamer:focus-visible img{animation-play-state:paused}
 .llama-roamer:focus-visible{outline:3px solid #caffc8;outline-offset:4px;border-radius:25px}
-/* The floating companion walks across the lower viewport, never the emergency header.
-   Each bounce changes height and tilt for a playful dancing rhythm. */
-@keyframes llamaDanceAcross{
-   0%{transform:translate3d(0,0,0) rotate(-4deg) scaleX(-1)}
-   8%{transform:translate3d(min(0px,calc(37.4px - 22vw)),-50px,0) rotate(8deg) scaleX(-1)}
-  16%{transform:translate3d(min(0px,calc(71.4px - 42vw)),-10px,0) rotate(-6deg) scaleX(-1)}
-  25%{transform:translate3d(min(0px,calc(113.9px - 67vw)),-68px,0) rotate(7deg) scaleX(-1)}
-  34%{transform:translate3d(min(0px,calc(147.9px - 87vw)),-13px,0) rotate(-5deg) scaleX(-1)}
-  42%{transform:translate3d(min(0px,calc(170px - 100vw)),-52px,0) rotate(8deg) scaleX(-1)}
-  49%{transform:translate3d(min(0px,calc(170px - 100vw)),0,0) rotate(0deg) scaleX(1)}
-  58%{transform:translate3d(min(0px,calc(130.9px - 77vw)),-60px,0) rotate(-9deg) scaleX(1)}
-  67%{transform:translate3d(min(0px,calc(93.5px - 55vw)),-8px,0) rotate(5deg) scaleX(1)}
-  77%{transform:translate3d(min(0px,calc(49.3px - 29vw)),-65px,0) rotate(-8deg) scaleX(1)}
-  88%{transform:translate3d(min(0px,calc(15.3px - 9vw)),-12px,0) rotate(6deg) scaleX(1)}
-  94%{transform:translate3d(0,-42px,0) rotate(-4deg) scaleX(1)}
- 100%{transform:translate3d(0,0,0) rotate(-4deg) scaleX(-1)}
+/* Forward motion and facing ALWAYS match:
+   first half rightwards, second half leftwards.
+   Direction flips happen in place in 0.1% of the cycle, not mid-hop. */
+@keyframes llamaTravelForward{
+  0%{transform:translate3d(0,0,0) scaleX(1)}
+  49.9%{transform:translate3d(var(--llama-travel),0,0) scaleX(1)}
+  50%{transform:translate3d(var(--llama-travel),0,0) scaleX(-1)}
+  99.9%{transform:translate3d(0,0,0) scaleX(-1)}
+  100%{transform:translate3d(0,0,0) scaleX(1)}
 }
 @keyframes llamaHappyBop{
-  0%{transform:translateY(2px) rotate(-3deg) scale(.97)}
- 100%{transform:translateY(-5px) rotate(3deg) scale(1.025)}
+  0%{transform:translateY(4px) rotate(-4deg) scale(.96)}
+  45%{transform:translateY(-12px) rotate(1deg) scale(1.025)}
+  100%{transform:translateY(-24px) rotate(5deg) scale(1.035)}
 }
 
 .llama-game[hidden]{display:none!important}
@@ -148,7 +148,7 @@
  .llama-say{font-size:.82rem;padding:12px}
  .llama-game-actions{display:grid;grid-template-columns:1fr}
  .llama-ask,.llama-bag{width:100%}
- /* Keep the full llama visible on phones. */\n .llama-roamer{width:102px;height:120px}
+ /* Keep the full llama visible on phones and compute travel correctly. */\n .llama-roamer{--llama-size:102px;height:120px}
  .llama-charms{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(prefers-reduced-motion:reduce){
