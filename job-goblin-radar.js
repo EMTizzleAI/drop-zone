@@ -76,10 +76,10 @@ function hourlyMinimum(salary){
 function relevant(job,search){
  const tokens=escapeWords(search.role).filter(x=>!['jobs','job','remote','work','the','for','with','and'].includes(x));
  const title=job.title.toLowerCase(),company=job.company.toLowerCase();
- const aiEval=/\\bai\\b|\\bllm\\b|model evaluat|red.team|annotat|label|rater|video.?review|data trainer|ai train/i.test(search.role);
- const qaIntent=/\\bqa\\b|quality assurance|software test|game test/i.test(search.role);
- const aiTitles=/\\bai\\b|\\bllm\\b|model evaluat|red.team|annotat|label|rater|video.?review|data trainer|ai train/i.test(title);
- const qaTitles=/\\bqa\\b|quality assurance|software test|game test|test engineer/i.test(title);
+ const aiEval=/\bai\b|\bllm\b|model evaluat|red.team|annotat|label|rater|video.?review|data trainer|ai train/i.test(search.role);
+ const qaIntent=/\bqa\b|quality assurance|software test|game test/i.test(search.role);
+ const aiTitles=/\bai\b|\bllm\b|model evaluat|red.team|annotat|label|rater|video.?review|data trainer|ai train/i.test(title);
+ const qaTitles=/\bqa\b|quality assurance|software test|game test|test engineer/i.test(title);
  const matchedText=tokens.some(word=>title.includes(word)||company.includes(word));
  if(tokens.length&&!(matchedText||(aiEval&&aiTitles)||(qaIntent&&qaTitles)))return false;
  const where=job.location.toLowerCase();
@@ -156,7 +156,7 @@ async function scan(search,id,signal){
   {name:'Job Goblin server',timeout:16000,url:'https://pantry-goblin.vercel.app/api/jobs?'+qs,
    map:data=>{if(!Array.isArray(data.jobs))throw Error('Bad server response');return data.jobs;}},
   ...(search.remote?[{name:'Remotive',timeout:12000,
-   url:'https://remotive.com/api/remote-jobs?'+new URLSearchParams({search:/annotat|label/i.test(search.role)?'annotation':/qa|test/i.test(search.role)?'QA':/support/i.test(search.role)?'support':/ai|llm|red.team|model/i.test(search.role)?'AI':search.role.split(/\\s+/)[0],limit:'100'}),
+   url:'https://remotive.com/api/remote-jobs?'+new URLSearchParams({search:/annotat|label/i.test(search.role)?'annotation':/qa|test/i.test(search.role)?'QA':/support/i.test(search.role)?'support':/ai|llm|red.team|model/i.test(search.role)?'AI':search.role.split(/\s+/)[0],limit:'100'}),
    map:data=>{if(!Array.isArray(data.jobs))throw Error('Bad feed response');return data.jobs.map(j=>({...j,location:j.candidate_required_location||'Remote',remote:true}));}}]:[]),
   {name:'Arbeitnow',timeout:11000,url:'https://www.arbeitnow.com/api/job-board-api',
    map:data=>{if(!Array.isArray(data.data))throw Error('Bad feed response');return data.data;}}
