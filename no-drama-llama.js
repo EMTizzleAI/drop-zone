@@ -76,7 +76,7 @@
     if(soundOutside){
       soundOutside.setAttribute('aria-pressed',String(soundOn));
       soundOutside.setAttribute('aria-label',soundOn?'Mute both magical llama chimes':'Enable optional entrance and knowledge chimes. Plays a preview.');
-      soundOutside.title=soundOn?'Tap here to mute the magical entrance sound.':'Silent by default. Tap to enable a magical chime.';
+      soundOutside.title=soundOn?'Tap here to mute the happy wind-chime entrance sound.':'Silent by default. Tap to enable a happy wind chime.';
       const icon=soundOutside.querySelector('.llama-sound-icon');
       const caption=soundOutside.querySelector('.llama-sound-caption');
       if(icon)icon.textContent=soundOn?'🔊':'🔇';
@@ -84,7 +84,7 @@
     }
     if(soundInside){
       soundInside.setAttribute('aria-pressed',String(soundOn));
-      soundInside.setAttribute('aria-label',soundOn?'Mute entrance and knowledge chimes':'Enable optional magical chimes. Plays a preview.');
+      soundInside.setAttribute('aria-label',soundOn?'Mute entrance and knowledge chimes':'Enable optional happy wind chimes. Plays a preview.');
       soundInside.textContent=soundOn?'🔊 MAGIC CHIME ON':'🔇 MAGIC CHIME OFF';
     }
     if(replay)replay.hidden=!soundOn;
@@ -92,63 +92,58 @@
       'Magical entrance and earned-charm chimes ON. Mute anytime.':
       'Quiet by default for privacy. Turn on entrance and knowledge-card chimes here.';
     roamer.setAttribute('aria-label',
-      soundOn?'Open No Drama Llama Comfort Quest with a magical chime':
+      soundOn?'Open No Drama Llama Comfort Quest with a happy wind chime':
       'Open No Drama Llama Comfort Quest silently. Magical chime is optional.');
   }
   function renderMagicChime(kind='entrance'){
     if(!audioCtx||!soundOn||document.hidden)return;
     stopChime();
     try{
-      const now=audioCtx.currentTime+.015;
+      const now=audioCtx.currentTime+.025;
       const output=audioCtx.createGain();
-      output.gain.setValueAtTime(.62,now);
+      output.gain.setValueAtTime(.68,now);
       output.connect(audioCtx.destination);
       activeOutput=output;
-      function bell(freq,delay,duration,peak,type){
+      // Little C-major-pentatonic wind chimes: bright, cheerful, gently
+      // irregular, and short. No haunting sustained chords or shrill sweeps.
+      function windBell(freq,delay,duration,volume=1){
         const start=now+delay,end=start+duration;
-        const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
-        osc.type=type||'sine';
-        osc.frequency.setValueAtTime(freq,start);
-        osc.frequency.exponentialRampToValueAtTime(freq*.994,end);
-        gain.gain.setValueAtTime(.0001,start);
-        gain.gain.exponentialRampToValueAtTime(peak,start+.018);
-        gain.gain.exponentialRampToValueAtTime(Math.max(.0001,peak*.23),start+duration*.55);
-        gain.gain.exponentialRampToValueAtTime(.0001,end);
-        osc.connect(gain);gain.connect(output);
-        osc.start(start);osc.stop(end+.025);
-        osc.onended=()=>{try{osc.disconnect();gain.disconnect();}catch(_){}};
+        function partial(multiplier,strength,decay){
+          const osc=audioCtx.createOscillator(),env=audioCtx.createGain();
+          osc.type='sine';
+          osc.frequency.setValueAtTime(freq*multiplier,start);
+          env.gain.setValueAtTime(.0001,start);
+          env.gain.exponentialRampToValueAtTime(Math.max(.0002,strength*volume),start+.012);
+          env.gain.exponentialRampToValueAtTime(.0001,start+decay);
+          osc.connect(env);env.connect(output);
+          osc.start(start);osc.stop(end+.02);
+          osc.onended=()=>{try{osc.disconnect();env.disconnect()}catch(_){}};
+        }
+        partial(1,.085,duration);
+        partial(2.0,.010,duration*.64); // warm metal sparkle, not a scary overtone
+        partial(3.0,.002,duration*.38);
       }
-      // Two musical signatures: a dreamy entrance and an excited, warm
-      // knowledge-acquired flourish. Both stay intentionally gentle.
-      const acquired=kind==='reward';
-      const sequence=acquired?[
-        [659.25,0,.68],[783.99,.15,.72],[987.77,.33,.79],
-        [1174.66,.51,.87],[1318.51,.70,.92],[1567.98,.90,.96],
-        [1760.0,1.12,1.04],[2093.0,1.36,1.12]
+      const reward=kind==='reward';
+      // Notes C D E G A in comfortable registers (no minor or tritone tension).
+      const melody=reward?[
+        [783.99,0,.68,1], [1046.50,.18,.73,.98],
+        [1174.66,.39,.74,.95],[1318.51,.60,.78,1],
+        [1567.98,.85,.81,.93],[1760,1.12,.72,.77],
+        [1567.98,1.40,.67,.72],[2093,1.66,.81,.80]
       ]:[
-        [523.25,0,.90],[659.25,.23,1.02],[783.99,.48,1.18],
-        [987.77,.77,1.30],[1174.66,1.08,1.38],[1318.51,1.39,1.42],
-        [1567.98,1.73,1.50],[2093.0,2.08,1.68]
+        [659.25,0,.82,.74],[783.99,.19,.78,.86],
+        [880,.46,.81,.77],[1046.5,.69,.90,.95],
+        [1174.66,1.00,.82,.73],[1318.51,1.24,.91,.86],
+        [1567.98,1.56,.88,.75],[1318.51,1.93,.86,.62]
       ];
-      for(const [pitch,delay,duration] of sequence){
-        bell(pitch,delay,duration,acquired?.063:.05,'sine');
-        bell(pitch*2.01,delay+.012,Math.max(.33,duration*.63),acquired?.014:.01,'triangle');
-      }
-      if(acquired){
-        // Major-sixth sparkle and a soft resolving chord: +25 XP!
-        [523.25,659.25,783.99,1046.5].forEach(pitch=>bell(pitch,1.68,1.32,.033,'sine'));
-        [[2637,1.02],[3136,1.30],[3520,1.65],[4186.0,2.06]].forEach(([pitch,start])=>
-          bell(pitch,start,.54,.012,'sine'));
-      }else{
-        [523.25,783.99,1046.5,1567.98].forEach(pitch=>bell(pitch,2.51,1.55,.021,'sine'));
-        [[2637,2.15],[3136,2.65],[3520,3.1]].forEach(([pitch,start])=>bell(pitch,start,.46,.008,'sine'));
-      }
-      const finalOutput=output;
+      melody.forEach(([pitch,delay,duration,volume])=>
+        windBell(pitch,delay,duration,volume));
+      const thisOutput=output;
       setTimeout(()=>{
-        try{finalOutput.disconnect();}catch(_){}
-        if(activeOutput===finalOutput)activeOutput=null;
-      },acquired?3400:4700);
-    }catch(_){/* Optional audio must never interrupt safety information. */}
+        try{thisOutput.disconnect()}catch(_){}
+        if(activeOutput===thisOutput)activeOutput=null;
+      },reward?3000:3300);
+    }catch(_){/* Sound must never interfere with safety information. */}
   }
   function playMagicChime(kind='entrance'){
     if(!soundOn||document.hidden)return;
@@ -170,7 +165,7 @@
   }
   soundOutside?.addEventListener('click',toggleSound);
   soundInside?.addEventListener('click',toggleSound);
-  replay?.addEventListener('click',playMagicChime);
+  replay?.addEventListener('click',()=>playMagicChime('entrance'));
   updateSoundUI();
 
   // No localStorage, sessionStorage or backend: even reading topics can be sensitive.
