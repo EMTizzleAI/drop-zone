@@ -75,7 +75,7 @@
   function updateSoundUI(){
     if(soundOutside){
       soundOutside.setAttribute('aria-pressed',String(soundOn));
-      soundOutside.setAttribute('aria-label',soundOn?'Mute the optional magical llama chime':'Turn on the optional magical llama chime. Plays a preview.');
+      soundOutside.setAttribute('aria-label',soundOn?'Mute both magical llama chimes':'Enable optional entrance and knowledge chimes. Plays a preview.');
       soundOutside.title=soundOn?'Tap here to mute the magical entrance sound.':'Silent by default. Tap to enable a magical chime.';
       const icon=soundOutside.querySelector('.llama-sound-icon');
       const caption=soundOutside.querySelector('.llama-sound-caption');
@@ -84,13 +84,13 @@
     }
     if(soundInside){
       soundInside.setAttribute('aria-pressed',String(soundOn));
-      soundInside.setAttribute('aria-label',soundOn?'Mute the magical chime':'Enable the optional magical chime. Plays a preview.');
+      soundInside.setAttribute('aria-label',soundOn?'Mute entrance and knowledge chimes':'Enable optional magical chimes. Plays a preview.');
       soundInside.textContent=soundOn?'🔊 MAGIC CHIME ON':'🔇 MAGIC CHIME OFF';
     }
     if(replay)replay.hidden=!soundOn;
     if(soundHint)soundHint.textContent=soundOn?
-      'Only deliberate taps play the chime. Mute it anytime.':
-      'Quiet by default for privacy. Tap the switch to enable the magical chime.';
+      'Magical entrance and earned-charm chimes ON. Mute anytime.':
+      'Quiet by default for privacy. Turn on entrance and knowledge-card chimes here.';
     roamer.setAttribute('aria-label',
       soundOn?'Open No Drama Llama Comfort Quest with a magical chime':
       'Open No Drama Llama Comfort Quest silently. Magical chime is optional.');
