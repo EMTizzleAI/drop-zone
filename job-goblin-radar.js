@@ -18,7 +18,7 @@ function add(tag,parent,value,cls){
  return node;
 }
 function boardLinks(role,place,remote,container){
- const heading=add('h3',container,'🔗 KEEP HUNTING — DIRECT JOB SEARCHES');
+ add('h3',container,'🔗 KEEP HUNTING — DIRECT JOB SEARCHES');
  const query=(role+(remote?' remote':'')).trim();
  const links=[
   ['SEARCH INDEED ↗','https://www.indeed.com/jobs?q='+encodeURIComponent(query)+'&l='+encodeURIComponent(remote?'':place)],
@@ -50,7 +50,7 @@ function normalize(job,source){
  const location=clean(typeof job.location==='string'?job.location:job.location?.name||(job.locations||[]).map(x=>x.name).join(', ')||job.candidate_required_location||'');
  return {title,company:clean(typeof job.company==='string'?job.company:job.company?.name||job.company_name),
    location:location||'Location not supplied',url,salary:job.salary||null,
-   source:clean(job.source)||source,remote:job.remote===true||job.remoteStatus==='remote'||
+   source:clean(job.source)||source,remote:job.remote===true||job.remote==='true'||job.remoteStatus==='remote'||
    /remote|work from home|anywhere|worldwide/i.test(location),
    employmentType:clean(job.employmentType||job.employment_type).toLowerCase()};
 }
@@ -76,7 +76,12 @@ function hourlyMinimum(salary){
 function relevant(job,search){
  const tokens=escapeWords(search.role).filter(x=>!['jobs','job','remote','work','the','for','with','and'].includes(x));
  const title=job.title.toLowerCase(),company=job.company.toLowerCase();
- if(tokens.length&&!tokens.some(word=>title.includes(word)||company.includes(word)))return false;
+ const aiEval=/\\bai\\b|\\bllm\\b|model evaluat|red.team|annotat|label|rater|video.?review|data trainer|ai train/i.test(search.role);
+ const qaIntent=/\\bqa\\b|quality assurance|software test|game test/i.test(search.role);
+ const aiTitles=/\\bai\\b|\\bllm\\b|model evaluat|red.team|annotat|label|rater|video.?review|data trainer|ai train/i.test(title);
+ const qaTitles=/\\bqa\\b|quality assurance|software test|game test|test engineer/i.test(title);
+ const matchedText=tokens.some(word=>title.includes(word)||company.includes(word));
+ if(tokens.length&&!(matchedText||(aiEval&&aiTitles)||(qaIntent&&qaTitles)))return false;
  const where=job.location.toLowerCase();
  if(search.remote&&!job.remote)return false;
  if(!search.remote&&search.place&&!/^(remote|anywhere)$/i.test(search.place)){
@@ -106,7 +111,14 @@ function jobCard(job){
  add('p',d,[job.company,job.location].filter(Boolean).join(' · '));
  const pay=salaryText(job.salary);
  if(pay)add('p',d,pay);
- add('p',d,'Source: '+job.source+(job.remote?' · Marked remote':''),'hint');
+ const attribution=add('p',d,undefined,'hint');
+ attribution.append(document.createTextNode('Source: '));
+ if(job.source==='Himalayas'||job.source==='Remotive'){
+  const credit=add('a',attribution,job.source);
+  credit.href=job.source==='Himalayas'?'https://himalayas.app/':'https://remotive.com/';
+  credit.target='_blank';credit.rel='noopener noreferrer';
+ }else attribution.append(document.createTextNode(job.source));
+ attribution.append(document.createTextNode(job.remote?' · Marked remote (check country eligibility)':''));
  const a=add('a',d,'VIEW JOB & APPLY ↗');a.href=job.url;a.target='_blank';a.rel='noopener noreferrer';
  if(window.JobGoblinAgent){
   const b=add('button',d,'👹 PREPARE APPLICATION');
@@ -143,10 +155,9 @@ async function scan(search,id,signal){
  const feeds=[
   {name:'Job Goblin server',timeout:16000,url:'https://pantry-goblin.vercel.app/api/jobs?'+qs,
    map:data=>{if(!Array.isArray(data.jobs))throw Error('Bad server response');return data.jobs;}},
-  {name:'Remotive',timeout:12000,url:'https://remotive.com/api/remote-jobs?limit=100',
-   map:data=>{if(!Array.isArray(data.jobs))throw Error('Bad feed response');return data.jobs.map(j=>({...j,location:j.candidate_required_location||'Remote',remote:true}));}},
-  {name:'The Muse',timeout:12000,url:'https://www.themuse.com/api/public/jobs?page=0',
-   map:data=>{if(!Array.isArray(data.results))throw Error('Bad feed response');return data.results;}},
+  ...(search.remote?[{name:'Remotive',timeout:12000,
+   url:'https://remotive.com/api/remote-jobs?'+new URLSearchParams({search:/annotat|label/i.test(search.role)?'annotation':/qa|test/i.test(search.role)?'QA':/support/i.test(search.role)?'support':/ai|llm|red.team|model/i.test(search.role)?'AI':search.role.split(/\\s+/)[0],limit:'100'}),
+   map:data=>{if(!Array.isArray(data.jobs))throw Error('Bad feed response');return data.jobs.map(j=>({...j,location:j.candidate_required_location||'Remote',remote:true}));}}]:[]),
   {name:'Arbeitnow',timeout:11000,url:'https://www.arbeitnow.com/api/job-board-api',
    map:data=>{if(!Array.isArray(data.data))throw Error('Bad feed response');return data.data;}}
  ];
@@ -170,10 +181,15 @@ async function scan(search,id,signal){
   const key=job.url.toLowerCase().replace(/\/$/,'');
   if(!unique.has(key))unique.set(key,job);
  }
- const matched=[...unique.values()].filter(j=>relevant(j,search))
+ const allJobs=[...unique.values()];
+ const matched=allJobs.filter(j=>relevant(j,search))
   .sort((a,b)=>score(b,search)-score(a,search)).slice(0,25);
  if(window.JobGoblinAgent)window.JobGoblinAgent.receiveResults(matched);
  render(matched,search,completed,errors);
+ if(!matched.length&&allJobs.length){
+  add('p',results,'The radar checked '+allJobs.length+' listings, but none passed this search. Try shorter keywords such as AI, annotation, QA, or support, and remove pay/type filters if needed.','hint');
+ }
+
 }
 function startSearch(){
  const role=clean(el('role').value),place=clean(el('place').value);
