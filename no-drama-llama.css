@@ -1,6 +1,6 @@
 /* No Drama Llama 2.0 // 14-fact, no-pressure Comfort Quest
    Visible page: one bounding fluffy white llama icon. The game is opt-in.
-   IMPORTANT: All sounds disabled. No personal disclosures or saved history. */
+   IMPORTANT: Sound muted by default; user may opt in to magical chime. */
 .llama-roamer{
   --llama-span:clamp(68px,33vw,184px);
   position:fixed;z-index:30;
@@ -155,3 +155,51 @@
 }
 .llama-charm.llama-locked .llama-charm-icon{filter:grayscale(1);font-size:1.6rem}
 .llama-charm.llama-locked:hover{background:#151821;border-color:#526171}
+
+/* Optional sound controls. No chime until a visitor chooses it.
+   The floating mute switch is deliberately separate from the bouncing llama. */
+.llama-chime-toggle{
+  position:fixed;
+  z-index:32;
+  right:clamp(116px,15vw,158px);
+  bottom:max(23px,calc(env(safe-area-inset-bottom) + 19px));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1px;width:78px;min-height:57px;
+  padding:7px 4px;
+  border:1px solid #bceee8;border-radius:14px;
+  background:linear-gradient(140deg,#17232fe8,#30152de8);
+  color:#f3e5f0;backdrop-filter:blur(7px);
+  font:800 10px/1.2 system-ui,sans-serif;
+  box-shadow:0 0 13px #ff7cd82b;
+  cursor:pointer;touch-action:manipulation;
+}
+.llama-chime-toggle .llama-sound-icon{font-size:22px;line-height:1}
+.llama-chime-toggle[aria-pressed="true"]{border-color:#ffa0d5;color:#ffd5ef;background:#421935ee}
+.llama-chime-toggle:hover{filter:brightness(1.13)}
+.llama-chime-toggle[hidden],
+.llama-replay-chime[hidden]{display:none!important}
+.llama-sound-row{
+  display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+  margin:10px 0 16px;padding:12px;
+  border:1px solid #537a7d;border-radius:13px;
+  background:#0b202ab8;
+}
+.llama-chime-inside,.llama-replay-chime{
+  min-height:44px;padding:10px 12px;border-radius:10px;
+  color:#fff;border:1px solid #e7a7d3;
+  background:#331b39;font:800 .78rem/1.2 system-ui,sans-serif;
+  cursor:pointer;touch-action:manipulation;
+}
+.llama-chime-inside[aria-pressed="true"]{
+  border-color:#8cf7d8;background:#1d4339;color:#caffef;
+}
+.llama-replay-chime{border-color:#a5fcf0;color:#b9fff2}
+.llama-sound-row small{flex-basis:100%;font-size:.73rem;color:#cbd6e4}
+@media(max-width:560px){
+  .llama-chime-toggle{
+    right:115px;bottom:max(22px,calc(env(safe-area-inset-bottom) + 18px));
+    width:68px;min-height:54px;font-size:9px;
+  }
+  .llama-sound-row{gap:7px}
+  .llama-chime-inside,.llama-replay-chime{font-size:.72rem}
+}
