@@ -1,37 +1,47 @@
-/* No Drama Llama 2.0 // 14-fact, no-pressure Comfort Quest
-   Visible page: one bounding fluffy white llama icon. The game is opt-in.
-   IMPORTANT: Sound muted by default; user may opt in to magical chime. */
+/* No Drama Llama // happy hop-and-dance loop; no obstruction of header.
+   Keeps optional companion reachable and respects reduced motion. */
 .llama-roamer{
-  --llama-span:clamp(68px,33vw,184px);
   position:fixed;z-index:30;
-  bottom:max(16px,env(safe-area-inset-bottom));
-  right:clamp(6px,2.4vw,26px);
+  bottom:max(12px,env(safe-area-inset-bottom));
+  right:clamp(8px,2.4vw,26px);
   display:grid;place-items:center;
-  width:clamp(88px,12vw,124px);
-  height:clamp(88px,12vw,124px);
+  width:clamp(100px,13vw,130px);
+  height:clamp(108px,14vw,145px);
   padding:0;border:0;background:transparent;color:inherit;
   cursor:pointer;touch-action:manipulation;
   filter:drop-shadow(0 6px 10px #0008) drop-shadow(0 0 5px #ff90d55e);
-  animation:llamaBounding 6.6s ease-in-out infinite;
-  transform-origin:50% 83%;
+  animation:llamaDanceAcross 14s ease-in-out infinite;
+  transform-origin:50% 84%;
+  will-change:transform;
 }
 .llama-roamer[hidden]{display:none!important}
-.llama-roamer img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.llama-roamer img{display:block;width:100%;height:100%;object-fit:contain;
+  pointer-events:none;animation:llamaHappyBop .7s ease-in-out infinite alternate}
 .llama-roamer:hover,.llama-roamer:focus-visible{animation-play-state:paused}
+.llama-roamer:hover img,.llama-roamer:focus-visible img{animation-play-state:paused}
 .llama-roamer:focus-visible{outline:3px solid #caffc8;outline-offset:4px;border-radius:25px}
-@keyframes llamaBounding{
-  0%,100%{transform:translate3d(0,0,0) rotate(-2deg) scaleX(1)}
-  9%{transform:translate3d(calc(var(--llama-span)*-.26),-42px,0) rotate(-12deg) scaleX(1)}
-  18%{transform:translate3d(calc(var(--llama-span)*-.58),-78px,0) rotate(-10deg) scaleX(1)}
-  30%{transform:translate3d(calc(var(--llama-span)*-1),0,0) rotate(2deg) scaleX(1)}
-  34%{transform:translate3d(calc(var(--llama-span)*-1),-7px,0) rotate(3deg) scaleX(1)}
-  41%{transform:translate3d(calc(var(--llama-span)*-1),0,0) rotate(0) scaleX(-1)}
-  55%{transform:translate3d(calc(var(--llama-span)*-.72),-55px,0) rotate(9deg) scaleX(-1)}
-  66%{transform:translate3d(calc(var(--llama-span)*-.46),-76px,0) rotate(8deg) scaleX(-1)}
-  82%{transform:translate3d(0,0,0) rotate(1deg) scaleX(-1)}
-  87%{transform:translate3d(0,-8px,0) rotate(-3deg) scaleX(-1)}
-  94%{transform:translate3d(0,0,0) rotate(0) scaleX(1)}
+/* The floating companion walks across the lower viewport, never the emergency header.
+   Each bounce changes height and tilt for a playful dancing rhythm. */
+@keyframes llamaDanceAcross{
+   0%{transform:translate3d(0,0,0) rotate(-4deg) scaleX(1)}
+   8%{transform:translate3d(calc((170px - 100vw)*.22),-50px,0) rotate(8deg) scaleX(1)}
+  16%{transform:translate3d(calc((170px - 100vw)*.42),-10px,0) rotate(-6deg) scaleX(1)}
+  25%{transform:translate3d(calc((170px - 100vw)*.67),-68px,0) rotate(7deg) scaleX(1)}
+  34%{transform:translate3d(calc((170px - 100vw)*.87),-13px,0) rotate(-5deg) scaleX(1)}
+  42%{transform:translate3d(min(0px,calc(170px - 100vw)),-52px,0) rotate(8deg) scaleX(1)}
+  49%{transform:translate3d(min(0px,calc(170px - 100vw)),0,0) rotate(0deg) scaleX(-1)}
+  58%{transform:translate3d(calc((170px - 100vw)*.77),-60px,0) rotate(-9deg) scaleX(-1)}
+  67%{transform:translate3d(calc((170px - 100vw)*.55),-8px,0) rotate(5deg) scaleX(-1)}
+  77%{transform:translate3d(calc((170px - 100vw)*.29),-65px,0) rotate(-8deg) scaleX(-1)}
+  88%{transform:translate3d(calc((170px - 100vw)*.09),-12px,0) rotate(6deg) scaleX(-1)}
+  94%{transform:translate3d(0,-42px,0) rotate(-4deg) scaleX(-1)}
+ 100%{transform:translate3d(0,0,0) rotate(-4deg) scaleX(1)}
 }
+@keyframes llamaHappyBop{
+  0%{transform:translateY(2px) rotate(-3deg) scale(.97)}
+ 100%{transform:translateY(-5px) rotate(3deg) scale(1.025)}
+}
+
 .llama-game[hidden]{display:none!important}
 .llama-game{
   position:relative;isolation:isolate;scroll-margin-top:87px;
@@ -138,12 +148,12 @@
  .llama-say{font-size:.82rem;padding:12px}
  .llama-game-actions{display:grid;grid-template-columns:1fr}
  .llama-ask,.llama-bag{width:100%}
- .llama-roamer{width:100px;height:100px}
+ /* Keep the full llama visible on phones. */\n .llama-roamer{width:102px;height:120px}
  .llama-charms{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(prefers-reduced-motion:reduce){
  .llama-roamer,.llama-game.llama-learning,.llama-fact,.llama-loot-card,
- .llama-bag.llama-bag-bounce{animation:none!important}
+ .llama-bag.llama-bag-bounce,.llama-roamer img{animation:none!important}
  .llama-progress-bar{transition:none}
  .llama-fly-charm{display:none!important}
 }
