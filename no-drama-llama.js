@@ -1,5 +1,5 @@
-/* No Drama Llama // Comfort Quest 2.0.
-   Learning only: no sensitive prompts, persistence, analytics, requests, or audio.
+/* No Drama Llama // Comfort Quest 2.1.
+   Learning only: no sensitive prompts, persistence, analytics, requests; optional user-enabled chime.
    Rewards are cosmetic and never gate emergency/hotline services. */
 (()=>{
   'use strict';
@@ -11,6 +11,7 @@
   const xp=$('llamaXP'),count=$('llamaCounter'),rank=$('llamaRank');
   const progress=$('llamaProgress'),bar=$('llamaProgressBar');
   const layer=$('llamaLootLayer'),heading=$('llamaTitle');
+  const soundOutside=$('llamaChimeToggle'),soundInside=$('llamaChimeInside'),replay=$('llamaReplayChime'),soundHint=$('llamaSoundHint');
   if(!roamer||!game||!closeBtn||!ask||!fact||!bag||!charms||!layer)return;
 
   const facts=[
@@ -57,6 +58,107 @@
      body:'The National Domestic Violence Hotline offers support for exploring options and safety planning. You do not need a police report or a completed quest to reach out. You decide what information to share.',
      url:'https://www.thehotline.org/get-help/',link:'NATIONAL DOMESTIC VIOLENCE HOTLINE'}
   ];
+
+  // On this sensitive safety page, sounds are OFF until somebody opts in.
+  // No user preferences, gameplay, or safety interactions are stored or sent.
+  let soundOn=false,audioCtx=null,activeOutput=null;
+  function stopChime(){
+    if(!activeOutput||!audioCtx)return;
+    try{
+      const now=audioCtx.currentTime;
+      activeOutput.gain.cancelScheduledValues(now);
+      activeOutput.gain.setValueAtTime(Math.max(.0001,activeOutput.gain.value),now);
+      activeOutput.gain.exponentialRampToValueAtTime(.0001,now+.05);
+    }catch(_){}
+    activeOutput=null;
+  }
+  function updateSoundUI(){
+    if(soundOutside){
+      soundOutside.setAttribute('aria-pressed',String(soundOn));
+      soundOutside.setAttribute('aria-label',soundOn?'Mute the optional magical llama chime':'Turn on the optional magical llama chime. Plays a preview.');
+      soundOutside.title=soundOn?'Tap here to mute the magical entrance sound.':'Silent by default. Tap to enable a magical chime.';
+      const icon=soundOutside.querySelector('.llama-sound-icon');
+      const caption=soundOutside.querySelector('.llama-sound-caption');
+      if(icon)icon.textContent=soundOn?'🔊':'🔇';
+      if(caption)caption.textContent=soundOn?'SOUND ON':'SOUND OFF';
+    }
+    if(soundInside){
+      soundInside.setAttribute('aria-pressed',String(soundOn));
+      soundInside.setAttribute('aria-label',soundOn?'Mute the magical chime':'Enable the optional magical chime. Plays a preview.');
+      soundInside.textContent=soundOn?'🔊 MAGIC CHIME ON':'🔇 MAGIC CHIME OFF';
+    }
+    if(replay)replay.hidden=!soundOn;
+    if(soundHint)soundHint.textContent=soundOn?
+      'Only deliberate taps play the chime. Mute it anytime.':
+      'Quiet by default for privacy. Tap the switch to enable the magical chime.';
+    roamer.setAttribute('aria-label',
+      soundOn?'Open No Drama Llama Comfort Quest with a magical chime':
+      'Open No Drama Llama Comfort Quest silently. Magical chime is optional.');
+  }
+  function renderMagicChime(){
+    if(!audioCtx||!soundOn||document.hidden)return;
+    stopChime();
+    try{
+      const now=audioCtx.currentTime+.015;
+      const output=audioCtx.createGain();
+      output.gain.setValueAtTime(.62,now);
+      output.connect(audioCtx.destination);
+      activeOutput=output;
+      function bell(freq,delay,duration,peak,type){
+        const start=now+delay,end=start+duration;
+        const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
+        osc.type=type||'sine';
+        osc.frequency.setValueAtTime(freq,start);
+        osc.frequency.exponentialRampToValueAtTime(freq*.994,end);
+        gain.gain.setValueAtTime(.0001,start);
+        gain.gain.exponentialRampToValueAtTime(peak,start+.018);
+        gain.gain.exponentialRampToValueAtTime(Math.max(.0001,peak*.23),start+duration*.55);
+        gain.gain.exponentialRampToValueAtTime(.0001,end);
+        osc.connect(gain);gain.connect(output);
+        osc.start(start);osc.stop(end+.025);
+        osc.onended=()=>{try{osc.disconnect();gain.disconnect();}catch(_){}};
+      }
+      // A quiet 4-second cascade of glass bells, twinkles, and a final warm chord.
+      const sequence=[
+        [523.25,0,.90],[659.25,.23,1.02],[783.99,.48,1.18],
+        [987.77,.77,1.30],[1174.66,1.08,1.38],[1318.51,1.39,1.42],
+        [1567.98,1.73,1.50],[2093.0,2.08,1.68]
+      ];
+      for(const [pitch,delay,duration] of sequence){
+        bell(pitch,delay,duration,.05,'sine');
+        bell(pitch*2.01,delay+.012,Math.max(.33,duration*.63),.01,'triangle');
+      }
+      [523.25,783.99,1046.5,1567.98].forEach(pitch=>bell(pitch,2.51,1.55,.021,'sine'));
+      [[2637,2.15],[3136,2.65],[3520,3.1]].forEach(([pitch,start])=>bell(pitch,start,.46,.008,'sine'));
+      const finalOutput=output;
+      setTimeout(()=>{
+        try{finalOutput.disconnect();}catch(_){}
+        if(activeOutput===finalOutput)activeOutput=null;
+      },4700);
+    }catch(_){/* Optional audio must never interrupt safety information. */}
+  }
+  function playMagicChime(){
+    if(!soundOn||document.hidden)return;
+    try{
+      const Audio=window.AudioContext||window.webkitAudioContext;
+      if(!Audio)return;
+      if(!audioCtx)audioCtx=new Audio();
+      if(audioCtx.state==='suspended'){
+        const promise=audioCtx.resume();
+        if(promise?.then)promise.then(()=>{if(soundOn&&!document.hidden)renderMagicChime();}).catch(()=>{});
+      }else renderMagicChime();
+    }catch(_){/* Audio unsupported: game still works. */}
+  }
+  function toggleSound(){
+    soundOn=!soundOn;
+    updateSoundUI();
+    if(soundOn)playMagicChime(); // Deliberate opt-in produces the chime preview.
+    else stopChime();
+  }
+  soundOutside?.addEventListener('click',toggleSound);
+  soundInside?.addEventListener('click',toggleSound);
+  replay?.addEventListener('click',playMagicChime);
+  updateSoundUI();
 
   // No localStorage, sessionStorage or backend: even reading topics can be sensitive.
   const unlocked=new Set();
@@ -181,6 +283,7 @@
     if(!game.hidden)return;
     game.hidden=false;
     roamer.hidden=true;
+    if(soundOutside)soundOutside.hidden=true;
     roamer.setAttribute('aria-expanded','true');
     updateStatus();
     renderCharms();
@@ -190,12 +293,14 @@
   function close(){
     if(game.hidden)return;
     clearLoot();
+    stopChime();
     game.hidden=true;
     roamer.hidden=false;
+    if(soundOutside)soundOutside.hidden=false;
     roamer.setAttribute('aria-expanded','false');
     roamer.focus({preventScroll:true});
   }
-  roamer.addEventListener('click',open);
+  roamer.addEventListener('click',()=>{playMagicChime();open();});
   closeBtn.addEventListener('click',close);
   ask.addEventListener('click',advance);
   bag.addEventListener('click',()=>{
@@ -204,8 +309,10 @@
   });
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!game.hidden){e.preventDefault();close();}});
   document.addEventListener('visibilitychange',()=>{
-    if(document.hidden){clearLoot();roamer.style.animationPlayState='paused';}
+    if(document.hidden){clearLoot();stopChime();roamer.style.animationPlayState='paused';}
     else roamer.style.animationPlayState='';
   });
+  $('quickExit')?.addEventListener('click',stopChime);
+  window.addEventListener('pagehide',stopChime);
   updateStatus();
 })();
