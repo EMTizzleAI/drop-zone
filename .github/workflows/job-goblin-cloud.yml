@@ -60,6 +60,11 @@ jobs:
         run: |
           python -m pip install 'playwright==1.55.0' 'cryptography==46.0.4'
           python -m playwright install --with-deps chromium
+      - name: Test job discovery safety and resume routing
+        if: steps.secret.outputs.ready == 'true'
+        env:
+          PYTHONPATH: app/job-goblin-autopilot
+        run: python -m unittest discover -s app/job-goblin-autopilot/tests -v
       - name: Run encrypted cloud applicant
         if: steps.secret.outputs.ready == 'true'
         shell: bash
