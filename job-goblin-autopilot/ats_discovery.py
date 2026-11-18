@@ -102,7 +102,7 @@ def _phrase_in(haystack, needle):
     return bool(query) and (" " + query + " ") in (" " + _norm(haystack) + " ")
 
 def _title_match(job, target):
-    terms = [target.get("role", "")] + list(target.get("match_any") or [])
+    terms = list(target.get("match_any") or [target.get("role", "")])
     if any(_phrase_in(job["title"], term) for term in terms):
         return True
     descriptor = " ".join(str(t or "") for t in terms)
