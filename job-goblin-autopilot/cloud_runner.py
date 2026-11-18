@@ -87,6 +87,8 @@ def run(args):
         direct, ats_stats=ats_discovery.discover(profile)
         print(f"Employer ATS feeds: {ats_stats['boards_ok']}/{ats_stats['boards_checked']} available; "
               f"{ats_stats['published_posts']} open postings checked; "
+              f"{ats_stats['title_matches']} title matches; "
+              f"{ats_stats['location_rejections']} filtered by location; "
               f"{ats_stats['matched_posts']} target-matched leads.")
         jobs.extend(direct)
         # Deduplicate and limit to direct Greenhouse/Lever, matching configured resume files.
