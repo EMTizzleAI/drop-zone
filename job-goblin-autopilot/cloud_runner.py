@@ -77,9 +77,18 @@ def run(args):
             raise ValueError("Unexpected cap: cloud mode requires exactly 10 applications/day")
         sys.path.insert(0,str(Path(args.agent_dir).resolve()))
         import agent
+        import ats_discovery
         from playwright.sync_api import sync_playwright
-        with contextlib.redirect_stdout(io.StringIO()):
+        feed_output=io.StringIO()
+        with contextlib.redirect_stdout(feed_output):
             jobs=agent.discover(profile)
+        feed_failures=feed_output.getvalue().count("Feed unavailable:")
+        print(f"General feed: {len(jobs)} matched leads; {feed_failures} unavailable target searches.")
+        direct, ats_stats=ats_discovery.discover(profile)
+        print(f"Employer ATS feeds: {ats_stats['boards_ok']}/{ats_stats['boards_checked']} available; "
+              f"{ats_stats['published_posts']} open postings checked; "
+              f"{ats_stats['matched_posts']} target-matched leads.")
+        jobs.extend(direct)
         # Deduplicate and limit to direct Greenhouse/Lever, matching configured resume files.
         eligible=[];seen=set()
         for job in jobs:
