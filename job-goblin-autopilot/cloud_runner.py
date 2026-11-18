@@ -102,7 +102,23 @@ def run(args):
             if r is not None: eligible.append((job,r))
         print(f"Discovery complete: {len(jobs)} leads; {len(eligible)} supported ATS leads with matching resumes.")
         if args.mode=="preview":
-            print(f"Preview only: {sum(hashlib.sha256(j['url'].encode()).hexdigest() not in records for j,_ in eligible)} eligible new leads; no forms submitted.")
+            new_leads=[(job,resume) for job,resume in eligible
+                       if hashlib.sha256(job["url"].encode()).hexdigest() not in records]
+            print(f"Preview only: {len(new_leads)} eligible new leads; no forms submitted.")
+            # These are PUBLIC job-board details only. Never log applicant data,
+            # private profile fields, decrypted vault content or form responses.
+            def public_label(value):
+                return " ".join(str(value or "").split())[:110]
+            for index,(job,resume) in enumerate(new_leads[:10],start=1):
+                print(f"REVIEW LEAD {index}: "
+                      f"{public_label(job.get('title'))} | "
+                      f"{public_label(job.get('company'))} | "
+                      f"{public_label(job.get('location'))} | "
+                      f"resume={public_label(resume.name)}")
+                print("PUBLIC JOB LINK:",job["url"])
+            if len(new_leads)>10:
+                print(f"Additional matching postings not displayed: {len(new_leads)-10}")
+            print("Listing matches are leads, not verified application-form compatibility.")
             return
         today=datetime.now(timezone.utc).date().isoformat()
         past_today=sum(1 for x in records.values() if x.get("date","").startswith(today))
