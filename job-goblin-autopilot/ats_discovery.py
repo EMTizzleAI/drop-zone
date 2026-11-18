@@ -64,22 +64,76 @@ def _fetch_board(slug, company, timeout=13):
                      "location": str(where or ""), "url": link})
     return jobs
 
-def _matches(job, target):
-    title = job["title"].casefold()
-    terms = target.get("match_any") or [target.get("role", "")]
-    if not any(str(term).strip().casefold() in title for term in terms if str(term).strip()):
-        return False
+# Narrow, interchangeable job-title wording. These do not override a target's
+# location or résumé choice; they only recognize alternate titles in that domain.
+TITLE_ALIASES = (
+    (("emergency medical technician", "emt", "er tech", "emergency room technician"),
+     ("emergency medical technician", "emt", "emergency department technician",
+      "emergency room technician", "er tech", "ed tech")),
+    (("data center", "datacenter", "hardware technician", "it technician"),
+     ("data center technician", "datacenter technician", "data center operations technician",
+      "data center operations specialist", "hardware technician", "hardware support technician",
+      "it technician", "it support technician")),
+    (("ai evaluator", "model evaluator", "ai trainer", "data annotat", "red team", "llm evaluator"),
+     ("ai evaluator", "ai trainer", "model evaluator", "llm evaluator",
+      "llm evaluation", "ai training specialist", "data annotator",
+      "data annotation specialist", "ai data annotator", "red team")),
+    (("qa tester", "quality assurance", "software tester", "game tester"),
+     ("qa tester", "qa analyst", "quality assurance analyst", "quality assurance tester",
+      "software tester", "game tester", "game qa tester")),
+    (("robotics", "robot technician", "robot operator"),
+     ("robotics technician", "robotics test technician", "robot technician",
+      "robot operator", "robotics operator")),
+    (("occupational health", "industrial emt"),
+     ("occupational health technician", "occupational health emt", "industrial emt")),
+    (("animal care", "veterinary assistant", "kennel"),
+     ("animal care technician", "animal care attendant", "veterinary assistant",
+      "kennel technician")),
+    (("video annotat", "video label", "video review"),
+     ("video annotator", "video annotation specialist", "video data annotator",
+      "video labeling specialist")),
+)
+
+def _norm(value):
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", str(value or "").casefold())).strip()
+
+def _phrase_in(haystack, needle):
+    query = _norm(needle)
+    return bool(query) and (" " + query + " ") in (" " + _norm(haystack) + " ")
+
+def _title_match(job, target):
+    terms = [target.get("role", "")] + list(target.get("match_any") or [])
+    if any(_phrase_in(job["title"], term) for term in terms):
+        return True
+    descriptor = " ".join(str(t or "") for t in terms)
+    for triggers, aliases in TITLE_ALIASES:
+        if any(_phrase_in(descriptor, trigger) for trigger in triggers):
+            if any(_phrase_in(job["title"], alias) for alias in aliases):
+                return True
+    return False
+
+def _location_match(job, target):
     allowed = target.get("locations") or []
-    if allowed and not any(str(place).strip().casefold() in job["location"].casefold()
-                           for place in allowed if str(place).strip()):
-        return False
-    return True
+    if not allowed:
+        return True
+    where = job.get("location", "")
+    if any(_phrase_in(where, place) for place in allowed):
+        return True
+    # ATS listings vary between "US", "USA" and "United States".
+    us = {"us", "usa", "united states", "united states of america"}
+    if any(_norm(place) in us for place in allowed) and any(_phrase_in(where, alias) for alias in us):
+        return True
+    return False
+
+def _matches(job, target):
+    return _title_match(job, target) and _location_match(job, target)
 
 def discover(profile, boards=None):
     """Returns (deduplicated target-matched leads, non-sensitive source statistics)."""
     selected = boards if boards is not None else BOARDS
     stats = {"boards_checked": len(selected), "boards_ok": 0,
-             "boards_failed": 0, "published_posts": 0, "matched_posts": 0}
+             "boards_failed": 0, "published_posts": 0, "title_matches": 0,
+             "location_rejections": 0, "matched_posts": 0}
     all_jobs = []
     with ThreadPoolExecutor(max_workers=5) as pool:
         tasks = {pool.submit(_fetch_board, slug, company): slug
@@ -96,9 +150,23 @@ def discover(profile, boards=None):
     out = []
     seen = set()
     for job in all_jobs:
-        if any(_matches(job, target) for target in profile.get("targets", [])):
-            if job["url"] not in seen:
-                seen.add(job["url"])
-                out.append(job)
+        matching_targets = [target for target in profile.get("targets", [])
+                            if _title_match(job, target)]
+        if not matching_targets:
+            continue
+        stats["title_matches"] += 1
+        eligible_targets = [target for target in matching_targets if _location_match(job, target)]
+        if not eligible_targets:
+            stats["location_rejections"] += 1
+            continue
+        if job["url"] in seen:
+            continue
+        seen.add(job["url"])
+        # Keep the user's category-specific résumé from the matching target.
+        matched = dict(job)
+        chosen_resume = eligible_targets[0].get("resume")
+        if chosen_resume:
+            matched["resume"] = chosen_resume
+        out.append(matched)
     stats["matched_posts"] = len(out)
     return out, stats
