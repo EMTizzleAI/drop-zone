@@ -34,12 +34,7 @@ jobs:
           # Public pages must not include automation profiles, encrypted vaults,
           # private state, workflow files, SQL setup, or repository metadata.
           mkdir -p public-site
-          find . -maxdepth 1 -type f \\(
-            -name '*.html' -o -name '*.css' -o -name '*.js' -o
-            -name '*.svg' -o -name '*.jpg' -o -name '*.jpeg' -o
-            -name '*.png' -o -name '*.webp' -o -name '*.mp3' -o
-            -name '*.xml' -o -name 'CNAME' -o -name '.nojekyll'
-          \\) -exec cp -t public-site -- {} +
+          find . -maxdepth 1 -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name '*.svg' -o -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' -o -name '*.webp' -o -name '*.mp3' -o -name '*.xml' -o -name 'CNAME' -o -name '.nojekyll' \) -exec cp -t public-site -- {} +
           test -s public-site/index.html
           test -s public-site/stabilization.html
           test -s public-site/job-goblin.html
