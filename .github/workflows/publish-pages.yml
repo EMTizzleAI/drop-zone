@@ -28,12 +28,30 @@ jobs:
           sudo apt-get install -y -qq librsvg2-bin
           rsvg-convert --width 1200 --height 630 --output field-intel-preview.png field-intel-social-preview.svg
           test -s field-intel-preview.png
+      - name: Stage public website only
+        shell: bash
+        run: |
+          # Public pages must not include automation profiles, encrypted vaults,
+          # private state, workflow files, SQL setup, or repository metadata.
+          mkdir -p public-site
+          find . -maxdepth 1 -type f \\(
+            -name '*.html' -o -name '*.css' -o -name '*.js' -o
+            -name '*.svg' -o -name '*.jpg' -o -name '*.jpeg' -o
+            -name '*.png' -o -name '*.webp' -o -name '*.mp3' -o
+            -name '*.xml' -o -name 'CNAME' -o -name '.nojekyll'
+          \\) -exec cp -t public-site -- {} +
+          test -s public-site/index.html
+          test -s public-site/stabilization.html
+          test -s public-site/job-goblin.html
+          test -s public-site/resource-config.js
+          test -s public-site/field-intel-preview.png
+          test ! -e public-site/job-goblin-autopilot
       - name: Configure Pages
         uses: actions/configure-pages@v5
-      - name: Upload static site
+      - name: Upload public website only
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: public-site
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
