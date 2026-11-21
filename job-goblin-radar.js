@@ -122,10 +122,22 @@ function jobCard(job){
  }else attribution.append(document.createTextNode(job.source));
  attribution.append(document.createTextNode(job.remote?' · Marked remote (check country eligibility)':''));
  const a=add('a',d,'VIEW JOB & APPLY ↗');a.href=job.url;a.target='_blank';a.rel='noopener noreferrer';
- if(window.JobGoblinAgent){
-  const b=add('button',d,'👹 PREPARE APPLICATION');
-  b.type='button';b.addEventListener('click',()=>window.JobGoblinAgent.queueJob(job));
- }
+ const b=add('button',d,'👹 PREPARE APPLICATION');
+ b.type='button';
+ const feedback=add('p',d,'','hint');feedback.setAttribute('role','status');
+ b.addEventListener('click',()=>{
+  try{
+   if(typeof window.JobGoblinAgent?.queueJob!=='function'){
+    feedback.textContent='Application Desk did not load. Refresh this page with Ctrl+Shift+R and try again. Your saved résumés stay on this device.';
+    return;
+   }
+   window.JobGoblinAgent.queueJob(job);
+   feedback.textContent='Application Desk opened. Review your packet before submitting.';
+  }catch(err){
+   feedback.textContent='Could not open the application packet. Your job link is still available above. Error: '+clean(err.message).slice(0,120);
+   console.error('Job Goblin application error:',err);
+  }
+ });
 }
 function render(jobs,search,completed,errors){
  results.replaceChildren();
@@ -193,7 +205,7 @@ async function scan(search,id,signal){
  const allJobs=[...unique.values()];
  const matched=allJobs.filter(j=>relevant(j,search))
   .sort((a,b)=>score(b,search)-score(a,search)).slice(0,25);
- if(window.JobGoblinAgent)window.JobGoblinAgent.receiveResults(matched);
+ try{window.JobGoblinAgent?.receiveResults?.(matched)}catch(err){console.warn('Application Desk auto-prep error:',err)}
  render(matched,search,completed,errors);
  if(!matched.length&&allJobs.length){
   add('p',results,'The radar checked '+allJobs.length+' listings, but none passed this search. Try shorter keywords (EMT, ER tech, warehouse, QA) and remove pay/type filters if needed.','hint');
