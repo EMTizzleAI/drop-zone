@@ -41,10 +41,10 @@ function bestResume(job){
 function add(job,silent=false){
  const url=validUrl(job.url);if(!url){if(!silent)notice('Invalid job link; use an employer posting URL.');return false}
  const id=url.toLowerCase();
- const old=state.jobs.find(j=>j.id===id);if(old){if(!silent){selected=id;detail();notice('Already in the queue.')}return false}
+ const old=state.jobs.find(j=>j.id===id);if(old){if(!silent){selected=id;renderQueue();showPacket();notice('Already in the queue. Application packet opened.')}return false}
  const j={id,url,title:trim(job.title,160)||'Job listing',company:trim(job.company,160),location:trim(job.location,160),resume:bestResume(job),status:'Ready to review',note:'',updated:new Date().toISOString()};
  state.jobs.unshift(j);state.jobs=state.jobs.slice(0,200);if(!silent)selected=id;
- save();renderQueue();if(!silent){detail();notice('Application added to queue. Choose the résumé and review the employer form.')};return true
+ save();renderQueue();if(!silent){showPacket();notice('Application added to queue. Choose the résumé and review the employer form.')};return true
 }
 const card=document.createElement('section');card.id='jg-desk';card.className='box';
 card.innerHTML='<style>#jg-desk{border:2px solid #ff46aa;background:#21162d}#jg-desk textarea{width:100%;min-height:105px;box-sizing:border-box;background:#0e1020;color:#fff;border:1px solid #6f637e;border-radius:9px;padding:12px;font:inherit}#jg-desk .j-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}#jg-desk .j-row{border:1px solid #665574;border-radius:11px;margin:10px 0;padding:12px}#jg-desk .j-row button{margin:3px}#jg-desk .j-quiet{color:#c9c0d3}#jg-desk details{border:1px solid #5c4b68;border-radius:12px;padding:12px;margin:15px 0}#jg-desk summary{cursor:pointer;font-weight:850;color:#caff82}#jg-desk .j-muted{background:#3d2a4b;color:white}#jg-desk .j-danger{background:#44222e;color:white}#jg-desk input[type=checkbox]{width:auto}#jg-desk button,#jg-desk .btn{font-size:.85rem}#jg-message{color:#caff82;font-weight:800;min-height:1.5em}@media(max-width:600px){#jg-desk .j-grid{grid-template-columns:1fr}}</style>'+
@@ -57,7 +57,7 @@ card.innerHTML='<style>#jg-desk{border:2px solid #ff46aa;background:#21162d}#jg-
 '<details><summary>🔗 ADD A JOB FROM ANYWHERE</summary><div class="j-grid"><label>Title<input id="jg-title" placeholder="Data Center Technician"></label><label>Employer<input id="jg-company"></label><label>Job URL<input id="jg-url" type="url" placeholder="https://…"></label><label>Location<input id="jg-place"></label></div><button type="button" id="jg-add">📎 PREPARE APPLICATION</button></details>'+
 '<p id="jg-message" aria-live="polite"></p><h3>🗂️ APPLICATION QUEUE <span id="jg-total"></span></h3><div id="jg-queue"></div>'+
 '<button id="jg-export" type="button" class="j-muted">EXPORT TRACKER</button><button id="jg-clear" type="button" class="j-danger">CLEAR QUEUE</button>'+
-'<div id="jg-detail"></div>';
+'<div id="jg-detail" tabindex="-1" style="scroll-margin-top:18px"></div>';
 const origin=el('hunt');if(!origin)return;origin.closest('section').after(card);
 const fields=['name','email','phone','city','exp','skills'];
 fields.forEach(f=>{el('jg-'+f).value=state.profile[f]||''});
@@ -113,10 +113,10 @@ function renderQueue(){
  const host=el('jg-queue');host.replaceChildren();el('jg-total').textContent='('+state.jobs.length+')';
  if(!state.jobs.length){host.textContent='No jobs in queue yet. Search above or paste a job posting.';return}
  for(const j of state.jobs.slice(0,100)){
-   const d=document.createElement('div');d.className='j-row',head=document.createElement('strong');head.textContent=j.title+' — '+(j.company||'Employer unknown');
+   const d=document.createElement('div');d.className='j-row';const head=document.createElement('strong');head.textContent=j.title+' — '+(j.company||'Employer unknown');
    const desc=document.createElement('p');desc.className='j-quiet';desc.textContent=[j.location,j.status].filter(Boolean).join(' · ');
    const s=document.createElement('select');s.setAttribute('aria-label','Resume for '+j.title);choices(s,j.resume);s.onchange=()=>{j.resume=s.value;save();if(j.id===selected)detail()};
-   const prep=document.createElement('button');prep.type='button';prep.textContent='📝 PREPARE';prep.onclick=()=>{selected=j.id;detail();el('jg-detail').scrollIntoView({behavior:'smooth',block:'nearest'})};
+   const prep=document.createElement('button');prep.type='button';prep.textContent='📝 PREPARE';prep.onclick=()=>{selected=j.id;showPacket()};
    const go=document.createElement('a');go.href=j.url;go.target='_blank';go.rel='noopener noreferrer';go.className='btn';go.textContent='↗ APPLICATION';go.onclick=()=>{j.status='Opened';j.updated=new Date().toISOString();save();renderQueue()};
    const status=document.createElement('select');status.setAttribute('aria-label','Status for '+j.title);
    for(const v of ['Ready to review','Opened','Submitted by me','Interview','Rejected','Skipped']){const o=document.createElement('option');o.value=v;o.textContent=v;status.append(o)}status.value=j.status;
@@ -129,6 +129,7 @@ function draft(j){
  const p=state.profile;
  return ['Hello hiring team,','',"I'm interested in the "+j.title+(j.company?' role at '+j.company:' role')+'.',p.exp?('My professional background includes '+p.exp.replace(/[.!?\s]+$/,'')+'.'):'I would welcome the opportunity to discuss my relevant experience.',p.skills?'My skills include '+p.skills.replace(/[.!?\s]+$/,'')+'.':'','Thank you for your consideration.','',p.name||'',p.email||''].filter(Boolean).join('\n');
 }
+function showPacket(){detail();const host=el('jg-detail');host.scrollIntoView({behavior:'smooth',block:'start'});host.focus({preventScroll:true});}
 function detail(){
  const host=el('jg-detail');host.replaceChildren();const j=state.jobs.find(x=>x.id===selected);if(!j)return;
  const h=document.createElement('h3');h.textContent='👹 APPLICATION PACKET: '+j.title;
