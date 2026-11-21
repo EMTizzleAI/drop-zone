@@ -128,11 +128,14 @@ function jobCard(job){
  b.addEventListener('click',()=>{
   try{
    if(typeof window.JobGoblinAgent?.queueJob!=='function'){
-    feedback.textContent='Application Desk did not load. Refresh this page with Ctrl+Shift+R and try again. Your saved résumés stay on this device.';
+    const pending={title:job.title,company:job.company,location:job.location,url:job.url};
+    try{sessionStorage.setItem('jg-pending-job',JSON.stringify(pending));}catch{}
+    feedback.textContent='Desk unavailable. Your job link works; reload to recover the pending application.';
+    const retry=add('button',feedback,'RELOAD & RECOVER');retry.type='button';retry.onclick=()=>location.reload();
     return;
    }
-   window.JobGoblinAgent.queueJob(job);
-   feedback.textContent='Application Desk opened. Review your packet before submitting.';
+   const queued=window.JobGoblinAgent.queueJob(job);
+   feedback.textContent=queued?'Application Desk opened. Review your packet before submitting.':'Could not queue this posting. Open the job link directly.';
   }catch(err){
    feedback.textContent='Could not open the application packet. Your job link is still available above. Error: '+clean(err.message).slice(0,120);
    console.error('Job Goblin application error:',err);
