@@ -129,6 +129,31 @@ def run(args):
                 print("PUBLIC JOB LINK:",job["url"])
             if len(new_leads)>10:
                 print(f"Additional matching postings not displayed: {len(new_leads)-10}")
+            # Show non-automatable public leads too, without applicant details.
+            # This is especially important for hospital career portals.
+            manual_seen=set()
+            eligible_urls={job["url"] for job,_ in eligible}
+            manual_count=0
+            for job in jobs:
+                url=job.get("url","")
+                from urllib.parse import urlsplit
+                try:
+                    parsed=urlsplit(url)
+                    valid=parsed.scheme=="https" and parsed.hostname and not parsed.username and not parsed.password
+                except ValueError:
+                    valid=False
+                if not valid or url in eligible_urls or url in manual_seen:
+                    continue
+                manual_seen.add(url)
+                if manual_count<15:
+                    manual_count+=1
+                    print(f"MANUAL LEAD {manual_count}: "
+                          f"{public_label(job.get('title'))} | "
+                          f"{public_label(job.get('company'))} | "
+                          f"{public_label(job.get('location'))}")
+                    # Strip query/fragment to avoid printing tracking tokens or private identifiers.
+                    print("PUBLIC JOB PAGE:",parsed._replace(query="",fragment="").geturl())
+            print(f"Manual review leads: {len(manual_seen)}; displayed {manual_count}.")
             print("Listing matches are leads, not verified application-form compatibility.")
             return
         today=datetime.now(timezone.utc).date().isoformat()
