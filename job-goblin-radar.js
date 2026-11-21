@@ -52,7 +52,7 @@ function normalize(job,source){
    location:location||'Location not supplied',url,salary:job.salary||null,
    source:clean(job.source)||source,remote:job.remote===true||job.remote==='true'||job.remoteStatus==='remote'||
    /remote|work from home|anywhere|worldwide/i.test(location),
-   employmentType:clean(job.employmentType||job.employment_type).toLowerCase()};
+   employmentType:clean(job.employmentType||job.employment_type).toLowerCase(),localMatch:source==='Job Goblin server'&&job.source==='VeritaHire'&&job.localMatch===true};
 }
 function salaryText(salary){
  if(!salary)return '';
@@ -80,11 +80,13 @@ function relevant(job,search){
  const qaIntent=/\bqa\b|quality assurance|software test|game test/i.test(search.role);
  const aiTitles=/\bai\b|\bllm\b|model evaluat|red.team|annotat|label|rater|video.?review|data trainer|ai train/i.test(title);
  const qaTitles=/\bqa\b|quality assurance|software test|game test|test engineer/i.test(title);
- const matchedText=tokens.some(word=>title.includes(word)||company.includes(word));
+ const emtIntent=/\bemt\b|emergency medical technician/i.test(search.role);
+ const emtTitle=/\bemt\b|emergency medical technician|emergency department tech|emergency room tech|\bed tech\b|\ber tech\b/i.test(title);
+ const matchedText=emtIntent?emtTitle:tokens.some(word=>title.includes(word)||company.includes(word));
  if(tokens.length&&!(matchedText||(aiEval&&aiTitles)||(qaIntent&&qaTitles)))return false;
  const where=job.location.toLowerCase();
  if(search.remote&&!job.remote)return false;
- if(!search.remote&&search.place&&!/^(remote|anywhere)$/i.test(search.place)){
+ if(!search.remote&&!job.localMatch&&search.place&&!/^(remote|anywhere)$/i.test(search.place)){
   const city=search.place.split(',')[0].trim().toLowerCase();
   const state=(search.place.split(',')[1]||'').trim().toLowerCase();
   const regional=state&&((state==='ca'&&/california/.test(where))||where.includes(state));
@@ -113,9 +115,9 @@ function jobCard(job){
  if(pay)add('p',d,pay);
  const attribution=add('p',d,undefined,'hint');
  attribution.append(document.createTextNode('Source: '));
- if(job.source==='Himalayas'||job.source==='Remotive'){
+ if(job.source==='VeritaHire'||job.source==='Himalayas'||job.source==='Remotive'){
   const credit=add('a',attribution,job.source);
-  credit.href=job.source==='Himalayas'?'https://himalayas.app/':'https://remotive.com/';
+  credit.href=job.source==='VeritaHire'?'https://veritahire.com/':job.source==='Himalayas'?'https://himalayas.app/':'https://remotive.com/';
   credit.target='_blank';credit.rel='noopener noreferrer';
  }else attribution.append(document.createTextNode(job.source));
  attribution.append(document.createTextNode(job.remote?' · Marked remote (check country eligibility)':''));
@@ -143,6 +145,7 @@ function render(jobs,search,completed,errors){
   const d=add('details',results,undefined,'hint');
   add('summary',d,'Feed status: '+errors.length+' source'+(errors.length===1?'':'s')+' unavailable');
   add('p',d,'Some external job feeds restrict browser access or temporarily time out. Your search is not a guarantee that jobs do not exist.');
+  for(const error of errors)add('p',d,error);
  }
  boardLinks(search.role,search.place,search.remote,results);
  if(search.pay)add('p',results,'Requested minimum: $'+search.pay+'/hr. Listings with unpublished or non-comparable pay may still appear.','hint');
@@ -154,7 +157,7 @@ async function scan(search,id,signal){
  const errors=[];
  const feeds=[
   {name:'Job Goblin server',timeout:16000,url:'https://pantry-goblin.vercel.app/api/jobs?'+qs,
-   map:data=>{if(!Array.isArray(data.jobs))throw Error('Bad server response');return data.jobs;}},
+   map:data=>{if(!Array.isArray(data.jobs))throw Error('Bad server response');return data.jobs;},proxy:true},
   ...(search.remote?[{name:'Remotive',timeout:12000,
    url:'https://remotive.com/api/remote-jobs?'+new URLSearchParams({search:/annotat|label/i.test(search.role)?'annotation':/qa|test/i.test(search.role)?'QA':/support/i.test(search.role)?'support':/ai|llm|red.team|model/i.test(search.role)?'AI':search.role.split(/\s+/)[0],limit:'100'}),
    map:data=>{if(!Array.isArray(data.jobs))throw Error('Bad feed response');return data.jobs.map(j=>({...j,location:j.candidate_required_location||'Remote',remote:true}));}}]:[]),
@@ -166,7 +169,13 @@ async function scan(search,id,signal){
    const payload=await readJSON(feed.url,feed.timeout,signal);
    const rows=feed.map(payload);
    const cleanRows=rows.map(j=>normalize(j,feed.name)).filter(Boolean);
-   completed++;
+   if(feed.proxy&&Array.isArray(payload.diagnostics)){
+    if(!payload.diagnostics.length)throw Error('No upstream feed diagnostics');
+    for(const d of payload.diagnostics){
+     if(d.ok===true)completed++;
+     else errors.push(clean(d.source||'Upstream source')+(d.error?' ('+clean(d.error).slice(0,100)+')':''));
+    }
+   }else completed++;
    jobs.push(...cleanRows);
   }catch(err){if(!signal.aborted)errors.push(feed.name)}
   finally{
@@ -187,7 +196,7 @@ async function scan(search,id,signal){
  if(window.JobGoblinAgent)window.JobGoblinAgent.receiveResults(matched);
  render(matched,search,completed,errors);
  if(!matched.length&&allJobs.length){
-  add('p',results,'The radar checked '+allJobs.length+' listings, but none passed this search. Try shorter keywords such as AI, annotation, QA, or support, and remove pay/type filters if needed.','hint');
+  add('p',results,'The radar checked '+allJobs.length+' listings, but none passed this search. Try shorter keywords (EMT, ER tech, warehouse, QA) and remove pay/type filters if needed.','hint');
  }
 
 }
