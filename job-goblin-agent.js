@@ -157,5 +157,5 @@ window.JobGoblinAgent={
    if(count){renderQueue();notice('👹 Auto-prepared '+count+' job(s). Check the selected résumés before applying.')}
  }
 };
-try{renderResumes();renderQueue()}catch(err){notice('Saved desk data could not be displayed: '+err.message);console.error('Job Goblin desk startup:',err)}
+try{renderResumes();renderQueue();const pending=sessionStorage.getItem('jg-pending-job');if(pending){if(window.JobGoblinAgent.queueJob(JSON.parse(pending)))sessionStorage.removeItem('jg-pending-job');}}catch(err){notice('Saved desk data could not be displayed: '+err.message);console.error('Job Goblin desk startup:',err)}
 })();
