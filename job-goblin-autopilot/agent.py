@@ -17,7 +17,7 @@ import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urlencode, urlparse
+from urllib.parse import urlencode, urlparse, quote
 from urllib.request import Request, urlopen
 
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
@@ -87,7 +87,35 @@ def discover(profile):
                 continue
             leads.append({"title": title, "company": company, "location": where,
                           "url": url, "resume": text(target.get("resume"))})
-        time.sleep(2)  # respectful feed polling
+        # Direct ATS feeds avoid dependence on aggregator redirect links.
+        for board in profile.get("boards", []):
+            kind, slug = text(board.get("kind")), text(board.get("slug"))
+            if not re.fullmatch(r"[A-Za-z0-9_-]+", slug):
+                continue
+            try:
+                if kind == "greenhouse":
+                    rows = get_json("https://boards-api.greenhouse.io/v1/boards/" + quote(slug) + "/jobs").get("jobs", [])
+                elif kind == "lever":
+                    rows = get_json("https://api.lever.co/v0/postings/" + quote(slug) + "?mode=json")
+                else:
+                    continue
+                for row in rows:
+                    title = text(row.get("title") or row.get("text"))
+                    location_data = row.get("location") or row.get("categories") or {}
+                    where = text(location_data.get("name") or location_data.get("location"))
+                    url = text(row.get("absolute_url") or row.get("applyUrl"))
+                    allowed = [v.lower() for v in target.get("locations", []) if v]
+                    if not allowed and location:
+                        allowed = [location.lower()]
+                    if host_kind(url) != kind or not any(t in title.lower() for t in terms):
+                        continue
+                    if allowed and not any(v in where.lower() for v in allowed):
+                        continue
+                    leads.append({"title": title, "company": slug, "location": where,
+                                  "url": url, "resume": text(target.get("resume"))})
+            except Exception as exc:
+                print("  ATS feed unavailable:", slug, exc)
+        time.sleep(2)
     seen = set()
     out = []
     for job in leads:
@@ -216,7 +244,21 @@ def fill_application(page, profile, resume):
     completed["website"] = fill_field(page,
         ['input[name*="website" i]', 'input[id*="website" i]',
          'input[name*="portfolio" i]'], text(profile.get("website")))
+    completed["city"] = fill_field(page, ['input[autocomplete="address-level2"]', 'input[name="city"]'], text(profile.get("city")))
     completed["resume"] = upload_resume(page, resume)
+    # Exact user-provided question/answer mappings; never infer eligibility.
+    for question, answer in profile.get("answers", {}).items():
+        try:
+            control = page.get_by_label(question, exact=True)
+            if control.count() != 1 or not control.is_visible():
+                continue
+            tag = control.evaluate("(e) => e.tagName.toLowerCase()")
+            if tag == "select":
+                control.select_option(label=str(answer), timeout=3000)
+            elif tag in ("input", "textarea") and control.get_attribute("type") not in ("checkbox", "radio", "file", "hidden", "password"):
+                control.fill(str(answer), timeout=3000)
+        except Exception:
+            continue
     return completed
 
 
@@ -257,7 +299,7 @@ def safe_to_submit(page):
                 # Explicit consent and screening answers must be user-entered.
                 if not node.is_checked():
                     return False, "Unanswered required checkbox/radio (human review)"
-            elif node.evaluate("(e) => !(e.value || '').trim()"):
+            elif node.evaluate("(e) => !(e.value || '').trim() || !e.checkValidity()"):
                 return False, "Unanswered required question (human review)"
     except Exception:
         return False, "Unable to inspect form fields"
@@ -295,10 +337,14 @@ def try_apply(page, job, profile, resume, submit):
     button = first_match(page, selectors)
     if button is None:
         return "needs-human", "Submit button not recognized"
-    button.click(timeout=10000)
-    page.wait_for_timeout(2500)
-    if has_confirmation(page):
-        return "submitted-confirmed", "ATS displayed an application receipt"
+    try:
+        button.click(timeout=10000)
+        for _ in range(12):
+            page.wait_for_timeout(1000)
+            if has_confirmation(page):
+                return "submitted-confirmed", "ATS displayed an application receipt"
+    except Exception:
+        return "uncertain", "Submission interaction interrupted; verify before retrying"
     return "uncertain", "Submit clicked but no receipt confirmed; check employer portal before retrying"
 
 
