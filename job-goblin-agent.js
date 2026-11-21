@@ -7,11 +7,15 @@ const el=id=>document.getElementById(id),trim=(x,n=1000)=>String(x||'').trim().s
 const validUrl=value=>{try{const u=new URL(value);return /^https?:$/.test(u.protocol)?u.href:null}catch{return null}};
 let state;try{state=JSON.parse(localStorage.getItem(KEY))||{}}catch{state={}}
 state={profile:{},resumes:[],jobs:[],auto:false,...state};
+if(!state.profile||typeof state.profile!=='object'||Array.isArray(state.profile))state.profile={};
 if(!Array.isArray(state.jobs))state.jobs=[];
 if(!Array.isArray(state.resumes))state.resumes=[];
+state.jobs=state.jobs.filter(j=>j&&typeof j==='object'&&typeof j.id==='string'&&validUrl(j.url));
+state.resumes=state.resumes.filter(r=>r&&typeof r==='object'&&typeof r.id==='string');
+for(const f of ['name','email','phone','city','exp','skills'])state.profile[f]=trim(state.profile[f]);
 let selected=null,dbRequest=null;
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch{notice('Browser storage is unavailable; export the queue before leaving.')}}
-function notice(s){el('jg-message').textContent=s}
+function notice(s){const host=el('jg-message');if(host)host.textContent=s;}
 function dbOpen(){
  if(dbRequest)return dbRequest;
  dbRequest=new Promise((resolve,reject)=>{
@@ -144,7 +148,6 @@ function detail(){
 el('jg-add').onclick=()=>add({title:el('jg-title').value,company:el('jg-company').value,location:el('jg-place').value,url:el('jg-url').value});
 el('jg-export').onclick=()=>download(new Blob([JSON.stringify({exported:new Date().toISOString(),applications:state.jobs},null,2)],{type:'application/json'}),'job-goblin-application-tracker.json');
 el('jg-clear').onclick=()=>{if(!confirm('Delete the entire application queue from this browser?'))return;state.jobs=[];selected=null;save();renderQueue();detail();notice('Queue cleared.')};
-renderResumes();renderQueue();
 window.JobGoblinAgent={
  queueJob:job=>add(job),
  receiveResults:jobs=>{
@@ -153,4 +156,5 @@ window.JobGoblinAgent={
    if(count){renderQueue();notice('👹 Auto-prepared '+count+' job(s). Check the selected résumés before applying.')}
  }
 };
+try{renderResumes();renderQueue()}catch(err){notice('Saved desk data could not be displayed: '+err.message);console.error('Job Goblin desk startup:',err)}
 })();
