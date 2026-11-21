@@ -14,6 +14,7 @@ state.jobs=state.jobs.filter(j=>j&&typeof j==='object'&&typeof j.id==='string'&&
 state.resumes=state.resumes.filter(r=>r&&typeof r==='object'&&typeof r.id==='string');
 for(const f of ['name','email','phone','city','exp','skills'])state.profile[f]=trim(state.profile[f]);
 let selected=null,dbRequest=null;
+state.resumes=state.resumes.filter(r=>typeof r.name==='string').map(r=>({...r,tags:trim(r.tags,500)}));
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch{notice('Browser storage is unavailable; export the queue before leaving.')}}
 function notice(s){const host=el('jg-message');if(host)host.textContent=s;}
 function dbOpen(){
@@ -40,7 +41,7 @@ function words(s){return new Set(trim(s,2000).toLowerCase().split(/[^a-z0-9]+/).
 function bestResume(job){
  let best='',max=0;const title=words(job.title+' '+(job.description||''));
  for(const r of state.resumes){const tags=words(r.name+' '+r.tags);let score=0;for(const word of title)if(tags.has(word))score++;if(score>max){best=r.id;max=score;}}
- return best||state.resumes[0]?.id||'';
+ return best;
 }
 function add(job,silent=false){
  const url=validUrl(job.url);if(!url){if(!silent)notice('Invalid job link; use an employer posting URL.');return false}
@@ -62,7 +63,7 @@ card.innerHTML='<style>#jg-desk{border:2px solid #ff46aa;background:#21162d}#jg-
 '<p id="jg-message" aria-live="polite"></p><h3>🗂️ APPLICATION QUEUE <span id="jg-total"></span></h3><div id="jg-queue"></div>'+
 '<button id="jg-export" type="button" class="j-muted">EXPORT TRACKER</button><button id="jg-clear" type="button" class="j-danger">CLEAR QUEUE</button>'+
 '<div id="jg-detail" tabindex="-1" style="scroll-margin-top:18px"></div>';
-const origin=el('hunt');if(!origin)return;origin.closest('section').after(card);
+const origin=el('hunt');if(!origin)return;(origin.closest('section')||origin).after(card);
 const fields=['name','email','phone','city','exp','skills'];
 fields.forEach(f=>{el('jg-'+f).value=state.profile[f]||''});
 el('jg-save-profile').onclick=()=>{const profile={};fields.forEach(f=>profile[f]=trim(el('jg-'+f).value,f==='exp'?2200:1000));state.profile=profile;save();notice('Private applicant details saved in this browser.')};
@@ -149,7 +150,7 @@ el('jg-add').onclick=()=>add({title:el('jg-title').value,company:el('jg-company'
 el('jg-export').onclick=()=>download(new Blob([JSON.stringify({exported:new Date().toISOString(),applications:state.jobs},null,2)],{type:'application/json'}),'job-goblin-application-tracker.json');
 el('jg-clear').onclick=()=>{if(!confirm('Delete the entire application queue from this browser?'))return;state.jobs=[];selected=null;save();renderQueue();detail();notice('Queue cleared.')};
 window.JobGoblinAgent={
- queueJob:job=>add(job),
+ queueJob:job=>{add(job);return state.jobs.some(j=>j.id===validUrl(job.url)?.toLowerCase());},
  receiveResults:jobs=>{
    if(!state.auto||!Array.isArray(jobs))return;
    let count=0;for(const j of jobs.slice(0,20))if(add(j,true))count++;
