@@ -52,6 +52,18 @@ def save_ledger(ledger_path: Path, ledger:dict,key:bytes):
         "commit","-m","Job Goblin encrypted application state",cwd=branch)
     git("push","origin","HEAD:job-goblin-state",cwd=branch)
 
+def effective_run_mode(profile, requested):
+    """Discovery remains available without permission to send applications."""
+    settings=profile.get("autopilot") or {}
+    if not isinstance(settings,dict):
+        return "preview",0
+    cap=settings.get("daily_max",0)
+    if requested=="apply" and settings.get("enabled") is True:
+        if type(cap) is not int or not 1<=cap<=10:
+            raise ValueError("Cloud daily_max must be an integer between 1 and 10")
+        return "apply",cap
+    return "preview",0
+
 def run(args):
     key=decode_secret(os.environ["GOBLIN_VAULT_KEY"])
     body=decrypt_blob(Path(args.vault).read_text(),key,VAULT_AAD)
@@ -70,11 +82,9 @@ def run(args):
         profile=json.loads((root/"profile.json").read_text())
         resumes=root/"resumes"
         if not resumes.is_dir():raise ValueError("Missing resumes in private bundle")
-        if profile.get("autopilot",{}).get("enabled") is not True and args.mode=="apply":
-            print("Submissions not enabled in private profile; no applications sent")
-            return
-        if profile.get("autopilot",{}).get("daily_max")!=10:
-            raise ValueError("Unexpected cap: cloud mode requires exactly 10 applications/day")
+        mode, daily_cap = effective_run_mode(profile, args.mode)
+        if args.mode=="apply" and mode=="preview":
+            print("Automatic submissions disabled: running discovery-only instead. No applications will be sent.")
         sys.path.insert(0,str(Path(args.agent_dir).resolve()))
         import agent
         import ats_discovery
@@ -101,10 +111,11 @@ def run(args):
             r=agent.choose_resume(job,profile,resumes)
             if r is not None: eligible.append((job,r))
         print(f"Discovery complete: {len(jobs)} leads; {len(eligible)} supported ATS leads with matching resumes.")
-        if args.mode=="preview":
+        if mode=="preview":
             new_leads=[(job,resume) for job,resume in eligible
                        if hashlib.sha256(job["url"].encode()).hexdigest() not in records]
             print(f"Preview only: {len(new_leads)} eligible new leads; no forms submitted.")
+            print(f"Found {len(jobs)} total matched leads, including listings requiring manual application.")
             # These are PUBLIC job-board details only. Never log applicant data,
             # private profile fields, decrypted vault content or form responses.
             def public_label(value):
@@ -114,7 +125,7 @@ def run(args):
                       f"{public_label(job.get('title'))} | "
                       f"{public_label(job.get('company'))} | "
                       f"{public_label(job.get('location'))} | "
-                      f"resume={public_label(resume.name)}")
+                      "matching resume available")
                 print("PUBLIC JOB LINK:",job["url"])
             if len(new_leads)>10:
                 print(f"Additional matching postings not displayed: {len(new_leads)-10}")
@@ -122,7 +133,7 @@ def run(args):
             return
         today=datetime.now(timezone.utc).date().isoformat()
         past_today=sum(1 for x in records.values() if x.get("date","").startswith(today))
-        remaining=max(0,10-past_today)
+        remaining=max(0,daily_cap-past_today)
         if not remaining:
             print("Daily limit already reached; no applications attempted.");return
         attempted=0;confirmed=0;uncertain=0;needs_human=0
